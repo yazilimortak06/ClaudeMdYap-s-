@@ -1,0 +1,2 @@
+# ali — RestaurantSystemQr Analiz Taslağı
+

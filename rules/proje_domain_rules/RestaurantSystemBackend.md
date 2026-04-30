@@ -1,0 +1,2 @@
+# RestaurantSystemBackend Domain Kuralları
+

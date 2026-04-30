@@ -1,0 +1,2 @@
+# ali — RestaurantSystemBackend Analiz Taslağı
+

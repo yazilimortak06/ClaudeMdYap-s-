@@ -1,0 +1,2 @@
+# said — RestaurantSystemPanel Analiz Taslağı
+

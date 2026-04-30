@@ -1,0 +1,2 @@
+# RestaurantSystemQr Domain Kuralları
+

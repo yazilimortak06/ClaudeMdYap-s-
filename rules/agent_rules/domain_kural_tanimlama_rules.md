@@ -1,0 +1,2 @@
+# Domainsel Kural Tanımlama Kuralları
+

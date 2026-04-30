@@ -1,0 +1,2 @@
+# said — RestaurantSystemQr Analiz Taslağı
+

@@ -1,0 +1,2 @@
+# RestaurantSystemPanel Domain Kuralları
+

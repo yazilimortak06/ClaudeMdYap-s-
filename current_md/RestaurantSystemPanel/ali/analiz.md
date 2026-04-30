@@ -1,0 +1,2 @@
+# ali — RestaurantSystemPanel Analiz Taslağı
+
