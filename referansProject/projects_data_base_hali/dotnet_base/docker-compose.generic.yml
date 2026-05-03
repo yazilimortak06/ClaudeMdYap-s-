@@ -1,0 +1,261 @@
+version: "3.8"
+
+# Generic microservice docker-compose template
+# Tüm domain/proje isimleri soyutlanmıştır.
+# service-a, service-b ... servis isimleri tamamen generic'tir.
+
+services:
+
+  service-a:
+    # Rol: Bildirim servisi
+    image: [REGISTRY]/service-a:[TAG]
+    environment:
+      - ASPNETCORE_ENVIRONMENT=[ENVIRONMENT]
+      - ConnectionStrings__Default=[CONNECTION_STRING]
+      - MessageBus__Host=[MESSAGE_BUS_HOST]
+      - MessageBus__User=[MESSAGE_BUS_USER]
+      - MessageBus__Password=[PASSWORD]
+    ports:
+      - "[HOST_PORT]:80"
+    depends_on:
+      - message-bus
+    restart: unless-stopped
+
+  service-b:
+    # Rol: API Gateway
+    image: [REGISTRY]/service-b:[TAG]
+    environment:
+      - ASPNETCORE_ENVIRONMENT=[ENVIRONMENT]
+      - ConnectionStrings__Default=[CONNECTION_STRING]
+    ports:
+      - "[HOST_PORT]:80"
+    restart: unless-stopped
+
+  message-bus:
+    # Rol: Message broker
+    image: rabbitmq:3-management-alpine
+    environment:
+      - RABBITMQ_DEFAULT_USER=[MESSAGE_BUS_USER]
+      - RABBITMQ_DEFAULT_PASS=[PASSWORD]
+    ports:
+      - "[HOST_PORT]:5672"
+      - "[HOST_PORT_MGMT]:15672"
+    volumes:
+      - message-bus-data:/var/lib/rabbitmq
+    restart: unless-stopped
+
+  service-c:
+    # Rol: Mobile API
+    image: [REGISTRY]/service-c:[TAG]
+    environment:
+      - ASPNETCORE_ENVIRONMENT=[ENVIRONMENT]
+      - ConnectionStrings__Default=[CONNECTION_STRING]
+      - MessageBus__Host=[MESSAGE_BUS_HOST]
+      - MessageBus__User=[MESSAGE_BUS_USER]
+      - MessageBus__Password=[PASSWORD]
+    ports:
+      - "[HOST_PORT]:80"
+    depends_on:
+      - message-bus
+    restart: unless-stopped
+
+  service-d:
+    # Rol: Mesajlaşma (mail/SMS) servisi
+    image: [REGISTRY]/service-d:[TAG]
+    environment:
+      - ASPNETCORE_ENVIRONMENT=[ENVIRONMENT]
+      - ConnectionStrings__Default=[CONNECTION_STRING]
+      - MessageBus__Host=[MESSAGE_BUS_HOST]
+      - MessageBus__User=[MESSAGE_BUS_USER]
+      - MessageBus__Password=[PASSWORD]
+    ports:
+      - "[HOST_PORT]:80"
+    depends_on:
+      - message-bus
+    restart: unless-stopped
+
+  service-e:
+    # Rol: Kimlik doğrulama / Token servisi
+    image: [REGISTRY]/service-e:[TAG]
+    environment:
+      - ASPNETCORE_ENVIRONMENT=[ENVIRONMENT]
+      - ConnectionStrings__Default=[CONNECTION_STRING]
+      - Auth__SecretKey=[SECRET_KEY]
+    ports:
+      - "[HOST_PORT]:80"
+    restart: unless-stopped
+
+  service-f:
+    # Rol: Ödeme servisi
+    image: [REGISTRY]/service-f:[TAG]
+    environment:
+      - ASPNETCORE_ENVIRONMENT=[ENVIRONMENT]
+      - ConnectionStrings__Default=[CONNECTION_STRING]
+      - MessageBus__Host=[MESSAGE_BUS_HOST]
+      - MessageBus__User=[MESSAGE_BUS_USER]
+      - MessageBus__Password=[PASSWORD]
+    ports:
+      - "[HOST_PORT]:80"
+    depends_on:
+      - message-bus
+    restart: unless-stopped
+
+  service-g:
+    # Rol: Web portal API
+    image: [REGISTRY]/service-g:[TAG]
+    environment:
+      - ASPNETCORE_ENVIRONMENT=[ENVIRONMENT]
+      - ConnectionStrings__Default=[CONNECTION_STRING]
+      - MessageBus__Host=[MESSAGE_BUS_HOST]
+      - MessageBus__User=[MESSAGE_BUS_USER]
+      - MessageBus__Password=[PASSWORD]
+    ports:
+      - "[HOST_PORT]:80"
+    depends_on:
+      - message-bus
+    restart: unless-stopped
+
+  service-h:
+    # Rol: Dosya yönetimi servisi
+    image: [REGISTRY]/service-h:[TAG]
+    environment:
+      - ASPNETCORE_ENVIRONMENT=[ENVIRONMENT]
+      - ConnectionStrings__Default=[CONNECTION_STRING]
+    ports:
+      - "[HOST_PORT]:80"
+    volumes:
+      - file-storage:/app/uploads
+    restart: unless-stopped
+
+  service-i:
+    # Rol: 3. parti entegrasyon servisi
+    image: [REGISTRY]/service-i:[TAG]
+    environment:
+      - ASPNETCORE_ENVIRONMENT=[ENVIRONMENT]
+      - ConnectionStrings__Default=[CONNECTION_STRING]
+      - MessageBus__Host=[MESSAGE_BUS_HOST]
+      - MessageBus__User=[MESSAGE_BUS_USER]
+      - MessageBus__Password=[PASSWORD]
+    ports:
+      - "[HOST_PORT]:80"
+    depends_on:
+      - message-bus
+    restart: unless-stopped
+
+  service-j:
+    # Rol: Loglama servisi
+    image: [REGISTRY]/service-j:[TAG]
+    environment:
+      - ASPNETCORE_ENVIRONMENT=[ENVIRONMENT]
+      - ConnectionStrings__Default=[CONNECTION_STRING]
+      - MessageBus__Host=[MESSAGE_BUS_HOST]
+      - MessageBus__User=[MESSAGE_BUS_USER]
+      - MessageBus__Password=[PASSWORD]
+    ports:
+      - "[HOST_PORT]:80"
+    depends_on:
+      - message-bus
+    restart: unless-stopped
+
+  service-k:
+    # Rol: Coğrafi/harita servisi
+    image: [REGISTRY]/service-k:[TAG]
+    environment:
+      - ASPNETCORE_ENVIRONMENT=[ENVIRONMENT]
+      - ConnectionStrings__Default=[CONNECTION_STRING]
+      - ExternalService__ApiKey=[API_KEY]
+    ports:
+      - "[HOST_PORT]:80"
+    restart: unless-stopped
+
+  service-l:
+    # Rol: Background worker API
+    image: [REGISTRY]/service-l:[TAG]
+    environment:
+      - ASPNETCORE_ENVIRONMENT=[ENVIRONMENT]
+      - ConnectionStrings__Default=[CONNECTION_STRING]
+      - MessageBus__Host=[MESSAGE_BUS_HOST]
+      - MessageBus__User=[MESSAGE_BUS_USER]
+      - MessageBus__Password=[PASSWORD]
+    ports:
+      - "[HOST_PORT]:80"
+    depends_on:
+      - message-bus
+    restart: unless-stopped
+
+  background-worker:
+    # Rol: Arka plan işlemci (headless)
+    image: [REGISTRY]/background-worker:[TAG]
+    environment:
+      - DOTNET_ENVIRONMENT=[ENVIRONMENT]
+      - ConnectionStrings__Default=[CONNECTION_STRING]
+      - MessageBus__Host=[MESSAGE_BUS_HOST]
+      - MessageBus__User=[MESSAGE_BUS_USER]
+      - MessageBus__Password=[PASSWORD]
+    depends_on:
+      - message-bus
+    restart: unless-stopped
+
+  service-m:
+    # Rol: Firma entegrasyon servisi
+    image: [REGISTRY]/service-m:[TAG]
+    environment:
+      - ASPNETCORE_ENVIRONMENT=[ENVIRONMENT]
+      - ConnectionStrings__Default=[CONNECTION_STRING]
+      - MessageBus__Host=[MESSAGE_BUS_HOST]
+      - MessageBus__User=[MESSAGE_BUS_USER]
+      - MessageBus__Password=[PASSWORD]
+    ports:
+      - "[HOST_PORT]:80"
+    depends_on:
+      - message-bus
+    restart: unless-stopped
+
+  service-n:
+    # Rol: Kaynak yönetimi servisi (istasyon/cihaz)
+    image: [REGISTRY]/service-n:[TAG]
+    environment:
+      - ASPNETCORE_ENVIRONMENT=[ENVIRONMENT]
+      - ConnectionStrings__Default=[CONNECTION_STRING]
+      - MessageBus__Host=[MESSAGE_BUS_HOST]
+      - MessageBus__User=[MESSAGE_BUS_USER]
+      - MessageBus__Password=[PASSWORD]
+    ports:
+      - "[HOST_PORT]:80"
+    depends_on:
+      - message-bus
+    restart: unless-stopped
+
+  service-o:
+    # Rol: Protokol servisi (cihaz iletişimi)
+    image: [REGISTRY]/service-o:[TAG]
+    environment:
+      - ASPNETCORE_ENVIRONMENT=[ENVIRONMENT]
+      - ConnectionStrings__Default=[CONNECTION_STRING]
+      - MessageBus__Host=[MESSAGE_BUS_HOST]
+      - MessageBus__User=[MESSAGE_BUS_USER]
+      - MessageBus__Password=[PASSWORD]
+    ports:
+      - "[HOST_PORT]:80"
+    depends_on:
+      - message-bus
+    restart: unless-stopped
+
+  service-p:
+    # Rol: Cihaz yönetimi servisi
+    image: [REGISTRY]/service-p:[TAG]
+    environment:
+      - ASPNETCORE_ENVIRONMENT=[ENVIRONMENT]
+      - ConnectionStrings__Default=[CONNECTION_STRING]
+      - MessageBus__Host=[MESSAGE_BUS_HOST]
+      - MessageBus__User=[MESSAGE_BUS_USER]
+      - MessageBus__Password=[PASSWORD]
+    ports:
+      - "[HOST_PORT]:80"
+    depends_on:
+      - message-bus
+    restart: unless-stopped
+
+volumes:
+  message-bus-data:
+  file-storage:

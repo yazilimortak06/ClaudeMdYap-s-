@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  web.config.template — qr_menu_mvc
+  Hassas bilgiler [PLACEHOLDER] ile değiştirilmiştir.
+  Gerçek değerleri production sunucusunda ayarlayın.
+-->
+<configuration>
+  <configSections>
+    <!-- Entity Framework konfigürasyon bölümü -->
+    <section name="entityFramework"
+             type="System.Data.Entity.Internal.ConfigFile.EntityFrameworkSection, EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089"
+             requirePermission="false" />
+  </configSections>
+
+  <!-- ================================================================
+       Veritabanı Bağlantısı
+       ================================================================ -->
+  <connectionStrings>
+    <!--
+      EF Database-First connection string.
+      QrMenuEntities: EDMX'teki context adıyla aynı olmalı.
+      provider connection string içindeki data source, user id, password değiştir.
+    -->
+    <add name="QrMenuEntities"
+         connectionString="metadata=res://*/QrMenuDB.csdl|res://*/QrMenuDB.ssdl|res://*/QrMenuDB.msl;provider=System.Data.SqlClient;provider connection string=&quot;[CONNECTION_STRING]&quot;"
+         providerName="System.Data.EntityClient" />
+  </connectionStrings>
+
+  <!-- ================================================================
+       Uygulama Ayarları
+       ================================================================ -->
+  <appSettings>
+    <!-- Güvenlik -->
+    <add key="webpages:Version" value="3.0.0.0" />
+    <add key="webpages:Enabled" value="false" />
+    <add key="ClientValidationEnabled" value="true" />
+    <add key="UnobtrusiveJavaScriptEnabled" value="true" />
+
+    <!-- Site ayarları -->
+    <add key="SiteTitle" value="[SITE_TITLE]" />
+    <add key="SiteBaseUrl" value="[SITE_BASE_URL]" />
+
+    <!-- Dosya yükleme -->
+    <add key="MaxUploadSizeMB" value="[MAX_UPLOAD_SIZE_MB]" />
+    <add key="AllowedImageExtensions" value=".jpg,.jpeg,.png,.gif,.webp" />
+    <add key="ProductImagePath" value="~/Content/images/products/" />
+    <add key="DefaultProductImage" value="/Content/images/default-product.png" />
+
+    <!-- Session -->
+    <add key="SessionTimeoutMinutes" value="[SESSION_TIMEOUT_MINUTES]" />
+  </appSettings>
+
+  <!-- ================================================================
+       System.Web Konfigürasyonu
+       ================================================================ -->
+  <system.web>
+    <compilation debug="false" targetFramework="4.7.2" />
+    <httpRuntime targetFramework="4.7.2"
+                 maxRequestLength="[MAX_REQUEST_LENGTH_KB]"
+                 executionTimeout="[EXECUTION_TIMEOUT_SECONDS]" />
+
+    <!-- Session durumu -->
+    <sessionState mode="InProc"
+                  timeout="[SESSION_TIMEOUT_MINUTES]" />
+
+    <!-- Authentication — Forms Auth (MVC 5 admin paneli için) -->
+    <authentication mode="Forms">
+      <forms loginUrl="~/AdminLogin"
+             timeout="[SESSION_TIMEOUT_MINUTES]"
+             cookieless="UseCookies"
+             requireSSL="false" />
+    </authentication>
+  </system.web>
+
+  <!-- ================================================================
+       System.WebServer Konfigürasyonu (IIS)
+       ================================================================ -->
+  <system.webServer>
+    <validation validateIntegratedModeConfiguration="false" />
+
+    <!-- URL Rewrite — QR menü kısa URL'leri için -->
+    <rewrite>
+      <rules>
+        <!-- /m/{mekanKod} → /Menu/Public/{mekanKod} -->
+        <rule name="QR Menu Short URL" stopProcessing="true">
+          <match url="^m/([a-zA-Z0-9-]+)$" />
+          <action type="Rewrite" url="/Menu/Public/{R:1}" />
+        </rule>
+      </rules>
+    </rewrite>
+
+    <!-- Static dosya önbellekleme -->
+    <staticContent>
+      <clientCache cacheControlMode="UseMaxAge"
+                   cacheControlMaxAge="[STATIC_CACHE_MAX_AGE]" />
+    </staticContent>
+  </system.webServer>
+
+  <!-- ================================================================
+       Entity Framework Konfigürasyonu
+       ================================================================ -->
+  <entityFramework>
+    <defaultConnectionFactory
+      type="System.Data.Entity.Infrastructure.SqlConnectionFactory, EntityFramework" />
+    <providers>
+      <provider invariantName="System.Data.SqlClient"
+                type="System.Data.Entity.SqlServer.SqlProviderServices, EntityFramework.SqlServer" />
+    </providers>
+  </entityFramework>
+
+  <!-- ================================================================
+       Runtime Binding Yönlendirmeleri
+       ================================================================ -->
+  <runtime>
+    <assemblyBinding xmlns="urn:schemas-microsoft-com:asm.v1">
+      <dependentAssembly>
+        <assemblyIdentity name="Newtonsoft.Json"
+                          publicKeyToken="30ad4fe6b2a6aeed"
+                          culture="neutral" />
+        <bindingRedirect oldVersion="0.0.0.0-12.0.0.0"
+                         newVersion="12.0.0.0" />
+      </dependentAssembly>
+    </assemblyBinding>
+  </runtime>
+
+</configuration>

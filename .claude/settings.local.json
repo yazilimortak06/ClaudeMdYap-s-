@@ -5,7 +5,25 @@
       "Bash(git add *)",
       "Bash(git commit *)",
       "Bash(git branch *)",
-      "Bash(git remote *)"
+      "Bash(git remote *)",
+      "Bash(git push *)",
+      "Bash(git config *)",
+      "Bash(git -c credential.helper= push -u origin main)",
+      "Bash(curl *)",
+      "Bash(Get-ChildItem *)",
+      "Bash(Select-Object Name)",
+      "Bash(Select-Object -ExpandProperty Name)",
+      "Bash(mkdir *)",
+      "Bash(cp *)",
+      "Bash(ls *)",
+      "PowerShell(New-Item *)",
+      "PowerShell(Copy-Item *)",
+      "PowerShell(Get-ChildItem *)",
+      "PowerShell(Remove-Item *)",
+      "PowerShell(mkdir *)",
+      "PowerShell(New-Item -ItemType Directory *)",
+      "PowerShell(ls *)",
+      "Skill(update-config)"
     ]
   }
 }
