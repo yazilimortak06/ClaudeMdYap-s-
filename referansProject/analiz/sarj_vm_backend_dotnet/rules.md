@@ -1,9 +1,10 @@
-# sarj_vm_backend_dotnet — Çıkarılan Kurallar
+# sarj_vm_backend_dotnet — Cikarilan Kurallar
+Orijinal: `E:\Projeler\Backend\rotawattvmbackend-develop (1)\rotawattvmbackend-develop`
 
-Bu dosya, projeyi analiz ederek çıkarılan tekrar edilebilir kural ve pattern'leri içerir.
-Ocelot gateway'li .NET microservice backend geliştirirken referans olarak kullanılabilir.
+Bu dosya gercek kod okunarak cikarilan somut kurallari icerir.
+Ocelot gateway'li ve WebSocket/OCPP tabanli .NET microservice backend gelistirirken referans.
 
-**Temel kural seti için bkz:** `sarj_backend_dotnet/rules.md`
+**Temel kural seti icin bkz:** `sarj_backend_dotnet/rules.md`
 
 ---
 
@@ -176,7 +177,7 @@ Vm.Application/
 
 **Kural:** Ocelot Gateway'den geçmeyen endpoint'ler olmamalı. Vm.Api ve VmPanel.Api dış dünyaya port expose etmemeli — sadece Gateway'in Docker network'üne açık olmalı.
 
-**Kural:** Docker Compose'da internal network tanımla:
+**Kural:** Docker Compose'da internal network tanimla:
 ```yaml
 networks:
   backend:
@@ -192,5 +193,148 @@ services:
     networks:
       - backend
     ports:
-      - "5000:80"   # Sadece gateway dışarıya açık
+      - "5000:80"   # Sadece gateway disariya acik
 ```
+
+---
+
+## 9. Gercek Koddan Cikarilan Ek Kurallar
+
+### WebSocket + OCPP proxy pattern
+
+```csharp
+// Controller WebSocket'i kabul etmez, servise devreder
+[Route("[controller]/{Identifier}")]
+public async Task ConnectionDevice(string Identifier)
+{
+    await _vmConnectionService.ConnectionDevice(Identifier);
+    // WebSocket kapaninana kadar bu metot bloklar
+    // HTTP response gönderilmez — bağlantı WebSocket'e upgrade edilir
+}
+
+// Servis icerisinde WebSocket kabul
+if (_customHttpUtilService.GetHttpContext().HttpContext.WebSockets.IsWebSocketRequest)
+{
+    using (WebSocket webSocket = await context.WebSockets.AcceptWebSocketAsync(subProtocol))
+    {
+        // Ana döngü — WebSocket acik oldukca calisir
+        while (webSocket.State == WebSocketState.Open)
+        {
+            var result = await webSocket.ReceiveAsync(buffer, cancellationToken);
+            if (result.MessageType != WebSocketMessageType.Close)
+            {
+                // Mesaj isle
+            }
+        }
+    }
+}
+```
+
+### ConcurrentDictionary session yönetimi
+
+```csharp
+// Tüm aktif cihaz baglantilari thread-safe dictionary'de
+public static ConcurrentDictionary<string, VmConnectionSessionDto> _vmSessionStatusDict
+    = new ConcurrentDictionary<string, VmConnectionSessionDto>();
+
+// Yeni baglanti ekle (var olan baglanti kapatilir)
+bool statusSuccess = await UpdateVmDictionaryForDevice(vmConnectionSession, identifier);
+// identifier = cihaz kimlik numarasi (OCPP ChargeBox ID)
+```
+
+### IServiceProvider ile scoped servis
+
+```csharp
+// WebSocket uzun sure acik - DI scope'u kendi yönetmelisin
+// Scoped servisler using (CreateScope()) ile alinir
+
+VmParameter vmParameter = null;
+using (var scope = _services.CreateScope())
+{
+    var repo = scope.ServiceProvider.GetRequiredService<IVmParameterRepository>();
+    vmParameter = await repo.GetVmParameter(...).FirstOrDefaultAsync();
+}
+// scope dispose oldugunda repository ve DbContext kapanir
+
+// YANLIS: Singleton veya uzun ömürlü serviste scoped servis direkt inject etme
+// DOGRU: IServiceProvider inject et, kullanim aninda scope ac
+```
+
+### Atomic first connection pattern
+
+```csharp
+int firstConnection = 1; // 1=true, 0=false
+
+while (webSocket.State == WebSocketState.Open)
+{
+    // ... mesaj isle ...
+
+    // Sadece ilk mesajda DB update yap - thread-safe
+    if (Interlocked.CompareExchange(ref firstConnection, 0, 1) == 1)
+    {
+        await UpdateDeviceConnectionDb(vmConnectionSession, true, ChargeDeviceInstantStateEnum.AVAILABLE);
+    }
+    // Sonraki iterasyonlarda CompareExchange 0 dönüyor, update atlanıyor
+}
+```
+
+### OCPP mesaj dispatch pattern
+
+```csharp
+// Action string'e göre dispatch — switch yerine if/else zinciri
+private async Task ProcessDeviceMessages(VmConnectionSessionDto session,
+    Uri uriServer, Uri uriCpo, string messageType, string messageId, JToken payload, string action)
+{
+    // action = "MeterValues", "Heartbeat", "Authorize" vb.
+    if (action == OcppFromChargePointActionTypeEnum.METER_VALUES.ToDescriptionString())
+    {
+        await SendMeterValuesResponseToDevice(session, messageId, payload);
+        await SendMeterValuesToCpoAndServer(session, uriServer, uriCpo, ...);
+    }
+    else if (action == OcppFromChargePointActionTypeEnum.AUTHORIZE.ToDescriptionString())
+    {
+        // Response bekle, hemen cevap verme
+        await SendAuthorizeToCpoAndServer(session, uriServer, uriCpo, ...);
+        // CPO/Server'dan gelen yanit sonra islenecek
+    }
+    else if (action == OcppFromChargePointActionTypeEnum.START_TRANSACTION.ToDescriptionString())
+    {
+        // TransactionTarget'a göre farkli davranis
+        if (session.TransactionTarget == TransactionTargetEnum.VM_ONLY)
+            await SendStartTransactionResponseToDevice(session, messageId, payload);
+        else
+            await HandleStartTransactionWithExternalWait(session, ...);
+    }
+}
+```
+
+### Heartbeat izleme pattern
+
+```csharp
+// Her gelen mesaj = cihaz hayatta
+vmConnectionSession.LastHeartbeatTime = DateTime.UtcNow;
+vmConnectionSession.MissedHeartbeatCount = 0;
+
+// Ayri monitor gorevi arka planda heartbeat kontrol eder
+await EnsureHeartbeatMonitorStarted(vmConnectionSession);
+// Monitor: beklenen interval'da heartbeat gelmediyse MissedHeartbeatCount arttirir
+// Belirli esik asildiysa baglanti kopuk kabul edilir
+```
+
+### Ocelot WebSocket route
+
+```json
+// WebSocket downstream = "ws" scheme ile isaretlenir
+{
+  "DownstreamScheme": "ws",           // WebSocket proxy
+  "UpstreamPathTemplate": "/vm/{url}" // OCPP cihazlar buradan baglanir
+}
+
+// HTTP downstream normal "http"
+{
+  "DownstreamScheme": "http",
+  "UpstreamPathTemplate": "/web/{url}"  // VmPanel REST API
+}
+```
+
+**Kural**: Ocelot'ta WebSocket ve HTTP route'lari farkli scheme ile ayirt edilmeli. `"DownstreamScheme": "ws"` olmadan WebSocket upgrade calismaz.

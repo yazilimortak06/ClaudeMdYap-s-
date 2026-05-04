@@ -1,7 +1,8 @@
-# sarj_backend_dotnet — Çıkarılan Kurallar
+# sarj_backend_dotnet — Cikarilan Kurallar
+Orijinal: `E:\Projeler\Backend\RotaWattBackEnd`
 
-Bu dosya, projeyi analiz ederek çıkarılan tekrar edilebilir kural ve pattern'leri içerir.
-.NET 5 microservice backend geliştirirken referans olarak kullanılabilir.
+Bu dosya gercek kod okunarak cikarilan somut kurallari icerir.
+ASP.NET Core microservice gelistirirken referans olarak kullanilabilir.
 
 ---
 
@@ -247,4 +248,149 @@ FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
 
 **Kural:** Connection string key adı olarak `MainConnectionString` standardını tüm servislerde koru.
 
-**Kural:** Secret değerleri (DB password, token key, API key) ortam değişkenleri veya Secret Manager üzerinden sağlan. appsettings.json'a yazılmasın.
+**Kural:** Secret degerler (DB password, token key, API key) ortam degiskenleri veya Secret Manager uzerinden saglan. appsettings.json'a yazilmasin.
+
+---
+
+## 15. Gercek Projeden Cikarilan Ek Kurallar
+
+### Partial Update Kurali — UpdateWithProperties
+
+```csharp
+// YANLIS: Tüm entity guncellenir (gereksiz column lock ve dirty read riski)
+_dbSet.Update(wallet);
+
+// DOGRU: Sadece belirtilen property'ler guncellenir
+_walletRepository.UpdateWithProperties(wallet, new Expression<Func<Wallet, object>>[] {
+    s => s.ProcessKey,
+    s => s.WalletAmount,
+    s => s.AmountTockenGuiId,
+});
+wallet.WalletAmount = wallet.WalletAmount - amount;
+// SaveChanges sonrasi sadece bu 3 kolon yazilir
+```
+
+### Dinamik Predicate Builder Kurali
+
+```csharp
+// Her repository'de null-safe dinamik filtre kurali
+private Expression<Func<Payment, bool>> GetPaymentPredicate(PaymentFilterDto filter)
+{
+    Expression<Func<Payment, bool>> predicate = p => !p.Deleted;  // Her zaman soft-delete filtresi
+    if (filter.Id != null)           predicate = predicate.And(p => p.Id == filter.Id);
+    if (filter.PaymentGuiId != null) predicate = predicate.And(p => p.GuiId == filter.PaymentGuiId);
+    if (filter.PaymentStatus != null) predicate = predicate.And(p => p.PaymentStatus == filter.PaymentStatus);
+    if (filter.PaymentStatusList?.Count > 0)
+        predicate = predicate.And(p => filter.PaymentStatusList.Contains(p.PaymentStatus));
+    return predicate;
+}
+```
+
+### IQueryable Pattern Kurali
+
+```csharp
+// Repository IQueryable doner — tüketme servis katmaninda yapilir
+public IQueryable<Payment> GetPaymentAsNoTracking(PaymentFilterDto filter)
+    => GetPayment(filter).AsNoTracking();  // Compose edilebilir
+
+// Servis katmaninda:
+var payment = await _paymentRepository.GetPaymentAsNoTracking(filter).FirstOrDefaultAsync();
+var list    = await _paymentRepository.GetPaymentAsNoTracking(filter).ToListAsync();
+// Ayni query farklı terminatorlarla kullanilabilir
+```
+
+### AsSplitQuery Kurali
+
+```csharp
+// Include ile birden fazla collection join varsa AsSplitQuery kullan
+var query = _appDbContext.Payment
+    .Include(p => p.PaymentCallbackData)
+    .Include(p => p.WalletSpendMoney)
+    .Where(predicate)
+    .AsSplitQuery();  // Tek SQL yerine ayri sorgular, N+1 azalir
+```
+
+### Soft Delete Kurali
+
+```csharp
+// Fiziksel silme yok — Deleted flag ile isaretleme
+public override void DeleteWithState(object id)
+{
+    var entity = _dbSet.Find(id);
+    entity.Deleted = true;
+    if (entity != null) Update(entity);
+}
+
+// Tüm sorgularda temel filtre
+Expression<Func<Payment, bool>> predicate = p => !p.Deleted;
+```
+
+### Entity GuiId Kurali
+
+```csharp
+// Her entity'nin DB PK (Id) yaninda string GuiId'si var
+// GuiId dis sistemlere expose edilir, numeric Id gizli kalir
+payment.GuiId = Guid.NewGuid() + "";  // Proje string concat kullaniyor (ToString yerine)
+```
+
+### Result<T> Kullanim Kurali
+
+```csharp
+// Service metotu imzasi
+public async Task<Result<PaymentWalletResponseDto>> PaymentWallet(PaymentWalletRequestDto request)
+{
+    var response = new PaymentWalletResponseDto();
+
+    // Validasyon hatasi
+    if (wallet == null)
+        return new ErrorResult<PaymentWalletResponseDto>(response, PaymentErrorEnum.WALLET_NOT_FOUND);
+    // ErrorCode = (int)PaymentErrorEnum.WALLET_NOT_FOUND, ErrorMessage = Description attribute
+
+    // Basari
+    return new SuccessResult<PaymentWalletResponseDto>(response);
+    // ResultType.Ok, Data = response
+}
+
+// Controller kullanimi
+public async Task<IActionResult> PaymentWallet(PaymentWalletRequestDto request)
+{
+    var result = await _paymentService.PaymentWallet(request);
+    return this.FromHttpClientResult(result);  // Her durumda Ok(result) doner
+}
+```
+
+### Hata Enum Kurali
+
+```csharp
+// Her modul/domain icin ayri error enum (Shared.Domain/Errors/ altinda)
+// enum Description attribute ile hata mesaji icerir
+public enum PaymentErrorEnum
+{
+    [Description("Odeme daha once tamamlandi")]
+    PAYMENT_WAS_COMPLETED = 1001,
+
+    [Description("Cüzdan bakiyesi yetersiz")]
+    WALLET_AMOUNT_INSUFFICIENT = 1002,
+
+    [Description("Cüzdan bulunamadi")]
+    WALLET_NOT_FOUND = 1003,
+}
+
+// Kullanim: error.ToDescriptionString() ile string mesaj alinir
+ErrorCode = (int)((object)error);
+ErrorMessage = error.ToDescriptionString();
+```
+
+### appsettings Startup Pattern
+
+```json
+// Her API icin StartupConfigs bolumu zorunlu
+"StartupConfigs": {
+  "ProjectPrefix": "Bank",        // Assembly scan prefix ("Bank", "Vm", "Station" vb.)
+  "Policy": "_myAllowSpecificOrigins",
+  "ApiUrl": "https://localhost:14495",
+  "MigrationAssembly": "Bank.Persistence",  // Migrations hangi projede
+  "AllowAnonymous": false,
+  "ApiName": "Bank"
+}
+```

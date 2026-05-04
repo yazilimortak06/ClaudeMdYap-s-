@@ -1,0 +1,115 @@
+# ORIJINAL DOSYA: docker-compose.yml (RotaWattBackEnd)
+# Credential degerleri [MASKED] yapildi
+
+# version: '3.4'
+
+services:
+  notification.api:
+   image: rotawatt/notificationapi:1
+   build:
+     context: .
+     dockerfile: src/Presentation/Notification.Api/Dockerfile
+
+  gateway.api:
+   image: rotawatt/gatewayapi:1
+   build:
+     context: .
+     dockerfile: src/Presentation/GateWay.Api/Dockerfile
+
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    environment:
+      - "RABBITMQ_DEFAULT_PASS=[MASKED]"
+      - "RABBITMQ_DEFAULT_USER=[MASKED]"
+
+  mobil.api:
+    image: rotawatt/mobilapi:1
+    build:
+      context: .
+      dockerfile: src/Presentation/Mobil.Api/Dockerfile
+
+  mailsms.api:
+    image: rotawatt/mailsms:1
+    build:
+      context: .
+      dockerfile: src/Presentation/MailSms.Api/Dockerfile
+
+  token.api:
+    image: rotawatt/tockenapi:1
+    build:
+      context: .
+      dockerfile: src/Presentation/Tocken.Api/Dockerfile
+
+  bank.api:
+    image: rotawatt/bankapi:1
+    build:
+      context: .
+      dockerfile: src/Presentation/Bank.Api/Dockerfile
+
+  web.api:
+    image: rotawatt/webapi:1
+    build:
+      context: .
+      dockerfile: src/Presentation/Web.Api/Dockerfile
+
+  file.api:
+    image: rotawatt/fileapi:1
+    build:
+      context: .
+      dockerfile: src/Presentation/File.Api/Dockerfile
+    volumes:
+      - ./src/Presentation/File.API/Uploaded_Files:/app/Uploaded_Files
+
+  integration.api:
+    image: rotawatt/integration:1
+    build:
+      context: .
+      dockerfile: src/Presentation/Integration.Api/Dockerfile
+
+  log.api:
+    image: rotawatt/log:1
+    build:
+      context: .
+      dockerfile: src/Presentation/Log.Api/Dockerfile
+
+  googleservice.api:
+    image: rotawatt/googleservice:1
+    build:
+      context: .
+      dockerfile: src/Presentation/googleservice.Api/Dockerfile
+
+  workerservice.api:
+    image: rotawatt/workerserviceapi:1
+    build:
+      context: .
+      dockerfile: src/Presentation/WorkerService.Api/Dockerfile
+
+  workerservice:
+    image: rotawatt/workerservice:1
+    build:
+      context: .
+      dockerfile: src/Presentation/WorkerService/Dockerfile
+
+  firmintegration.api:
+    image: rotawatt/firmintegration:1
+    build:
+      context: .
+      dockerfile: src/FirmIntegration/Presentation/FirmIntegration.Api/Dockerfile
+
+  station.api:
+    image: rotawatt/station:1
+    build:
+      context: .
+      dockerfile: src/Presentation/station.Api/Dockerfile
+
+  ocpp.api:
+    image: rotawatt/ocpp:1
+    build:
+      context: .
+      dockerfile: src/Presentation/Ocpp.Api/Dockerfile
+
+  vm.api:
+    image: rotawatt/vm:1
+    build:
+      context: .
+      dockerfile: src/Presentation/Vm.Api/Dockerfile

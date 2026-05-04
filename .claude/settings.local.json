@@ -23,7 +23,8 @@
       "PowerShell(mkdir *)",
       "PowerShell(New-Item -ItemType Directory *)",
       "PowerShell(ls *)",
-      "Skill(update-config)"
+      "Skill(update-config)",
+      "Bash(git checkout *)"
     ]
   }
 }

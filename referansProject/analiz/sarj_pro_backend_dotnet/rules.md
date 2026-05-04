@@ -1,8 +1,10 @@
-# sarj_pro_backend_dotnet — Çıkarılan Kurallar
+# sarj_pro_backend_dotnet — Cikarilan Kurallar
+Orijinal: `E:\Projeler\Backend\SarjAllPro`
 
-Bu dosya, `sarj_pro_backend_dotnet` (SarjAllPro) projesine özgü veya `sarj_backend_dotnet`'ten farklılaşan kuralları içerir.
+Bu dosya, SarjAllPro projesine özgü veya RotaWattBackEnd'den farklilasan kurallari icerir.
+Gercek kod okunarak dogrulandi.
 
-**Temel kural seti için bkz:** `sarj_backend_dotnet/rules.md` — tüm kurallar bu proje için de geçerlidir.
+**Temel kural seti icin bkz:** `sarj_backend_dotnet/rules.md` — tüm kurallar bu proje icin de gecerlidir.
 
 ---
 
@@ -89,4 +91,68 @@ sarj_pro_backend: registry.domain.com/sarjpro/notification.api:TAG
 2. Her iki projeyi ayrı ayrı test et
 3. Projeleri sırayla yükselt, aynı anda değil
 
-**Kural:** FrameworkCore kaynak kodunun fork'u olması durumunda bir `FRAMEWORK_VERSION.md` dosyası oluştur ve kaynak ile son sync tarihini belirt.
+**Kural:** FrameworkCore kaynak kodunun fork'u olmasi durumunda bir `FRAMEWORK_VERSION.md` dosyasi olustur ve kaynak ile son sync tarihini belirt.
+
+---
+
+## 7. Gercek Koddan Dogrulanan Farklar
+
+### Startup method prefix kurali
+
+```csharp
+// RotaWattBackEnd: AddRotaWatt* prefix
+services.AddRotaWattDbService<PaymentDbContext>(dbcontextOptions);
+services.AddRotaWattApiService(Configuration, WebHostEnvironment, policy, apiUrl);
+services.AddRotaWattAutoMapperService(ApiOptions.RegistrationAssemblies);
+
+// SarjAllPro: AddPixdinn* prefix
+services.AddPixdinnDbService<PaymentDbContext>(dbcontextOptions);
+services.AddPixdinnApiService(Configuration, WebHostEnvironment, policy, apiUrl);
+services.AddPixdinnAutoMapperService(ApiOptions.RegistrationAssemblies);
+```
+
+**Kural**: Fork proje olusturulurken tüm framework method isimlerinde prefix degistirilmeli. Karismaligin onlenmesi icin proje adi prefix olarak kullanilmali.
+
+### ConnectionString key kurali
+
+```json
+// RotaWattBackEnd
+"ConnectionStrings": {
+  "RotaWattConnectionString": "Server=[MASKED];..."
+}
+// GetAppSettingValue("ConnectionStrings:RotaWattConnectionString")
+
+// SarjAllPro
+"ConnectionStrings": {
+  "PixdinnConnectionString": "Server=[MASKED];..."
+}
+// GetAppSettingValue("ConnectionStrings:PixdinnConnectionString")
+```
+
+**Kural**: Her fork projede ConnectionString key'i proje/musteri adiyla isimlendir. Generic "MainConnectionString" yerine proje adini tasi.
+
+### DateTime JSON davranisi farki
+
+```csharp
+// RotaWattBackEnd: Ozel DateTimeConverter eklendi
+opt.JsonSerializerOptions.Converters.Add(new DateTimeConverter());
+// Cikti: "2024-01-15T14:30:00" (UTC offset yok)
+
+// SarjAllPro: Enum converter var, DateTime converter yok
+opt.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+// Cikti: default .NET davranisi
+```
+
+**Kural**: Fork'ta DateTime serializasyonu ozellestirilmemis. Bu iki proje arasinda API response format farkliligi yaratabilir.
+
+### Odeme saglayici konfig yapisi (her iki projede ayni)
+
+```json
+"PaymentIntegrations": [
+  { "Name": "IYZICO", "Selected": false },
+  { "Name": "PARAM",  "Selected": false },
+  { "Name": "MOKA",   "Selected": true  }
+]
+```
+
+**Kural**: Birden fazla odeme saglayicisi konfig'de tanim yapilmali. Aktif olan `Selected: true` ile isaretlenmeli. Kod degisikligi olmadan provider degistirilebilmeli.
