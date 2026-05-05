@@ -1,0 +1,219 @@
+version: "3.8"
+
+# sarj_pro_backend_dotnet — docker-compose.template.yml
+# sarj_backend_dotnet'ten farklar:
+#   - Image prefix: sarjpro/
+#   - Daha az servis (13+, FirmIntegration yok)
+#   - RabbitMQ credentials farklı
+
+services:
+
+  notification.api:
+    image: [REGISTRY]/sarjpro/notification.api:[TAG]
+    environment:
+      - ASPNETCORE_ENVIRONMENT=[ENVIRONMENT]
+      - ConnectionStrings__MainConnectionString=[CONNECTION_STRING]
+      - RabbitMqSettings__HostName=[RABBITMQ_HOST]
+      - RabbitMqSettings__UserName=[SARJPRO_RABBITMQ_USER]
+      - RabbitMqSettings__Password=[SARJPRO_RABBITMQ_PASSWORD]
+    ports:
+      - "[HOST_PORT]:80"
+    depends_on:
+      - rabbitmq
+    restart: unless-stopped
+
+  gateway.api:
+    image: [REGISTRY]/sarjpro/gateway.api:[TAG]
+    environment:
+      - ASPNETCORE_ENVIRONMENT=[ENVIRONMENT]
+      - ConnectionStrings__MainConnectionString=[CONNECTION_STRING]
+    ports:
+      - "[HOST_PORT]:80"
+    restart: unless-stopped
+
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    environment:
+      - RABBITMQ_DEFAULT_USER=[SARJPRO_RABBITMQ_USER]
+      - RABBITMQ_DEFAULT_PASS=[SARJPRO_RABBITMQ_PASSWORD]
+      - RABBITMQ_DEFAULT_VHOST=[SARJPRO_RABBITMQ_VHOST]
+    ports:
+      - "[HOST_PORT]:5672"
+      - "[HOST_PORT_MGMT]:15672"
+    volumes:
+      - sarjpro_rabbitmq_data:/var/lib/rabbitmq
+    restart: unless-stopped
+
+  mobil.api:
+    image: [REGISTRY]/sarjpro/mobil.api:[TAG]
+    environment:
+      - ASPNETCORE_ENVIRONMENT=[ENVIRONMENT]
+      - ConnectionStrings__MainConnectionString=[CONNECTION_STRING]
+      - RabbitMqSettings__HostName=[RABBITMQ_HOST]
+      - RabbitMqSettings__UserName=[SARJPRO_RABBITMQ_USER]
+      - RabbitMqSettings__Password=[SARJPRO_RABBITMQ_PASSWORD]
+      - StartupConfigs__ApiName=MOBIL
+    ports:
+      - "[HOST_PORT]:80"
+    depends_on:
+      - rabbitmq
+    restart: unless-stopped
+
+  mailsms.api:
+    image: [REGISTRY]/sarjpro/mailsms.api:[TAG]
+    environment:
+      - ASPNETCORE_ENVIRONMENT=[ENVIRONMENT]
+      - ConnectionStrings__MainConnectionString=[CONNECTION_STRING]
+      - RabbitMqSettings__HostName=[RABBITMQ_HOST]
+      - RabbitMqSettings__UserName=[SARJPRO_RABBITMQ_USER]
+      - RabbitMqSettings__Password=[SARJPRO_RABBITMQ_PASSWORD]
+    ports:
+      - "[HOST_PORT]:80"
+    depends_on:
+      - rabbitmq
+    restart: unless-stopped
+
+  token.api:
+    image: [REGISTRY]/sarjpro/token.api:[TAG]
+    environment:
+      - ASPNETCORE_ENVIRONMENT=[ENVIRONMENT]
+      - ConnectionStrings__MainConnectionString=[CONNECTION_STRING]
+      - Wallet__TockenKey=[TOKEN_SECRET_KEY]
+    ports:
+      - "[HOST_PORT]:80"
+    restart: unless-stopped
+
+  bank.api:
+    image: [REGISTRY]/sarjpro/bank.api:[TAG]
+    environment:
+      - ASPNETCORE_ENVIRONMENT=[ENVIRONMENT]
+      - ConnectionStrings__MainConnectionString=[CONNECTION_STRING]
+      - RabbitMqSettings__HostName=[RABBITMQ_HOST]
+      - RabbitMqSettings__UserName=[SARJPRO_RABBITMQ_USER]
+      - RabbitMqSettings__Password=[SARJPRO_RABBITMQ_PASSWORD]
+      # MOKA aktif ödeme sağlayıcısı
+      - PaymentIntegrations__0__Name=IYZICO
+      - PaymentIntegrations__0__Selected=false
+      - PaymentIntegrations__1__Name=PARAM
+      - PaymentIntegrations__1__Selected=false
+      - PaymentIntegrations__2__Name=MOKA
+      - PaymentIntegrations__2__Selected=true
+      - MokaSettings__DealerCode=[MOKA_DEALER_CODE]
+      - MokaSettings__Username=[MOKA_USERNAME]
+      - MokaSettings__Password=[MOKA_PASSWORD]
+    ports:
+      - "[HOST_PORT]:80"
+    depends_on:
+      - rabbitmq
+    restart: unless-stopped
+
+  web.api:
+    image: [REGISTRY]/sarjpro/web.api:[TAG]
+    environment:
+      - ASPNETCORE_ENVIRONMENT=[ENVIRONMENT]
+      - ConnectionStrings__MainConnectionString=[CONNECTION_STRING]
+      - RabbitMqSettings__HostName=[RABBITMQ_HOST]
+      - RabbitMqSettings__UserName=[SARJPRO_RABBITMQ_USER]
+      - RabbitMqSettings__Password=[SARJPRO_RABBITMQ_PASSWORD]
+    ports:
+      - "[HOST_PORT]:80"
+    depends_on:
+      - rabbitmq
+    restart: unless-stopped
+
+  file.api:
+    image: [REGISTRY]/sarjpro/file.api:[TAG]
+    environment:
+      - ASPNETCORE_ENVIRONMENT=[ENVIRONMENT]
+      - ConnectionStrings__MainConnectionString=[CONNECTION_STRING]
+    ports:
+      - "[HOST_PORT]:80"
+    volumes:
+      - sarjpro_uploaded_files:/app/uploads
+    restart: unless-stopped
+
+  integration.api:
+    image: [REGISTRY]/sarjpro/integration.api:[TAG]
+    environment:
+      - ASPNETCORE_ENVIRONMENT=[ENVIRONMENT]
+      - ConnectionStrings__MainConnectionString=[CONNECTION_STRING]
+      - RabbitMqSettings__HostName=[RABBITMQ_HOST]
+      - RabbitMqSettings__UserName=[SARJPRO_RABBITMQ_USER]
+      - RabbitMqSettings__Password=[SARJPRO_RABBITMQ_PASSWORD]
+    ports:
+      - "[HOST_PORT]:80"
+    depends_on:
+      - rabbitmq
+    restart: unless-stopped
+
+  log.api:
+    image: [REGISTRY]/sarjpro/log.api:[TAG]
+    environment:
+      - ASPNETCORE_ENVIRONMENT=[ENVIRONMENT]
+      - ConnectionStrings__MainConnectionString=[CONNECTION_STRING]
+      - RabbitMqSettings__HostName=[RABBITMQ_HOST]
+      - RabbitMqSettings__UserName=[SARJPRO_RABBITMQ_USER]
+      - RabbitMqSettings__Password=[SARJPRO_RABBITMQ_PASSWORD]
+    ports:
+      - "[HOST_PORT]:80"
+    depends_on:
+      - rabbitmq
+    restart: unless-stopped
+
+  workerservice.api:
+    image: [REGISTRY]/sarjpro/workerservice.api:[TAG]
+    environment:
+      - ASPNETCORE_ENVIRONMENT=[ENVIRONMENT]
+      - ConnectionStrings__MainConnectionString=[CONNECTION_STRING]
+      - RabbitMqSettings__HostName=[RABBITMQ_HOST]
+      - RabbitMqSettings__UserName=[SARJPRO_RABBITMQ_USER]
+      - RabbitMqSettings__Password=[SARJPRO_RABBITMQ_PASSWORD]
+    ports:
+      - "[HOST_PORT]:80"
+    depends_on:
+      - rabbitmq
+    restart: unless-stopped
+
+  workerservice:
+    image: [REGISTRY]/sarjpro/workerservice:[TAG]
+    environment:
+      - DOTNET_ENVIRONMENT=[ENVIRONMENT]
+      - ConnectionStrings__MainConnectionString=[CONNECTION_STRING]
+      - RabbitMqSettings__HostName=[RABBITMQ_HOST]
+      - RabbitMqSettings__UserName=[SARJPRO_RABBITMQ_USER]
+      - RabbitMqSettings__Password=[SARJPRO_RABBITMQ_PASSWORD]
+    depends_on:
+      - rabbitmq
+    restart: unless-stopped
+
+  station.api:
+    image: [REGISTRY]/sarjpro/station.api:[TAG]
+    environment:
+      - ASPNETCORE_ENVIRONMENT=[ENVIRONMENT]
+      - ConnectionStrings__MainConnectionString=[CONNECTION_STRING]
+      - RabbitMqSettings__HostName=[RABBITMQ_HOST]
+      - RabbitMqSettings__UserName=[SARJPRO_RABBITMQ_USER]
+      - RabbitMqSettings__Password=[SARJPRO_RABBITMQ_PASSWORD]
+    ports:
+      - "[HOST_PORT]:80"
+    depends_on:
+      - rabbitmq
+    restart: unless-stopped
+
+  ocpp.api:
+    image: [REGISTRY]/sarjpro/ocpp.api:[TAG]
+    environment:
+      - ASPNETCORE_ENVIRONMENT=[ENVIRONMENT]
+      - ConnectionStrings__MainConnectionString=[CONNECTION_STRING]
+      - RabbitMqSettings__HostName=[RABBITMQ_HOST]
+      - RabbitMqSettings__UserName=[SARJPRO_RABBITMQ_USER]
+      - RabbitMqSettings__Password=[SARJPRO_RABBITMQ_PASSWORD]
+    ports:
+      - "[HOST_PORT]:80"
+    depends_on:
+      - rabbitmq
+    restart: unless-stopped
+
+volumes:
+  sarjpro_rabbitmq_data:
+  sarjpro_uploaded_files:

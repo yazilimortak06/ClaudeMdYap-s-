@@ -1,0 +1,239 @@
+version: "3.8"
+
+services:
+
+  notification.api:
+    image: [REGISTRY]/notification.api:[TAG]
+    environment:
+      - ASPNETCORE_ENVIRONMENT=[ENVIRONMENT]
+      - ConnectionStrings__MainConnectionString=[CONNECTION_STRING]
+      - RabbitMqSettings__HostName=[RABBITMQ_HOST]
+      - RabbitMqSettings__UserName=[RABBITMQ_USER]
+      - RabbitMqSettings__Password=[PASSWORD]
+    ports:
+      - "[HOST_PORT]:80"
+    depends_on:
+      - rabbitmq
+    restart: unless-stopped
+
+  gateway.api:
+    image: [REGISTRY]/gateway.api:[TAG]
+    environment:
+      - ASPNETCORE_ENVIRONMENT=[ENVIRONMENT]
+      - ConnectionStrings__MainConnectionString=[CONNECTION_STRING]
+    ports:
+      - "[HOST_PORT]:80"
+    restart: unless-stopped
+
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    environment:
+      - RABBITMQ_DEFAULT_USER=[RABBITMQ_USER]
+      - RABBITMQ_DEFAULT_PASS=[PASSWORD]
+    ports:
+      - "[HOST_PORT]:5672"
+      - "[HOST_PORT_MGMT]:15672"
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    restart: unless-stopped
+
+  mobil.api:
+    image: [REGISTRY]/mobil.api:[TAG]
+    environment:
+      - ASPNETCORE_ENVIRONMENT=[ENVIRONMENT]
+      - ConnectionStrings__MainConnectionString=[CONNECTION_STRING]
+      - RabbitMqSettings__HostName=[RABBITMQ_HOST]
+      - RabbitMqSettings__UserName=[RABBITMQ_USER]
+      - RabbitMqSettings__Password=[PASSWORD]
+      - StartupConfigs__ApiName=MOBIL
+    ports:
+      - "[HOST_PORT]:80"
+    depends_on:
+      - rabbitmq
+    restart: unless-stopped
+
+  mailsms.api:
+    image: [REGISTRY]/mailsms.api:[TAG]
+    environment:
+      - ASPNETCORE_ENVIRONMENT=[ENVIRONMENT]
+      - ConnectionStrings__MainConnectionString=[CONNECTION_STRING]
+      - RabbitMqSettings__HostName=[RABBITMQ_HOST]
+      - RabbitMqSettings__UserName=[RABBITMQ_USER]
+      - RabbitMqSettings__Password=[PASSWORD]
+    ports:
+      - "[HOST_PORT]:80"
+    depends_on:
+      - rabbitmq
+    restart: unless-stopped
+
+  token.api:
+    image: [REGISTRY]/token.api:[TAG]
+    environment:
+      - ASPNETCORE_ENVIRONMENT=[ENVIRONMENT]
+      - ConnectionStrings__MainConnectionString=[CONNECTION_STRING]
+      - Wallet__TockenKey=[TOKEN_SECRET_KEY]
+    ports:
+      - "[HOST_PORT]:80"
+    restart: unless-stopped
+
+  bank.api:
+    image: [REGISTRY]/bank.api:[TAG]
+    environment:
+      - ASPNETCORE_ENVIRONMENT=[ENVIRONMENT]
+      - ConnectionStrings__MainConnectionString=[CONNECTION_STRING]
+      - RabbitMqSettings__HostName=[RABBITMQ_HOST]
+      - RabbitMqSettings__UserName=[RABBITMQ_USER]
+      - RabbitMqSettings__Password=[PASSWORD]
+    ports:
+      - "[HOST_PORT]:80"
+    depends_on:
+      - rabbitmq
+    restart: unless-stopped
+
+  web.api:
+    image: [REGISTRY]/web.api:[TAG]
+    environment:
+      - ASPNETCORE_ENVIRONMENT=[ENVIRONMENT]
+      - ConnectionStrings__MainConnectionString=[CONNECTION_STRING]
+      - RabbitMqSettings__HostName=[RABBITMQ_HOST]
+      - RabbitMqSettings__UserName=[RABBITMQ_USER]
+      - RabbitMqSettings__Password=[PASSWORD]
+    ports:
+      - "[HOST_PORT]:80"
+    depends_on:
+      - rabbitmq
+    restart: unless-stopped
+
+  file.api:
+    image: [REGISTRY]/file.api:[TAG]
+    environment:
+      - ASPNETCORE_ENVIRONMENT=[ENVIRONMENT]
+      - ConnectionStrings__MainConnectionString=[CONNECTION_STRING]
+    ports:
+      - "[HOST_PORT]:80"
+    volumes:
+      - uploaded_files:/app/uploads
+    restart: unless-stopped
+
+  integration.api:
+    image: [REGISTRY]/integration.api:[TAG]
+    environment:
+      - ASPNETCORE_ENVIRONMENT=[ENVIRONMENT]
+      - ConnectionStrings__MainConnectionString=[CONNECTION_STRING]
+      - RabbitMqSettings__HostName=[RABBITMQ_HOST]
+      - RabbitMqSettings__UserName=[RABBITMQ_USER]
+      - RabbitMqSettings__Password=[PASSWORD]
+    ports:
+      - "[HOST_PORT]:80"
+    depends_on:
+      - rabbitmq
+    restart: unless-stopped
+
+  log.api:
+    image: [REGISTRY]/log.api:[TAG]
+    environment:
+      - ASPNETCORE_ENVIRONMENT=[ENVIRONMENT]
+      - ConnectionStrings__MainConnectionString=[CONNECTION_STRING]
+      - RabbitMqSettings__HostName=[RABBITMQ_HOST]
+      - RabbitMqSettings__UserName=[RABBITMQ_USER]
+      - RabbitMqSettings__Password=[PASSWORD]
+    ports:
+      - "[HOST_PORT]:80"
+    depends_on:
+      - rabbitmq
+    restart: unless-stopped
+
+  googleservice.api:
+    image: [REGISTRY]/googleservice.api:[TAG]
+    environment:
+      - ASPNETCORE_ENVIRONMENT=[ENVIRONMENT]
+      - ConnectionStrings__MainConnectionString=[CONNECTION_STRING]
+    ports:
+      - "[HOST_PORT]:80"
+    restart: unless-stopped
+
+  workerservice.api:
+    image: [REGISTRY]/workerservice.api:[TAG]
+    environment:
+      - ASPNETCORE_ENVIRONMENT=[ENVIRONMENT]
+      - ConnectionStrings__MainConnectionString=[CONNECTION_STRING]
+      - RabbitMqSettings__HostName=[RABBITMQ_HOST]
+      - RabbitMqSettings__UserName=[RABBITMQ_USER]
+      - RabbitMqSettings__Password=[PASSWORD]
+    ports:
+      - "[HOST_PORT]:80"
+    depends_on:
+      - rabbitmq
+    restart: unless-stopped
+
+  workerservice:
+    image: [REGISTRY]/workerservice:[TAG]
+    environment:
+      - DOTNET_ENVIRONMENT=[ENVIRONMENT]
+      - ConnectionStrings__MainConnectionString=[CONNECTION_STRING]
+      - RabbitMqSettings__HostName=[RABBITMQ_HOST]
+      - RabbitMqSettings__UserName=[RABBITMQ_USER]
+      - RabbitMqSettings__Password=[PASSWORD]
+    depends_on:
+      - rabbitmq
+    restart: unless-stopped
+
+  firmintegration.api:
+    image: [REGISTRY]/firmintegration.api:[TAG]
+    environment:
+      - ASPNETCORE_ENVIRONMENT=[ENVIRONMENT]
+      - ConnectionStrings__MainConnectionString=[CONNECTION_STRING]
+      - RabbitMqSettings__HostName=[RABBITMQ_HOST]
+      - RabbitMqSettings__UserName=[RABBITMQ_USER]
+      - RabbitMqSettings__Password=[PASSWORD]
+    ports:
+      - "[HOST_PORT]:80"
+    depends_on:
+      - rabbitmq
+    restart: unless-stopped
+
+  station.api:
+    image: [REGISTRY]/station.api:[TAG]
+    environment:
+      - ASPNETCORE_ENVIRONMENT=[ENVIRONMENT]
+      - ConnectionStrings__MainConnectionString=[CONNECTION_STRING]
+      - RabbitMqSettings__HostName=[RABBITMQ_HOST]
+      - RabbitMqSettings__UserName=[RABBITMQ_USER]
+      - RabbitMqSettings__Password=[PASSWORD]
+    ports:
+      - "[HOST_PORT]:80"
+    depends_on:
+      - rabbitmq
+    restart: unless-stopped
+
+  ocpp.api:
+    image: [REGISTRY]/ocpp.api:[TAG]
+    environment:
+      - ASPNETCORE_ENVIRONMENT=[ENVIRONMENT]
+      - ConnectionStrings__MainConnectionString=[CONNECTION_STRING]
+      - RabbitMqSettings__HostName=[RABBITMQ_HOST]
+      - RabbitMqSettings__UserName=[RABBITMQ_USER]
+      - RabbitMqSettings__Password=[PASSWORD]
+    ports:
+      - "[HOST_PORT]:80"
+    depends_on:
+      - rabbitmq
+    restart: unless-stopped
+
+  vm.api:
+    image: [REGISTRY]/vm.api:[TAG]
+    environment:
+      - ASPNETCORE_ENVIRONMENT=[ENVIRONMENT]
+      - ConnectionStrings__MainConnectionString=[CONNECTION_STRING]
+      - RabbitMqSettings__HostName=[RABBITMQ_HOST]
+      - RabbitMqSettings__UserName=[RABBITMQ_USER]
+      - RabbitMqSettings__Password=[PASSWORD]
+    ports:
+      - "[HOST_PORT]:80"
+    depends_on:
+      - rabbitmq
+    restart: unless-stopped
+
+volumes:
+  rabbitmq_data:
+  uploaded_files:

@@ -63,8 +63,17 @@ Yeni bir karar alındığında buraya eklenir.
 │       ├── planlama.md            # Tartışmalar, kesinleşmemiş görevler, fikirler
 │       ├── havuz.md               # Kesinleşmiş ama henüz alınmamış görevler
 │       └── yapilacaklar.md        # Aktif yapılacak / yapılan işler
-└── referansProject/
-    └── referans_projects.md       # Referans alınan projeler listesi
+├── referansProject/
+│   ├── referans_projects.md       # Master liste: tüm projeler, platform, tech, özet
+│   ├── projects_data/             # Ham proje klasörleri (kullanılınca silinecek)
+│   ├── projects_data_ayristirilmis/
+│   │   └── <anonim_isim>/         # Yapısal dosyalar, hassas bilgi temizlenmiş
+│   ├── projects_data_base_hali/
+│   │   ├── angular_base/          # Angular base proje (sarj_qr_web baz alınmış)
+│   │   └── dotnet_base/           # .NET base proje (sarj_backend_dotnet baz alınmış)
+│   └── <anonim_isim>/
+│       ├── analiz.md              # Detaylı analiz ve çıkarımlar
+│       └── rules.md               # Bu projeden çıkarılan kurallar
 ```
 
 ---
@@ -100,3 +109,42 @@ Yeni bir karar alındığında buraya eklenir.
 1. Kullanıcıyı belirle
 2. Proje seç (yoksa ekle, path yoksa al)
 3. Mod seç: Geliştirme / Analiz / Domainsel kural tanımlama / İş ekleme
+
+### Referans Proje Sistemi
+- Ham proje klasörleri `projects_data/<ProjeAdı>/` altına bırakılır (karışık, sırasız olabilir)
+- Agent `projects_data/` tarar → platform, tech stack, yapı çıkarır → `referans_projects.md` doldurur
+- Her referans proje için `referansProject/<ProjeAdı>/analiz.md` ve `rules.md` oluşturulur
+- `analiz.md`: mimari kararlar, dikkat çeken desenler, çıkarımlar (detaylı)
+- `rules.md`: bu projeden üretilen, geliştirme sırasında uygulanabilir kurallar
+- Hem yapı kurulumu sırasında hem `main.md` agent akışında (geliştirme modu) bu dosyalar okunabilir/güncellenebilir
+- Kullanıcı sözlü olarak da ekleme yapabilir, agent ilgili `analiz.md` / `rules.md` günceller
+
+---
+
+## 2026-05-05 — RestaurantSystemBackend Faz 1 Foundation (muhammed_ali)
+
+Detay: `current_md/RestaurantSystemBackend/mimari_gelisen.md`. Özet:
+
+### Domain Yerleşimi
+- Entity'ler: `src/Core/Persistences/Api.Persistence/Domain/Entities/<Modül>/`
+- Konfig'ler: `src/Core/Persistences/Api.Persistence/Domain/Configurations/<Modül>/`
+- Sebep: `RestaurantDbContext` `ApplyConfigurationsFromAssembly` kullanıyor (entity ve config aynı assembly'de).
+
+### Base Sınıflar
+- Framework `BaseEntity` korunur (Id + Deleted).
+- Yeni `AuditedEntity : BaseEntity` (CreatedAt + UpdatedAt) — tüm tenant verileri buradan türer.
+- `ITenantOwned`, `IBranchOwned` interface'leri (multi-tenant scoping için).
+
+### Para / Lokalizasyon
+- Money: `decimal(18,4)` + 3 char ISO 4217 currency.
+- Language code: 5 char (örn `tr-TR`).
+
+### Identity Bölünmesi
+- `User`, `Role`, `Permission`, `UserRole`, `RolePermission` → `Api.Persistence`.
+- `RefreshToken` → `Token.Persistence`. İki context aynı SQL Server DB'sine bakıyor (logical bounded contexts).
+
+### Soft Delete
+- Tüm entity konfigürasyonlarında `HasQueryFilter(x => !x.Deleted)`.
+
+### Tenant Scope
+- Global tenant filter altyapısı interface ile hazır; `TenantResolver` service eklenince aktive edilecek.

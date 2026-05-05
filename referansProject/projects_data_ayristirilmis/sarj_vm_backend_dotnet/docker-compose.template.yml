@@ -1,0 +1,117 @@
+version: "3.8"
+
+# sarj_vm_backend_dotnet — docker-compose.template.yml
+# 4 servis: gateway.api, vm.api, vmpanel.api, vmlog.api
+# Bu dosya BASE dosyadır. Ortam override dosyalarıyla birleştir:
+#   docker-compose -f docker-compose.yml -f docker-compose.dev.override.yml up
+
+services:
+
+  # ---------------------------------------------------------------
+  # API Gateway — Ocelot tabanlı, tek giriş noktası
+  # ---------------------------------------------------------------
+  gateway.api:
+    image: [REGISTRY]/vmgateway.api:[TAG]
+    environment:
+      - ASPNETCORE_ENVIRONMENT=[ENVIRONMENT]
+      - ConnectionStrings__MainConnectionString=[CONNECTION_STRING]
+      # JWT doğrulama için token servis veya public key
+      - JwtSettings__Authority=[JWT_AUTHORITY_URL]
+      - JwtSettings__Audience=[JWT_AUDIENCE]
+    ports:
+      - "[GATEWAY_HOST_PORT]:80"
+    depends_on:
+      - vm.api
+      - vmpanel.api
+    restart: unless-stopped
+    networks:
+      - vm_backend
+
+  # ---------------------------------------------------------------
+  # VM API — Cihaz bağlantısı, OCPP, transaction
+  # ---------------------------------------------------------------
+  vm.api:
+    image: [REGISTRY]/vm.api:[TAG]
+    environment:
+      - ASPNETCORE_ENVIRONMENT=[ENVIRONMENT]
+      - ConnectionStrings__MainConnectionString=[CONNECTION_STRING]
+      - RabbitMqSettings__HostName=[RABBITMQ_HOST]
+      - RabbitMqSettings__UserName=[RABBITMQ_USER]
+      - RabbitMqSettings__Password=[PASSWORD]
+      - StartupConfigs__ApiName=VM
+      - OcppSettings__WebSocketPort=[OCPP_WS_PORT]
+      - OcppSettings__HeartbeatIntervalSeconds=[OCPP_HEARTBEAT_INTERVAL]
+    # vm.api gateway'e internal, OCPP port'u dışarıya açık olabilir
+    expose:
+      - "80"
+    ports:
+      - "[OCPP_WS_HOST_PORT]:[OCPP_WS_PORT]"    # OCPP WebSocket
+    depends_on:
+      - rabbitmq
+    restart: unless-stopped
+    networks:
+      - vm_backend
+
+  # ---------------------------------------------------------------
+  # VmPanel API — Admin paneli, CPO yönetimi
+  # ---------------------------------------------------------------
+  vmpanel.api:
+    image: [REGISTRY]/vmpanel.api:[TAG]
+    environment:
+      - ASPNETCORE_ENVIRONMENT=[ENVIRONMENT]
+      - ConnectionStrings__MainConnectionString=[CONNECTION_STRING]
+      - RabbitMqSettings__HostName=[RABBITMQ_HOST]
+      - RabbitMqSettings__UserName=[RABBITMQ_USER]
+      - RabbitMqSettings__Password=[PASSWORD]
+      - StartupConfigs__ApiName=VMPANEL
+      - Wallet__TockenKey=[TOKEN_SECRET_KEY]
+    expose:
+      - "80"
+    depends_on:
+      - rabbitmq
+    restart: unless-stopped
+    networks:
+      - vm_backend
+
+  # ---------------------------------------------------------------
+  # VmLog API — RabbitMQ consumer, log yazıcı
+  # ---------------------------------------------------------------
+  vmlog.api:
+    image: [REGISTRY]/vmlog.api:[TAG]
+    environment:
+      - ASPNETCORE_ENVIRONMENT=[ENVIRONMENT]
+      - ConnectionStrings__MainConnectionString=[CONNECTION_STRING]
+      - RabbitMqSettings__HostName=[RABBITMQ_HOST]
+      - RabbitMqSettings__UserName=[RABBITMQ_USER]
+      - RabbitMqSettings__Password=[PASSWORD]
+    # Log servisi dışarıya port açmaz (sadece RabbitMQ consumer)
+    depends_on:
+      - rabbitmq
+    restart: unless-stopped
+    networks:
+      - vm_backend
+
+  # ---------------------------------------------------------------
+  # RabbitMQ — Mesaj broker
+  # ---------------------------------------------------------------
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    environment:
+      - RABBITMQ_DEFAULT_USER=[RABBITMQ_USER]
+      - RABBITMQ_DEFAULT_PASS=[PASSWORD]
+      - RABBITMQ_DEFAULT_VHOST=[RABBITMQ_VHOST]
+    ports:
+      - "[AMQP_HOST_PORT]:5672"
+      - "[MGMT_HOST_PORT]:15672"
+    volumes:
+      - vm_rabbitmq_data:/var/lib/rabbitmq
+    restart: unless-stopped
+    networks:
+      - vm_backend
+
+volumes:
+  vm_rabbitmq_data:
+
+networks:
+  vm_backend:
+    driver: bridge

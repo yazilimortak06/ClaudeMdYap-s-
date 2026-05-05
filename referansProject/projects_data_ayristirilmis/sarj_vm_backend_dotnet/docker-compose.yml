@@ -1,0 +1,34 @@
+# ORIJINAL DOSYA: docker-compose.yml (rotawattvmbackend-develop)
+# Credential degerleri [MASKED] yapildi
+
+services:
+
+  gateway.api:
+   image: rotawatt/gatewayapi:1
+   build:
+     context: .
+     dockerfile: src/Presentation/GateWay.Api/Dockerfile
+
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    environment:
+      - "RABBITMQ_DEFAULT_PASS=[MASKED]"
+      - "RABBITMQ_DEFAULT_USER=[MASKED]"
+
+  vm.api:
+    image: rotawatt/vm:1
+    build:
+      context: .
+      dockerfile: src/Presentation/Vm.Api/Dockerfile
+
+  vmpanel.api:
+    image: rotawatt/vmpanel:1
+    build:
+      context: .
+      dockerfile: src/Presentation/VmPanel.Api/Dockerfile
+
+  vmlog.api:
+    image: rotawatt/vmlog:1
+    build:
+      context: .
+      dockerfile: src/Presentation/VmLog.Api/Dockerfile

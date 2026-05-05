@@ -1,0 +1,35 @@
+# Dockerfile — perde_iot_backend (PixdinnPerdeci)
+# .NET 8 Linux container — hassas bilgi içermiyor
+
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
+WORKDIR /app
+EXPOSE 80
+EXPOSE 443
+
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+WORKDIR /src
+
+# Proje dosyasını kopyala ve bağımlılıkları yükle (layer cache optimizasyonu)
+COPY ["PixdinnPerdeci/PixdinnPerdeci.csproj", "PixdinnPerdeci/"]
+RUN dotnet restore "PixdinnPerdeci/PixdinnPerdeci.csproj"
+
+# Kaynak kodu kopyala
+COPY . .
+
+# Release build
+WORKDIR "/src/PixdinnPerdeci"
+RUN dotnet build "PixdinnPerdeci.csproj" -c Release -o /app/build
+
+FROM build AS publish
+RUN dotnet publish "PixdinnPerdeci.csproj" -c Release -o /app/publish /p:UseAppHost=false
+
+FROM base AS final
+WORKDIR /app
+
+# Publish çıktısını kopyala
+COPY --from=publish /app/publish .
+
+# wwwroot static dosyaları zaten publish çıktısında yer alır
+
+# Uygulama başlatma
+ENTRYPOINT ["dotnet", "PixdinnPerdeci.dll"]

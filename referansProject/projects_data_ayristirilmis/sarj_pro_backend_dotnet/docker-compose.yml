@@ -1,0 +1,103 @@
+# ORIJINAL DOSYA: docker-compose.yml (SarjAllPro)
+# Credential degerleri [MASKED] yapildi
+
+version: '3.4'
+
+services:
+  notification.api:
+   image: pixdinn/notificationapi:1
+   build:
+     context: .
+     dockerfile: src/Presentation/Notification.Api/Dockerfile
+
+  gateway.api:
+   image: pixdinn/gatewayapi:1
+   build:
+     context: .
+     dockerfile: src/Presentation/GateWay.Api/Dockerfile
+
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    environment:
+      - "RABBITMQ_DEFAULT_PASS=[MASKED]"
+      - "RABBITMQ_DEFAULT_USER=[MASKED]"
+
+  mobil.api:
+    image: pixdinn/mobilapi:1
+    build:
+      context: .
+      dockerfile: src/Presentation/Mobil.Api/Dockerfile
+
+  mailsms.api:
+    image: pixdinn/mailsms:1
+    build:
+      context: .
+      dockerfile: src/Presentation/MailSms.Api/Dockerfile
+
+  token.api:
+    image: pixdinn/tockenapi:1
+    build:
+      context: .
+      dockerfile: src/Presentation/Tocken.Api/Dockerfile
+
+  bank.api:
+    image: pixdinn/bankapi:1
+    build:
+      context: .
+      dockerfile: src/Presentation/Bank.Api/Dockerfile
+
+  web.api:
+    image: pixdinn/webapi:1
+    build:
+      context: .
+      dockerfile: src/Presentation/Web.Api/Dockerfile
+
+  file.api:
+    image: pixdinn/fileapi:1
+    build:
+      context: .
+      dockerfile: src/Presentation/File.Api/Dockerfile
+    volumes:
+      - ./src/Presentation/File.API/Uploaded_Files:/app/Uploaded_Files
+
+  station.api:
+    image: pixdinn/station:1
+    build:
+      context: .
+      dockerfile: src/Presentation/Station.Api/Dockerfile
+
+  ocpp.api:
+    image: pixdinn/ocpp:1
+    build:
+      context: .
+      dockerfile: src/Presentation/Ocpp.Api/Dockerfile
+
+  integration.api:
+    image: pixdinn/integration:1
+    build:
+      context: .
+      dockerfile: src/Presentation/Integration.Api/Dockerfile
+
+  log.api:
+    image: pixdinn/log:1
+    build:
+      context: .
+      dockerfile: src/Presentation/Log.Api/Dockerfile
+
+  googleservice.api:
+    image: pixdinn/googleservice:1
+    build:
+      context: .
+      dockerfile: src/Presentation/googleservice.Api/Dockerfile
+
+  workerservice.api:
+    image: pixdinn/workerserviceapi:1
+    build:
+      context: .
+      dockerfile: src/Presentation/WorkerService.Api/Dockerfile
+
+  workerservice:
+    image: pixdinn/workerservice:1
+    build:
+      context: .
+      dockerfile: src/Presentation/WorkerService/Dockerfile
