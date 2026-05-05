@@ -118,3 +118,33 @@ Yeni bir karar alındığında buraya eklenir.
 - `rules.md`: bu projeden üretilen, geliştirme sırasında uygulanabilir kurallar
 - Hem yapı kurulumu sırasında hem `main.md` agent akışında (geliştirme modu) bu dosyalar okunabilir/güncellenebilir
 - Kullanıcı sözlü olarak da ekleme yapabilir, agent ilgili `analiz.md` / `rules.md` günceller
+
+---
+
+## 2026-05-05 — RestaurantSystemBackend Faz 1 Foundation (muhammed_ali)
+
+Detay: `current_md/RestaurantSystemBackend/mimari_gelisen.md`. Özet:
+
+### Domain Yerleşimi
+- Entity'ler: `src/Core/Persistences/Api.Persistence/Domain/Entities/<Modül>/`
+- Konfig'ler: `src/Core/Persistences/Api.Persistence/Domain/Configurations/<Modül>/`
+- Sebep: `RestaurantDbContext` `ApplyConfigurationsFromAssembly` kullanıyor (entity ve config aynı assembly'de).
+
+### Base Sınıflar
+- Framework `BaseEntity` korunur (Id + Deleted).
+- Yeni `AuditedEntity : BaseEntity` (CreatedAt + UpdatedAt) — tüm tenant verileri buradan türer.
+- `ITenantOwned`, `IBranchOwned` interface'leri (multi-tenant scoping için).
+
+### Para / Lokalizasyon
+- Money: `decimal(18,4)` + 3 char ISO 4217 currency.
+- Language code: 5 char (örn `tr-TR`).
+
+### Identity Bölünmesi
+- `User`, `Role`, `Permission`, `UserRole`, `RolePermission` → `Api.Persistence`.
+- `RefreshToken` → `Token.Persistence`. İki context aynı SQL Server DB'sine bakıyor (logical bounded contexts).
+
+### Soft Delete
+- Tüm entity konfigürasyonlarında `HasQueryFilter(x => !x.Deleted)`.
+
+### Tenant Scope
+- Global tenant filter altyapısı interface ile hazır; `TenantResolver` service eklenince aktive edilecek.
