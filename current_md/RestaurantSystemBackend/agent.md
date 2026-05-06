@@ -12,18 +12,27 @@ Detay için: `current_md/RestaurantSystemBackend/mimari_gelisen.md`.
 
 ## Aktif Görev
 
-**Faz 1 Foundation Veritabanı (DEVAM EDIYOR — analiz onayı bekliyor)**
+**Aktif görev yok — auth sistemi tamamlandı.**
 
-Yapılan:
-- Faz 1 entity'leri oluşturuldu (Tenancy, Identity, Catalog, Menu, Subscription).
-- `AuditedEntity`, `ITenantOwned` base'leri eklendi.
-- `RestaurantDbContext` DbSet'leri ve global filter'lar (soft delete) güncellendi.
-- EF EntityTypeConfiguration'ları yazıldı.
+Bir sonraki adım: Faz 1 Extension (Order snapshot, Tables, QR codes) veya açık soruların kesinleştirilmesi.
 
-Kalan:
-- Migration üret (`dotnet ef migrations add InitialCreate ...`).
-- Seed data (default plan, default permissions, default roles).
-- `muhammed_ali/analiz.md`'deki açık soruları tartış → `ortak/analiz.md` ye taşı.
+**Tamamlanan — Auth & Oturum Sistemi**
+
+- `JwtTokenService` — userId, tenantId, branchId, roles claim'leri
+- `AuthService` — login (bcrypt), refresh (rotation), logout, logout-all
+- `RefreshTokenRepository`, `UserRepositoryForToken`
+- `AuthController` (Token.Api) — 4 endpoint: login, refresh, logout, logout-all
+- DI kayıtları + CORS middleware sırası düzeltildi (UseRouting → UseCors)
+- Startup auto-migration + AdminUserSeeder (admin/Admin@123)
+- `User` entity'sine `Username` alanı eklendi, login email → username'e çevrildi
+- Login başarısız → 401 döner (exception değil)
+- Docker desteği: her API'ye Dockerfile, docker-compose.yml
+
+**Tamamlanan — Faz 1 Foundation**
+
+- 16 entity (Tenancy, Identity, Catalog, Menu, Subscription)
+- EF migration + seed data (roller, izinler, planlar, özellikler)
+- IIS Express launchSettings (44301/44302/44303)
 
 ## Bağlı Projeler ile Paylaşılan
 
