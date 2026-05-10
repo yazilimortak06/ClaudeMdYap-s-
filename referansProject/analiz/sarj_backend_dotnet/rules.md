@@ -394,3 +394,263 @@ ErrorMessage = error.ToDescriptionString();
   "ApiName": "Bank"
 }
 ```
+
+---
+
+## 16. Mobil.Api — Çıkarılan Kurallar
+
+**Kural:** Mobil API controller'larında `FromMobilResult` kullan — `FromResult` değil. `FromMobilResult` her durumda `Result<T>` sarmali ile döner (başarı: `Ok(result)`, hata: `BadRequest(result)`). Web API'deki `FromResult` başarıda sadece `result.Data` döner.
+
+**Kural:** İki seviyeli Mobil auth filtresi uygula:
+- `MobilApiAuthenticationFilterAttribute` — tam auth (token + DB kullanıcı doğrulama)
+- `MobilApiAuthenticationWithGuestFilterAttribute` — misafir kullanıcılar da erişebilir (harita, istasyon listeleme vb.)
+
+**Kural:** Tüm Mobil controller'larına `MobilApiRequestResponseLogFilterAttribute` ekle. İstek/yanıt çiftleri loglanmalıdır.
+
+**Kural:** Uygulama sürüm kontrolü için `MobilApiVersionFilterAttribute` kullan. Eski uygulama sürümlerini reddeder.
+
+**Kural:** Misafir ve üye birlikte erişebilecek endpoint'lerde (istasyon listesi, harita) `[Authorize]` + `MobilApiAuthenticationWithGuestFilterAttribute` kombinasyonu kullan. `[Authorize]` token varlığını zorlar, `WithGuestFilter` misafir token'a da izin verir.
+
+**Kural:** Mobil JWT kayıtları `services.AddMobilJwtTocken(Configuration)` ile yapılır. Web JWT'den (`services.AddWebJwtTocken`) farklı token anahtarları kullanılır.
+
+**Kural:** Kayıt akışı 3 adımda yapılır:
+1. `RegisterValidatePersonalInfo` — TC/kişisel bilgi doğrulama
+2. `VerifyRegisterSms` — SMS OTP doğrulama
+3. `RegisterComplete` — hesap oluşturma
+
+**Kural:** Şifre sıfırlama da 3 adımlıdır:
+1. `UserForgetPasswordSendSms`
+2. `UserForgetPasswordSmsVerify`
+3. `UserForgetPasswordComplete`
+
+**Kural:** 3D ödeme callback endpoint'lerine `[InnerRequestAttribute(ApiName.BANK)]` ekle. Dışarıdan doğrudan erişilemez; sadece Bank.Api yönlendirir.
+
+**Kural:** Belge (fatura PDF/HTML) görüntüleme endpoint'i `[HttpGet]` olabilir ve `File(bytes, contentType)` döner. Diğer tüm endpoint'ler `[HttpPost]` olmalıdır.
+
+---
+
+## 17. Web.Api — Çıkarılan Kurallar
+
+**Kural:** Web API controller'larında `FromResult` kullan. Başarı durumunda `Ok(result.Data)` (sarmalsız), hata durumunda `BadRequest(result)` döner. Bu Mobil API'den farklıdır.
+
+**Kural:** Dört seviyeli Web auth filtresi:
+- `WebApiAuthenticationFilterAttribute` — genel panel yetkilendirme
+- `WebApiFirmAdminAuthenticationFilterAttribute` — firma admin yetkisi
+- `WebApiMainAdminAuthenticationFilterAttribute` — merkezi admin yetkisi
+- `WebApiRootAdminAuthenticationFilterAttribute` — en yüksek yetki (PanelAdmin yönetimi)
+
+**Kural:** `WebApiRequestInfoFilterAttribute` tüm controller'lara class seviyesinde ekle. Bu filtre istek bilgilerini (admin ID, firma ID) context'e yükler.
+
+**Kural:** DataTable entegrasyonu için `DataTableFilterModel<T>` sarmal modeli kullan. Sayfalama, sıralama ve filtreleme tek modelde birleşir:
+```csharp
+public async Task<IActionResult> GetStationDataTablePanel(DataTableFilterModel<GetPanelStationDataTableRequestDto> dataTableFilterModel)
+```
+
+**Kural:** File upload endpoint'lerinde `IFormFile` kullan, route düzeyinde versioning ekle:
+```csharp
+[HttpPost]
+public async Task<IActionResult> AddStationPicture(IFormFile file)
+{
+    var result = await _service.AddStationPicture(file, Request);
+    return this.FromResult(result);
+}
+```
+
+**Kural:** Excel/PDF export endpoint'leri aynı controller içinde tanımla (ChargeManagment, PaymentInfo). Ayrı export controller oluşturma.
+
+**Kural:** Çoklu servis inject eden controller'lar için (ReportingController: 3 servis) dependency sayısını izle. 4+ servis olduğunda controller parçalamayı değerlendir.
+
+**Kural:** Web JWT kayıtları `services.AddWebJwtTocken(Configuration)` ile yapılır. Mobil JWT'den farklı anahtar kullanılır.
+
+**Kural:** PanelAdmin CRUD'unda HTTP metodları karışık olabilir (`[HttpGet]`, `[HttpPut]`, `[HttpPost]`). Ancak proje genelinde tutarlılık için `[HttpPost]` tercih edilmelidir.
+
+---
+
+## 18. Station.Api — Çıkarılan Kurallar
+
+**Kural:** Station.Api JWT auth içermez. Güvenlik sadece `InnerRequestAttribute` ile sağlanır. `UseAuthentication()`/`UseAuthorization()` pipeline'a eklenmez.
+
+**Kural:** Station.Api controller'larında `StationApiRequestInfoFilterAttribute` kullan (Web/Mobil'deki auth filter yerine).
+
+**Kural:** OCPP cihazlarına veri sağlayan servisler için tüm endpoint'ler `[InnerRequestAttribute(new ApiName[] { ApiName.OCPP })]` ile kısıtlanır.
+
+**Kural:** Singleton gerektiren state management servisleri (OCPP bağlantı durumu vb.) `services.RegisterSingletonService()` extension metodunda kayıt edilir, Autofac container'da değil.
+
+**Kural:** Station.Api, OCPP protokol akışındaki köprüdür: OCPP.Api → Station.Api (şarj/cihaz verisi al/güncelle) → DB.
+
+---
+
+## 19. Ocpp.Api — Çıkarılan Kurallar
+
+**Kural:** WebSocket desteği için `Configure` metoduna şu konfigürasyonu ekle:
+```csharp
+var webSocketOptions = new WebSocketOptions()
+{
+    ReceiveBufferSize = 8 * 1024,        // 8KB buffer
+    KeepAliveInterval = TimeSpan.FromMinutes(10)  // 10dk keepalive
+};
+app.UseWebSockets(webSocketOptions);
+```
+
+**Kural:** OCPP WebSocket bağlantısı için ayrı controller ve route kullan:
+```csharp
+// Sürüm prefix yok, {Identifier} cihaz kimliği
+[Route("[controller]/[action]/{Identifier}")]
+public async Task Connection(string Identifier)
+{
+    await _ocpp16ConnectionService.Connection(Identifier);
+}
+```
+
+**Kural:** Kendi `OcppDbContext`'ini oluştur (diğer API'lardan izole schema).
+
+**Kural:** RemoteStartTransaction ve RemoteStopTransaction endpoint'leri hem Mobil hem Web'den çağrılabilir:
+```csharp
+[InnerRequestAttribute(new ApiName[] { ApiName.MOBIL, ApiName.WEB })]
+```
+
+**Kural:** Cihaz konfigürasyonu, müsaitlik değişikliği ve reset komutları sadece Web panelden çağrılabilir:
+```csharp
+[InnerRequestAttribute(new ApiName[] { ApiName.WEB })]
+```
+
+---
+
+## 20. Notification.Api — Çıkarılan Kurallar
+
+**Kural:** SignalR hub'ları `UseEndpoints` içinde `MapHub<THub>("/routePath")` ile kayıt edilir. `UseSignalRBuilder` yerine manuel mapping kullan.
+
+**Kural:** SignalR için CORS konfigürasyonu özeldir; `AllowCredentials()` zorunludur:
+```csharp
+builder.WithOrigins(allowedOrigins).AllowAnyMethod().AllowAnyHeader().AllowCredentials();
+// Ayrıca genel middleware için:
+app.UseCors(builder => builder.AllowAnyHeader().AllowAnyMethod().SetIsOriginAllowed((host) => true).AllowCredentials());
+```
+
+**Kural:** Hedefli (tek kullanıcıya) bildirim için ConnectionId tabanlı pattern kullan:
+```csharp
+_hub.Clients.All.SendAsync(userConnectionId, notificationDto);
+// SendAsync metot adı olarak ConnectionId kullanılıyor — broadcast gibi ama sadece o connection dinler
+```
+
+**Kural:** `MobilConnectionRepository` ve `PanelAdminConnectionRepository` ile SignalR ConnectionId → kullanıcı eşleştirmesini DB'de tut. Mobil uygulama açıldığında ConnectionId kaydedilir.
+
+**Kural:** Bildirim endpoint'lerinden bazıları `IHubContext<THub>` doğrudan inject ederek sadece `return Ok("success")` döner (Result<T> wrapper kullanmaz). Bu tipik bir notification push pattern'idir.
+
+**Kural:** Destek (support) bildirimleri için iki ayrı hub kullan:
+- `SupportHub`: kullanıcı-admin direkt mesajlaşma
+- `SupportNotificationHub`: admin paneli için yeni destek talebi bildirimleri
+
+**Kural:** Gönderilen önemli bildirimleri `ConnectionMessage` tablosuna kaydet (kalıcı bildirim log).
+
+**Kural:** `services.RegisterRabbitMq()` ile MassTransit yerine doğrudan RabbitMQ consumer kaydet. Notification servisi event-driven çalışır.
+
+---
+
+## 21. WorkerService — Çıkarılan Kurallar
+
+**Kural:** Her background task `BackgroundService`'ten türesin. `ExecuteAsync` while döngüsü içinde çalışsın:
+```csharp
+protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+{
+    while (!stoppingToken.IsCancellationRequested)
+    {
+        // iş yap
+        await Task.Delay(delaySecond * 1000, stoppingToken);
+    }
+}
+```
+
+**Kural:** Worker'lar scoped servis için `IServiceProvider.CreateScope()` kullanmalıdır. DbContext doğrudan inject edilmemeli:
+```csharp
+using (var scope = _services.CreateScope())
+{
+    var repository = scope.ServiceProvider.GetRequiredService<IMyRepository>();
+    // ...
+}
+```
+
+**Kural:** `WorkerServiceDbContext` TRANSIENT olarak kaydet (`DepencyInjectionType.TRANSIENT`). Worker döngülerinde her scope yeni DbContext alır.
+
+**Kural:** Task konfigürasyonu (gecikme süresi, aktif/pasif) DB'den yönetilsin. `TaskControlWorker` bu konfigürasyonu static field'da tutar; diğer worker'lar bu field'dan okur:
+```csharp
+// TaskControlWorker
+public static List<GeneralTaskDto> _generaTasks;  // Static — tüm worker'lar erişir
+
+// Diğer worker'da
+if (TaskControlWorker._generaTasks != null &&
+    TaskControlWorker._generaTasks.Where(x => x.Id == (int)GeneralTaskIdEnum.AUTOMATIC_PAYMENT && x.Active) != null)
+{
+    delaySecond = TaskControlWorker._generaTasks
+        .Where(x => x.Id == taskId && x.Active).FirstOrDefault().TaskScheduleSecond;
+}
+```
+
+**Kural:** Worker hata yönetimi için şu pattern kullan:
+1. Exception yakala
+2. RabbitMQ producer ile exception'ı Log API'ye gönder
+3. `Task.Delay(5000)` bekle
+4. `StopAsync` çağır → tekrar `ExecuteAsync` çağır (self-healing)
+
+**Kural:** Utility servisler (IWorkerServiceExceptionProducer, IWorkerServiceUtilService, IGenericHttpClientService) Singleton olarak kayıt edilmelidir — worker ömrü boyunca paylaşılır.
+
+**Kural:** Worker `ConfigureContainer`'da `ConfigureRepositories` kullanma; bunun yerine `RegisterGeneric(typeof(ConnectedRepository<>))` ve assembly scan kombinasyonu kullan:
+```csharp
+builder.RegisterGeneric(typeof(ConnectedRepository<>)).As(typeof(IRepository<>)).InstancePerDependency();
+builder.RegisterAssemblyTypes(...).Where(t => t.Name.EndsWith("Repository")).AsImplementedInterfaces().InstancePerDependency();
+```
+
+---
+
+## 22. GateWay.Api — Çıkarılan Kurallar
+
+**Kural:** GateWay.Api `BaseStartup`'tan türemez. Minimal Ocelot startup kullan:
+```csharp
+public void ConfigureServices(IServiceCollection services)
+{
+    services.AddOcelot().AddCacheManager(settings => settings.WithDictionaryHandle());
+}
+public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+{
+    app.UseWebSockets();
+    app.UseOcelot().Wait();  // Son middleware
+}
+```
+
+**Kural:** Ortam başına ayrı Ocelot config dosyası tut: `ocelot.Local.json`, `ocelot.Prod.json`, `ocelot.Test.json`.
+
+**Kural:** Load balancer olarak `LeastConnection` tipini tercih et:
+```json
+"LoadBalancerOptions": { "Type": "LeastConnection" }
+```
+
+**Kural:** WebSocket proxy için `app.UseWebSockets()` Ocelot'tan önce eklenmelidir.
+
+**Kural:** Downstream path template versiyonu sabit tut (`/v1/{url}`), upstream'de versiyon olmasın (`/mobil/{url}`). Gateway, mobil istemcileri v1'e yönlendirir.
+
+---
+
+## 23. Integration.Api — Çıkarılan Kurallar
+
+**Kural:** Her 3. taraf sistem için ayrı controller oluştur: EPDK, GİB, Moka ödeme, EDM arşiv, SMS ayrı controller'lardadır.
+
+**Kural:** 3D ödeme callback endpoint'i (Moka vb.) dış sistemden `[FromForm]` parametrelerle alır. `[InnerRequestAttribute]` ekleme — bu endpoint public olmak zorundadır:
+```csharp
+[Route("v{version:apiVersion}/[controller]/[action]/{paymentCallbackDataId}/{paymentDataId}/{PaymentIntegrationProcessGuiId}")]
+[HttpPost]
+public async Task<IActionResult> PaymentCompleteFromMoka(
+    long paymentCallbackDataId, long paymentDataId, string paymentIntegrationProcessGuiId,
+    [FromForm] string hashValue, [FromForm] string resultCode, ...)
+```
+
+**Kural:** Integration.Api, gerçek 3. taraf API'leri çağırır. Her entegrasyon için ayrı `IXxxIntegrationService` interface tanımla.
+
+**Kural:** Route tanımı bazı Integration controller'larında method seviyesinde yapılır (class seviyesi değil). Bu durum tutarsız ama mevcut kodda var:
+```csharp
+// Method seviyesinde route (PaymentIntegrationController'da)
+[Route("v{version:apiVersion}/[controller]/[action]")]
+[HttpPost]
+public async Task<IActionResult> PaymentDirectIntegration(...) { }
+```
+
+**Kural:** Tüm Integration endpoint'lerine `IntegrationApiRequestResponseLogFilterAttribute` ekle. Entegrasyon çağrıları mutlaka loglanmalıdır.

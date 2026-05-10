@@ -1,0 +1,18 @@
+<!-- Kaynak: E:\Projeler\Angular\EvTechPanelAltunkaya\src\app\core\external-components\pixdinn-dropzone\pixdinn-dropzone.component.html -->
+<!-- Pattern: File Upload HTML — ngx-dropzone wrapper, custom-dropzone-preview, gizli bug-button trick -->
+
+<ngx-dropzone class="custom-dropzone col-md-12" [title]="(title)" [multiple]="(multiple)" [accept]="(accept)"
+  (change)="onSelect($event)">
+  <ngx-dropzone-label>
+    <div>
+      <h2>{{title}}</h2>
+    </div>
+  </ngx-dropzone-label>
+
+  <custom-dropzone-preview ngProjectAs="ngx-dropzone-preview" *ngFor="let f of fileData;" [fileDropZoneData]="f" [removable]="true"
+      (removed)="onRemove(f)">
+  </custom-dropzone-preview>
+
+</ngx-dropzone>
+<!-- DOM değişikliklerini tetiklemek için gizli buton (Angular change detection workaround) -->
+<button style="display: none;" #buttonForBug id="buttonForBug"></button>

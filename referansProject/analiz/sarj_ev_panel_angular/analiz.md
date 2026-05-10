@@ -1,21 +1,27 @@
-# sarj_ev_panel_angular — Analiz
+# sarj_ev_panel_angular — Kapsamlı Analiz
 
-## Platform ve Tech Stack
+## 1. Platform & Tech Stack
 
-| Bileşen | Versiyon / Detay |
-|---|---|
-| Framework | Angular 13.1.2 |
-| UI Template | Metronic v7.1.7 (Keenthemes) |
-| CSS | SCSS, Bootstrap (Metronic içinde) |
-| UI Kütüphanesi | Angular Material ^11.0.0 |
-| Auth | @auth0/angular-jwt ^5.0.2 |
-| Realtime | @microsoft/signalr ^6.0.1 |
-| i18n | @ngx-translate/core ^13.0.0 |
-| Grafik | ApexCharts + Chart.js (ikisi birden) |
-| Tarih | Moment.js ^2.29.1 |
-| HTML Editör | ngx-editor ^7.3.2 |
-| Dosya Yükleme | ngx-dropzone ^2.3.0 |
-| Spinner | ngx-spinner ^13.0.0 |
+| Katman | Teknoloji | Detay |
+|---|---|---|
+| Framework | Angular | 13+ |
+| Dil | TypeScript | ES2020 target, ES2015 output |
+| UI Template | Metronic 8 (KT) | KTLayoutHeader, KTLayoutContent, KTUtil |
+| UI Kütüphane | Angular Material | MatTable, MatPaginator, MatSort, MatDialog |
+| Harita | @agm/core | Google Maps Angular entegrasyonu |
+| Real-time | SignalR | @microsoft/signalr — destek bildirimleri |
+| Kimlik Doğrulama | JWT | @auth0/angular-jwt, BehaviorSubject akışı |
+| HTTP | HttpClient + Interceptor | Bearer token enjeksiyonu, 401 yönetimi |
+| Form | ReactiveFormsModule | FormBuilder, FormGroup, Validators |
+| Tarih | moment.js + MomentDateAdapter | Türkçe locale, DD/MM/YYYY formatı |
+| Grafik | ApexCharts + Chart.js | ng-apexcharts, chart.js/auto |
+| Dosya Yükleme | ngx-dropzone | PixdinnDropzone wrapper bileşeni |
+| Para Formatı | ng2-currency-mask | TL formatı (1.234,56) |
+| i18n | @ngx-translate/core | Çok dil desteği |
+| Routing | Angular Router | Lazy loading, HashLocationStrategy |
+| Durum | BehaviorSubject (RxJS) | Signal yok — klasik RxJS akışı |
+| Protokol | OCPP 1.6 | Şarj cihazı iletişim protokolü |
+| Build | Angular CLI | tsconfig.json, angular.json |
 
 ## Mimari Pattern
 

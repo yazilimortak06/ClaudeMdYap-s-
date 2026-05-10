@@ -1,0 +1,171 @@
+<!-- Kaynak: E:\Projeler\Angular\EvTechPanelAltunkaya\src\app\evtech\components\chargeDevice\chargeDevice-remote-managment\chargeDevice-remote-managment.component.html -->
+<!-- Pattern: SignalR HTML — mat-table ile liste, enum-based CSS class pipe'ları, BehaviorSubject notification gösterimi, mat-menu ile aksiyon butonları -->
+
+<div class="card card-custom gutter-b">
+  <div class="card-header">
+    <div class="card-title">
+      <h3 class="card-label"> Şarj Cihaz Listesi</h3>
+    </div>
+    <div class="card-toolbar"></div>
+  </div>
+  <div class="card-body">
+    <!-- begin: Filtering-->
+    <div class="row">
+      <div class="form col-md-12" style="margin-bottom: 15px;">
+        <div class="row">
+          <div class="col-lg-4">
+            <mat-form-field style="width: 100%;" class="mt-1">
+              <mat-label>Firma Seçin</mat-label>
+              <mat-select name="companyFilterSelect" [(ngModel)]="companyFilter.id" (selectionChange)="companyChange()"
+                #companyFilterSelection>
+                <mat-option *ngFor="let company of companyList" [value]="company.id">
+                  {{company.name}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+    </div>
+    <hr>
+    <div class="row">
+      <div class="form col-md-12" style="margin-bottom: 15px;">
+        <div class="form-group ">
+          <div class="row">
+            <div class="col-lg-4">
+              <mat-form-field style="width: 100%;" >
+                  <mat-label>İstasyon Seçin</mat-label>
+                  <mat-select name="stationFilterSelect" [(ngModel)]="searchCriterChargeDevice.data.stationManagmentId"
+                    #stationFilterSelection>
+                    <mat-option *ngFor="let station of stationList" [value]="station.id">
+                      {{station.name}}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+            </div>
+            <div class="col-lg-4">
+              <mat-form-field class="example-full-width">
+                <mat-label>Cihaz İsmi</mat-label>
+                <input [(ngModel)]="searchCriterChargeDevice.data.name" matInput>
+              </mat-form-field>
+            </div>
+            <div class="col-lg-4">
+              <mat-form-field class="example-full-width">
+                <mat-label>Cihaz Kimliği</mat-label>
+                <input [(ngModel)]="searchCriterChargeDevice.data.identifierContain" matInput>
+              </mat-form-field>
+            </div>
+            <div class="col-lg-4">
+              <mat-form-field style="width: 100%;" >
+                <mat-label>Bağlantı Durumunu Seçin</mat-label>
+                <mat-select [(ngModel)]="searchCriterChargeDevice.data.connectionState" #connectionStateFilterSelection>
+                  <mat-option  [value]="true">Bağlı</mat-option>
+                  <mat-option  [value]="false">Bağlantı Yok</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div class="col-lg-4">
+              <mat-form-field style="width: 100%;" >
+                <mat-label>Anlık Durumunu Seçin</mat-label>
+                <mat-select [(ngModel)]="searchCriterChargeDevice.data.instantState" #deiceInstantStateFilterSelection>
+                  <mat-option *ngFor="let chargeDeviceInstantState of chargeDeviceInstantStates" [value]="chargeDeviceInstantState">
+                    {{chargeDeviceInstantStateMapping[chargeDeviceInstantState]}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="col-md-3 offset-md-9 m--margin-bottom-10-mobile">
+            <div class="button-row float-right">
+              <button mat-raised-button matTooltip="Filtrele" color="primary" type="button"
+                (click)="getChargeDevices(true)">Filtrele</button>&nbsp;
+              <button mat-raised-button matTooltip="Temizle" color="accent" type="button"
+                (click)="clearParametersAndGetChargeDevices()">Temizle</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- end: Filtering -->
+    <div class="mat-table__wrapper">
+      <mat-table #sortChargeDeviceTable="matSort" [dataSource]="chargeDeviceList" matSort>
+        <ng-container matColumnDef="Id">
+          <mat-header-cell [style.flex]="'0 0 10%'" *matHeaderCellDef>#</mat-header-cell>
+          <mat-cell [style.flex]="'0 0 10%'" *matCellDef="let row">{{row.id}}</mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="Name">
+          <mat-header-cell [style.flex]="'0 0 15%'" *matHeaderCellDef mat-sort-header> Cihaz İsmi</mat-header-cell>
+          <mat-cell [style.flex]="'0 0 15%'" *matCellDef="let row">{{row.name}} </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="StationManagmentName">
+          <mat-header-cell [style.flex]="'0 0 20%'" *matHeaderCellDef mat-sort-header> İstasyon İsmi</mat-header-cell>
+          <mat-cell [style.flex]="'0 0 20%'" *matCellDef="let row">{{row.stationManagmentName}} </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="LastInstantStateUpdatedDate">
+          <mat-header-cell [style.flex]="'0 0 15%'" *matHeaderCellDef mat-sort-header>Son Güncellenme Tarihi</mat-header-cell>
+          <mat-cell [style.flex]="'0 0 15%'" *matCellDef="let row"> {{ row.lastInstantStateUpdatedDate | date: 'dd/MM/yyyy HH:mm:ss'}}</mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="InstantState">
+          <mat-header-cell [style.flex]="'0 0 10%'" *matHeaderCellDef mat-sort-header>Anlık Durum</mat-header-cell>
+          <mat-cell [style.flex]="'0 0 10%'" *matCellDef="let row">
+            <span class="label label-lg label-inline label-{{ row.instantState | chargeDeviceInstantStateCss }}">
+              {{ row.instantState | chargeDeviceInstantState }}
+            </span>
+          </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="ConnectionState">
+          <mat-header-cell [style.flex]="'0 0 10%'" *matHeaderCellDef>Bağlantı Durumu</mat-header-cell>
+          <mat-cell [style.flex]="'0 0 10%'" *matCellDef="let row">
+            <span class="label label-lg label-inline label-{{row.connectStateInfo | connectionStateCss}} ">
+              {{ row.connectStateInfo | connectionState }}
+            </span>
+          </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="HearthBeatDate">
+          <mat-header-cell [style.flex]="'0 0 15%'" *matHeaderCellDef mat-sort-header> Son Aktiflik Tarihi</mat-header-cell>
+          <mat-cell [style.flex]="'0 0 15%'" *matCellDef="let row">
+            <div *ngIf="row.hearthBeatDate ">{{row.hearthBeatDate| date :'dd/MM/yyyy HH:mm:ss' }}</div>
+          </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="Edit">
+          <mat-header-cell [style.flex]="'0 0 5%'" *matHeaderCellDef> </mat-header-cell>
+          <mat-cell [style.flex]="'0 0 5%'" style="justify-content: center !important;" *matCellDef="let row">
+            <button mat-button [matMenuTriggerFor]="menu">
+              <mat-icon aria-hidden="false">dehaze</mat-icon>
+            </button>
+            <mat-menu #menu="matMenu">
+              <button mat-menu-item>
+                <a target="_blank" href="{{row.ocppUrl}} ">Ocpp Linki</a>
+              </button>
+              <button mat-menu-item (click)="openDeviceCommandListDialog(row.guiId)">Mesaj Geçmişi</button>
+              <button mat-menu-item (click)="openConnectorListDialog(row.id , row.name,row.guiId)">Soketler</button>
+              <button mat-menu-item (click)="changeAvailabilityDialog(row.guiId , chargeDeviceAvailabilityType.Operative)">Cihazı Aktif Yap</button>
+              <button mat-menu-item (click)="changeAvailabilityDialog(row.guiId , chargeDeviceAvailabilityType.Inoperative)">Cihazı Aktif Dışı Yap</button>
+              <button mat-menu-item (click)="openResetDeviceDialog(row.guiId , row.name)">Cihazı Tekrar Başlat</button>
+              <button mat-menu-item (click)="openCommandDialog(row.guiId,row.chargeDeviceMarkId)">Özel Komut Yolla</button>
+              <button mat-menu-item (click)="openChangeConfigurationDialog(row.guiId)">Cihaz Ayarını Değiştir</button>
+              <button mat-menu-item (click)="openTriggerMessageDialog(row.guiId)">Mesaj Tetikle</button>
+              <button mat-menu-item>Bağlantıyı Kopar</button>
+            </mat-menu>
+          </mat-cell>
+        </ng-container>
+        <mat-header-row *matHeaderRowDef="showingColumnNamesChargeDeviceTable"></mat-header-row>
+        <mat-row [ngClass]="{'high-light': rIndex % 2 == 0 }"
+          *matRowDef="let row; columns: showingColumnNamesChargeDeviceTable; let rIndex = index;">
+        </mat-row>
+      </mat-table>
+    </div>
+    <!-- end: Table -->
+    <!-- begin: Pagination -->
+    <div class="mat-table__bottom row">
+      <div class="col-md-2">
+        <span>Kayıt sayısı: <b>{{totalRecordSizeChargeDeviceTable}}</b></span>
+      </div>
+      <div class="col-md-10">
+        <mat-paginator #paginatorChargeDeviceTable [pageSize]="15" [pageSizeOptions]="[10, 15, 30]"
+          [showFirstLastButtons]="true" [length]="totalRecordSizeChargeDeviceTable">
+        </mat-paginator>
+      </div>
+    </div>
+  </div>
+</div>
