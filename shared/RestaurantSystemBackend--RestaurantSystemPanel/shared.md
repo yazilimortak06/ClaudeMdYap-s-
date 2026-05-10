@@ -1,10 +1,23 @@
-# Shared — RestaurantSystemBackend & RestaurantSystemPanel
+# Backend ↔ Panel Paylaşım Alanı
 
-Her iki projenin agentları bu klasörü okuyup yazabilir.
+Backend agenı endpoint tanımlarını buraya yazar. Panel agenı buradan okur.
 
-## Endpoint Tanımları
+## API Endpoint'leri
 
-## Kontratlar / Arayüz Anlaşmaları
+### Auth
+(Henüz tanımlanmadı)
 
-## Notlar
+### Menu
+(Henüz tanımlanmadı)
 
+### Order
+(Henüz tanımlanmadı)
+
+### Table
+(Henüz tanımlanmadı)
+
+## SignalR Hub
+(Henüz tanımlanmadı)
+
+## DTO Sözleşmeleri
+(Henüz tanımlanmadı)

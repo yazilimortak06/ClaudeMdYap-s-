@@ -1,13 +1,6 @@
-# RestaurantSystemQr — Said Logs
+# RestaurantSystemQr — Said Log
 
-Said'in Qr projesindeki işlem geçmişi.
+Commit/push bazlı işlem geçmişi. Her önemli değişiklik kısa satırla kaydedilir.
 
-Format:
-```
-## [Tarih Saat] İşlem Başlığı
-**Yapılan:** Ne yapıldı?
-**Durum:** Tamamlandı / Devam ediyor / Askıda
-```
-
----
-
+## Log Şablonu
+[TARİH] | [Konu] | [Kısa açıklama]

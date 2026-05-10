@@ -67,13 +67,18 @@ Yeni bir karar alındığında buraya eklenir.
 │   ├── referans_projects.md       # Master liste: tüm projeler, platform, tech, özet
 │   ├── projects_data/             # Ham proje klasörleri (kullanılınca silinecek)
 │   ├── projects_data_ayristirilmis/
-│   │   └── <anonim_isim>/         # Yapısal dosyalar, hassas bilgi temizlenmiş
+│   │   └── <anonim_isim>/         # Yapısal pattern dosyaları (domain genellikle çıkarılmış)
+│   │       ├── klasor_yapisi.md
+│   │       ├── controller_pattern.cs / .ts
+│   │       ├── persistence_pattern.md
+│   │       └── ... (proje yapısına göre değişir)
 │   ├── projects_data_base_hali/
 │   │   ├── angular_base/          # Angular base proje (sarj_qr_web baz alınmış)
 │   │   └── dotnet_base/           # .NET base proje (sarj_backend_dotnet baz alınmış)
-│   └── <anonim_isim>/
-│       ├── analiz.md              # Detaylı analiz ve çıkarımlar
-│       └── rules.md               # Bu projeden çıkarılan kurallar
+│   └── analiz/
+│       └── <anonim_isim>/
+│           ├── analiz.md          # Detaylı analiz — GERÇEK KOD İÇERİR (domain-intact, secret-stripped)
+│           └── rules.md           # Bu projeden çıkarılan tekrar edilebilir kurallar
 ```
 
 ---
@@ -113,8 +118,15 @@ Yeni bir karar alındığında buraya eklenir.
 ### Referans Proje Sistemi
 - Ham proje klasörleri `projects_data/<ProjeAdı>/` altına bırakılır (karışık, sırasız olabilir)
 - Agent `projects_data/` tarar → platform, tech stack, yapı çıkarır → `referans_projects.md` doldurur
-- Her referans proje için `referansProject/<ProjeAdı>/analiz.md` ve `rules.md` oluşturulur
-- `analiz.md`: mimari kararlar, dikkat çeken desenler, çıkarımlar (detaylı)
-- `rules.md`: bu projeden üretilen, geliştirme sırasında uygulanabilir kurallar
+- Her referans proje için `referansProject/analiz/<ProjeAdı>/analiz.md` ve `rules.md` oluşturulur
+- `analiz.md`: detaylı mimari analiz + **gerçek domain kod blokları** (domain-intact, secret-stripped — parola/env/connectionstring yok)
+- `rules.md`: bu projeden üretilen, geliştirme sırasında uygulanabilir kurallar (kod örnekli)
+- `projects_data_ayristirilmis/<ProjeAdı>/`: yapısal pattern dosyaları (bazıları domain-stripped, bazıları domain-intact)
 - Hem yapı kurulumu sırasında hem `main.md` agent akışında (geliştirme modu) bu dosyalar okunabilir/güncellenebilir
 - Kullanıcı sözlü olarak da ekleme yapabilir, agent ilgili `analiz.md` / `rules.md` günceller
+- **Kullanım:** "Bu sayfayı şu referans projedeki gibi yap" denildiğinde → `analiz/` altındaki ilgili analiz.md okunur, kod bloğu referans alınır
+
+### Git & Branch Stratejisi
+- Pull alırken conflict varsa yerel değişiklikler öncelikli: `git pull -X ours`
+- Periyodik push hedefi: `said_local` branch'i
+- Branch isimlendirme: `<kullanıcıAdı>_local` formatı (ali-laptop-local, muhammedali_local, said_local)

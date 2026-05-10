@@ -1,8 +1,12 @@
-# muhammed_ali — RestaurantSystemQr
+# RestaurantSystemQr — Muhammed Ali — Aktif Çalışma
 
-## Çalışılan Modül / Konu
+## Çalışılan Modül
+(Henüz görev alınmadı)
 
-## Ne Yapacak
+## Yapılacak
+(Görev alındığında burada ne yapılacağı detaylanır)
 
 ## İlerleme
+(Adım adım tamamlama durumu)
 
+## Notlar
