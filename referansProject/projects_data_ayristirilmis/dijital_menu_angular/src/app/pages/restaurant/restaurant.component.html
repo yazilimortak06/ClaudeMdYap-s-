@@ -1,0 +1,231 @@
+<!-- Kaynak: E:\Projeler\Angular\PixdinnNewMenu\src\app\pages\restaurant\restaurant.component.html -->
+<app-navbar></app-navbar>
+
+<!-- restaurent top -->
+    <div class="page-banner p-relative smoothscroll" id="menu">
+        <img src="assets/img/banner.jpg" class="img-fluid full-width" alt="banner">
+        <div class="overlay-2">
+            <div class="container">
+                <div class="row">
+                    <div class="col-6">
+                        <div class="back-btn">
+                            <button type="button" class="text-light-green"> <i class="fas fa-chevron-left"></i>
+              </button>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="tag-share"> <span class="text-light-green share-tag">
+                <i class="fas fa-chevron-right"></i>
+              </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- restaurent top -->
+    <!-- restaurent details -->
+    <section class="restaurent-details  u-line">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="heading padding-tb-10">
+                        <h3 class="text-light-black title fw-700 no-margin">Great Burger</h3>
+                        <p class="text-light-black sub-title no-margin">4508 Fort Hamilton Pkwy <span><a routerLink="/checkout" class="text-success">Change locations</a></span>
+                        </p>
+                        <div class="head-rating">
+                            <div class="rating"> <span class="fs-16 text-yellow">
+                              <i class="fas fa-star"></i>
+                            </span>
+                                            <span class="fs-16 text-yellow">
+                              <i class="fas fa-star"></i>
+                            </span>
+                                            <span class="fs-16 text-yellow">
+                              <i class="fas fa-star"></i>
+                            </span>
+                                            <span class="fs-16 text-yellow">
+                              <i class="fas fa-star"></i>
+                            </span>
+                                            <span class="fs-16 text-dark-white">
+                              <i class="fas fa-star"></i>
+                            </span>
+                                <span class="text-light-black fs-12 rate-data">58 rating</span>
+                            </div>
+                            <div class="product-review">
+                                <h6 class="text-light-black no-margin">91<span class="fs-14">% Food was good</span></h6>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="restaurent-logo">
+                        <img src="assets/img/logo-4.jpg" class="img-fluid" alt="#">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- restaurent details -->
+    <!-- restaurent tab -->
+    <div class="restaurent-tabs u-line">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="restaurent-menu scrollnav">
+                        <ul class="nav nav-pills">
+                            <li class="nav-item"> <a class="nav-link active text-light-white fw-700" data-toggle="pill" href="#menu">Menu</a>
+                            </li>
+                            <li class="nav-item"> <a class="nav-link text-light-white fw-700" data-toggle="pill" href="#about">About</a>
+                            </li>
+                            <li class="nav-item"> <a class="nav-link text-light-white fw-700" data-toggle="pill" href="#review">Reviews</a>
+                            </li>
+                            <li class="nav-item"> <a class="nav-link text-light-white fw-700" data-toggle="pill" href="#mapgallery">Map & Gallery</a>
+                            </li>
+                        </ul>
+                        <div class="add-wishlist">
+                            <img src="assets/img/svg/013-heart-1.svg" alt="tag">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- restaurent tab -->
+    <!-- restaurent address -->
+    <div class="restaurent-address u-line">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="address-details">
+                        <div class="address">
+                            <div class="delivery-address"> <a routerLink="/orderdetails" class="text-light-black">Delivery, ASAP (45-55m)</a>
+                                <div class="delivery-type"> <span class="text-success fs-12 fw-500">No minimun</span><span class="text-light-white">, Free Delivery</span>
+                                </div>
+                            </div>
+                            <div class="change-address"> <a routerLink="/checkout" class="fw-500">Change</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- restaurent address -->
+    <!-- restaurent meals -->
+    <section class="section-padding restaurent-meals bg-light-theme">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-xl-3 col-lg-3">
+                  <app-restaurantleftsidebar></app-restaurantleftsidebar>
+                </div>
+                <div class="col-xl-6 col-lg-6">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <div class="section-header-left">
+                                        <h3 class="text-light-black header-title">
+                                            <a class="card-link text-light-black no-margin" data-toggle="collapse" href="#collapseOne">
+                                            Most Popular
+                                          </a>
+                                        </h3>
+                                    </div>
+                                </div>
+                                <div id="collapseOne" class="collapse show">
+                                    <div class="card-body no-padding">
+                                        <div class="row">
+                                            <div class="col-lg-12">
+                                                <div class="restaurent-product-list">
+                                                    <div class="restaurent-product-detail">
+                                                        <div class="restaurent-product-left">
+                                                            <div class="restaurent-product-title-box">
+                                                                <div class="restaurent-product-box">
+                                                                    <div class="restaurent-product-title">
+                                                                        <h6 class="mb-2"><a href="javascript:void(0)" class="text-light-black fw-600">Bacon Egg &amp; Vegan Burger - Meal</a></h6>
+                                                                        <p class="text-light-white">600-700 Cal.</p>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="restaurent-tags-price">
+                                                                <div class="restaurent-product-price">
+                                                                    <h6 class="text-success fw-600 no-margin">$7.99+</h6>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="restaurent-product-img">
+                                                            <img src="assets/img/dish/150x151/dish-1.jpg" class="img-fluid" alt="#">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-lg-3">
+                    <app-restaurantrightsidebar></app-restaurantrightsidebar>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- restaurent meals -->
+    <!-- restaurent about -->
+    <section class="section-padding restaurent-about smoothscroll" id="about">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h3 class="text-light-black fw-700 title">Great Burger Menu Info</h3>
+                    <p class="text-light-green no-margin">American, Breakfast, Coffee and Tea, Fast Food, Hamburgers</p>
+                    <ul class="about-restaurent">
+                        <li> <i class="fas fa-map-marker-alt"></i>
+                            <span>
+                <a routerLink="/restaurant" class="text-light-white">
+                  314 79th St, Brooklyn, NY, 11209
+                </a>
+              </span>
+                        </li>
+                        <li> <i class="fas fa-phone-alt"></i>
+                            <span><a href="tel:" class="text-light-white">[MASKED]</a></span>
+                        </li>
+                        <li> <i class="far fa-envelope"></i>
+                            <span><a href="mailto:" class="text-light-white">[MASKED]</a></span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-md-6">
+                    <div class="restaurent-schdule">
+                        <div class="card">
+                            <div class="card-header text-light-white fw-700 fs-16">Hours</div>
+                            <div class="card-body">
+                                <div class="schedule-box">
+                                    <div class="day text-light-black">Monday</div>
+                                    <div class="time text-light-black">Delivery: 7:00am - 10:59pm</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- restaurent about -->
+    <!-- map gallery -->
+    <div class="map-gallery-sec section-padding bg-light-theme smoothscroll" id="mapgallery">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="main-box">
+                        <div class="row">
+                            <div class="col-md-6 map-pr-0">
+                                <iframe id="locmap" src="[MASKED]"></iframe>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- map gallery -->
+
+    <app-footer2></app-footer2>

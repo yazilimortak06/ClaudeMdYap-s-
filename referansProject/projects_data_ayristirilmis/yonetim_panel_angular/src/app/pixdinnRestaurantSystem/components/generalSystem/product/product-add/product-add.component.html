@@ -1,0 +1,177 @@
+<!-- Kaynak: E:\Projeler\Angular\PixdinnYonetimPanel\PixdinnManagementPanel\src\app\pixdinnRestaurantSystem\components\generalSystem\product\product-add\product-add.component.html -->
+<button mat-icon-button class="close-button" [mat-dialog-close]="true">
+    <mat-icon class="close-icon" color="white">close</mat-icon>
+</button>
+<h4 color="primary" class="dialog-headline">Yeni Urun Ekle</h4>
+
+<div class="mat-dialog-content">
+    <mat-horizontal-stepper [linear]="true" #stepper>
+        <mat-step [stepControl]="firstFormGroup">
+            <form #form1="ngForm" [formGroup]="firstFormGroup">
+                <ng-template style="margin: auto;" matStepLabel>Genel Ozellikler</ng-template>
+                <div class="row">
+                    <div class="col-12 col-md-4" style="align-items: center; display: inline-flex;">
+                        <mat-form-field class="isActive-form-field" floatLabel="always" style="width: 100%; margin: 0px; padding-bottom: 0px; text-align: center;" appearance="none">
+                            <mat-slide-toggle [(ngModel)]="addProductRequestModel.isActive" class="example-margin"
+                                [color]="'primary'" [ngModelOptions]="{standalone: true}" [checked]="false">Aktiflik
+                                Durumu</mat-slide-toggle>
+                            <textarea matInput hidden></textarea>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-12 col-md-8">
+                        <span style="display: flex; padding: 10px; font-size: 10px;">
+                            <mat-icon style="margin-right: 5px;">info</mat-icon>
+                            Varsayilan olarak secilen dil icin girilen metinler, diger secilen diller icin otomatik
+                            cevrilir.
+                        </span>
+                    </div>
+                </div>
+                <hr style="width: 100%; border-color: dodgerblue; border-width: 2px;" />
+                <div class="row">
+                    <div class="col-12 col-md-4" style="height: fit-content;">
+                        <div class="col-md-12" style="height: 150px; width: 150px; border: dotted 1px black; margin: auto; margin-bottom: 10px;">
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-8" style="height: fit-content;">
+                        <div class="" style="height: fit-content;">
+                            <mat-tab-group style="margin-bottom: 10px;">
+                                <mat-tab *ngFor="let content of addProductRequestModel.productContent"
+                                    [label]="content.languageName">
+                                    <div class="row">
+                                        <ng-container *ngIf="!content.isDefault">
+                                            <div class="col-12 col-md-4">
+                                                <mat-form-field floatLabel="always" style="width: 100%; margin-top: 0px;"
+                                                    class="isManuelTranslate-checkbox" appearance="none">
+                                                    <mat-slide-toggle [(ngModel)]="content.isManuelTranslate"
+                                                        [name]="'isManuelTranslate-' + content.languageId"
+                                                        [ngModelOptions]="{standalone: true}" class="example-margin"
+                                                        [color]="'primary'" [checked]="false">
+                                                        Duzelt
+                                                    </mat-slide-toggle>
+                                                    <textarea matInput hidden></textarea>
+                                                </mat-form-field>
+                                            </div>
+                                        </ng-container>
+                                        <mat-form-field class="col-12 col-md-8" appearance="fill">
+                                            <mat-label>Isim</mat-label>
+                                            <input matInput [(ngModel)]="content.name"
+                                                [name]="'name-' + content.languageId"
+                                                [ngModelOptions]="{standalone: true}"
+                                                [disabled]="!content.isManuelTranslate">
+                                        </mat-form-field>
+                                        <mat-form-field class="col-12 col-md-12" appearance="fill">
+                                            <mat-label>Aciklama</mat-label>
+                                            <textarea matInput [(ngModel)]="content.description"
+                                                [name]="'description-' + content.languageId"
+                                                [ngModelOptions]="{standalone: true}"
+                                                [disabled]="!content.isManuelTranslate"></textarea>
+                                        </mat-form-field>
+                                    </div>
+                                </mat-tab>
+                            </mat-tab-group>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-12 col-md-4">
+                                <mat-form-field style="width: 100%;" appearance="fill">
+                                    <mat-label>Urun Kodu</mat-label>
+                                    <input matInput name="productCode" [(ngModel)]="addProductRequestModel.code"
+                                        formControlName="productCodeCtrl" required>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-12 col-md-8">
+                                <mat-form-field style="width: 100%;" appearance="fill" class="mt-1">
+                                    <mat-label>Kategori Secin</mat-label>
+                                    <mat-select name="categorySelect" [(ngModel)]="selectedCategoryId"
+                                        formControlName="categoryCtrl" required>
+                                        <mat-option
+                                            *ngFor="let category of prepareProductInsertFormResponseModel.categoryList"
+                                            [value]="category.id">{{category.name}}</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-12 col-md-4" *ngFor="let productPrice of productPrices; let i = index">
+                                <mat-form-field appearance="fill" style="width: 100%; margin-top: 0px;">
+                                    <mat-label>Fiyat-{{productPrice.order}}</mat-label>
+                                    <input matInput [(ngModel)]="productPrice.price" [name]="'price-' + i"
+                                        [ngModelOptions]="{standalone: true}" [disabled]="!productPrice.isActive"
+                                        currencyMask>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-12 col-md-3">
+                                <mat-form-field class="isActive-form-field" floatLabel="always" style="width: 100%; margin: 0px; padding-bottom: 0px; text-align: center;" appearance="none">
+                                    <mat-slide-toggle [(ngModel)]="isSecondPriceActive" class="example-margin"
+                                        [color]="'primary'" [ngModelOptions]="{standalone: true}"
+                                        [checked]="isSecondPriceActive" (change)="changeProductPrice($event)">
+                                        Ikinci Fiyat</mat-slide-toggle>
+                                    <textarea matInput hidden></textarea>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </mat-step>
+        <mat-step label="Ek Ozellikler" [stepControl]="secondFormGroup">
+            <form #form2="ngForm" [formGroup]="secondFormGroup">
+                <ng-container>
+                    <div class="row">
+                        <div class="col-12 col-md-12">
+                            <mat-form-field style="width: 100%;" appearance="fill" class="mt-1">
+                                <mat-label>Etiket Secin</mat-label>
+                                <mat-select name="tagSelect" multiple formControlName="tagCtrl">
+                                    <mat-option (onSelectionChange)="onChangeTagSelect($event)"
+                                        *ngFor="let tag of prepareProductInsertFormResponseModel.tagList"
+                                        [value]="tag.id">{{tag.name}}</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="col-6 col-md-3">
+                                    <mat-form-field style="width: 100%;" appearance="fill">
+                                        <mat-label>Pisirme Suresi (dk)</mat-label>
+                                        <input matInput name="cookingTime"
+                                            [(ngModel)]="addProductRequestModel.cookingTime"
+                                            formControlName="cookingTimeCtrl">
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-6 col-md-3">
+                                    <mat-form-field style="width: 100%;" appearance="fill">
+                                        <mat-label>Kalori</mat-label>
+                                        <input matInput name="calorie" [(ngModel)]="addProductRequestModel.calorie"
+                                            formControlName="calorieCtrl">
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <mat-form-field style="width: 100%;" appearance="fill" class="mt-1">
+                                        <mat-label>Alerjen Secin</mat-label>
+                                        <mat-select name="allergenSelect" multiple formControlName="allergenCtrl">
+                                            <mat-option (onSelectionChange)="onChangeAllergenSelect($event)"
+                                                *ngFor="let allergen of prepareProductInsertFormResponseModel.allergenList"
+                                                [value]="allergen.id">{{allergen.name}}</mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </ng-container>
+            </form>
+        </mat-step>
+    </mat-horizontal-stepper>
+</div>
+<mat-dialog-actions align="end">
+    <button mat-button mat-raised-button (click)="formPrevious();"
+        [disabled]="stepper.selectedIndex === 0">Geri</button>
+    <button mat-button mat-raised-button (click)="formNext();"
+        [disabled]="stepper.selectedIndex === stepper.steps.length-1">Ileri</button>
+    <button mat-button mat-raised-button color="accent" (click)="save();">Kaydet</button>
+</mat-dialog-actions>

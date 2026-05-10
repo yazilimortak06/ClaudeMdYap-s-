@@ -2,6 +2,38 @@
 
 Angular 13, şarj istasyon yönetim admin paneli, Metronic v7.1.7 template tabanlı.
 
+## Gercek Kod Dosyaları (Kaynaktan Alinmis)
+
+Asagidaki dosyalar `E:\Projeler\Angular\SarjAllProPanel` kaynagindan alinmistir:
+
+| Dosya | Aciklama |
+|---|---|
+| `src/app/app.module.ts` | Kok modul, APP_INITIALIZER, JWT, HashLocationStrategy |
+| `src/app/app-routing.module.ts` | Lazy load routing (auth, layout, error) |
+| `src/app/core/adapters/MOMENT_DATE_FORMATS.ts` | MomentDateAdapter + TR locale |
+| `src/app/core/bases/base-datatable/base-datatable.ts` | DataTableBase generic sinifi |
+| `src/app/core/bases/base-datatable/base-datatable-base-model.ts` | Base model (rowUniqueId, isSelected) |
+| `src/app/core/wrapper-core/datatable-request-core-model.ts` | Generic pagination request |
+| `src/app/core/wrapper-core/datatable-result-core.model.ts` | Generic pagination response |
+| `src/app/shared_admin/utils/wrapper-models/datatable-request-wrapper.model.ts` | DatatableRequestWrapper extends core |
+| `src/app/shared_admin/utils/wrapper-models/datatable-response-wrapper.model.ts` | DatatableResponseWrapper extends core |
+| `src/app/shared_admin/utils/interseptors/http-event-interseptor.ts` | JWT interceptor + 401 handler |
+| `src/app/shared_admin/auth/auth.guard.ts` | Route guard (adminValue + localStorage) |
+| `src/app/shared_admin/auth/authentication-service.ts` | BehaviorSubject auth, login/logout/refresh |
+| `src/app/shared_admin/partials/layout/layout.component.ts` | Layout host component |
+| `src/app/shared_admin/partials/layout/layout.component.html` | Metronic layout HTML (aside, header, content, footer) |
+| `src/app/shared_admin/utils/services/utils.service.ts` | SnackBar, dialog yardimci servisi |
+| `src/app/shared_admin/partials/subheader/_services/subheader.service.ts` | Breadcrumb BehaviorSubject servisi |
+| `src/app/sarjAllPro/components/auth/login/login.component.ts` | Login formu, prepareLoginForm + logIn akisi |
+| `src/app/sarjAllPro/components/auth/login/login.component.html` | Login view HTML |
+| `src/app/sarjAllPro/components/panelAdmin/panelAdmin-list/panelAdmin-list.component.ts` | Admin listesi, paginator+sort, isActive toggle |
+| `src/app/sarjAllPro/components/panelAdmin/panelAdmin-list/panelAdmin-list.component.html` | Admin listesi mat-table HTML |
+| `src/app/sarjAllPro/components/panelAdmin/panelAdmin-add/panelAdmin-add.component.ts` | Admin ekleme formu, MD5 sifre |
+| `src/app/sarjAllPro/components/panelAdmin/panelAdmin-update/panelAdmin-update.component.ts` | Admin guncelleme formu |
+| `src/app/sarjAllPro/services/panelAdmin/panelAdmin-service.ts` | PanelAdmin CRUD servisi (list/add/update/changeIsActive) |
+
+
+
 ## Genel Yapı
 
 ```

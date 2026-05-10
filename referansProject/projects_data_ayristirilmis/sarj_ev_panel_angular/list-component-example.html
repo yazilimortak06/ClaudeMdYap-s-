@@ -1,0 +1,239 @@
+<!-- Kaynak: E:\Projeler\Angular\EvTechPanelAltunkaya\src\app\evtech\components\stations\station-list\station-list.component.html -->
+
+<div class="card card-custom gutter-b">
+  <div class="card-header">
+    <div class="card-title">
+      <h3 class="card-label"> İstasyon Listesi</h3>
+    </div>
+    <div class="card-toolbar">
+      <a (click)="onNewBtnClicked()" type="button" class="btn btn-primary ml-2" matTooltip="Yeni İstasyon Ekle">
+        Yeni İstasyon Ekle
+      </a>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="row">
+      <div class="form col-md-12" style="margin-bottom: 15px;">
+          <div class="row">
+            <div class="col-lg-4">
+              <mat-form-field style="width: 100%;" class="mt-1">
+                <mat-label>Firma Seçin</mat-label>
+                <mat-select name="companyFilterSelect" [(ngModel)]="companyFilter.id"
+                (selectionChange)="initForm(true)"
+                  #companyFilterSelection>
+                  <mat-option *ngFor="let company of companyList" [value]="company.id">
+                    {{company.name}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+          </div>
+        </div>
+      </div>
+    </div>
+    <hr>
+    <!-- begin: Filtering-->
+    <div class="row">
+      <div class="form col-md-12" style="margin-bottom: 15px;">
+        <div class="form-group ">
+          <div class="row">
+            <div class="col-lg-4">
+              <mat-form-field class="example-full-width">
+                <mat-label>İsim</mat-label>
+                <input [(ngModel)]="searchCriterStationManagment.data.name" matInput>
+              </mat-form-field>
+            </div>
+            <div class="col-lg-4">
+              <mat-form-field class="example-full-width">
+                <mat-label>Açıklama</mat-label>
+                <input [(ngModel)]="searchCriterStationManagment.data.description" matInput>
+              </mat-form-field>
+            </div>
+            <div class="col-lg-3">
+              <mat-form-field style="width: 100%;" >
+                <mat-label>Durumunu Seçin</mat-label>
+                <mat-select [(ngModel)]="searchCriterStationManagment.data.isActive" #stationStateFilterSelection>
+                  <mat-option  [value]="true">
+                    Aktif
+                  </mat-option>
+                  <mat-option  [value]="false">
+                    Aktif Değil
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="col-md-3 offset-md-9 m--margin-bottom-10-mobile">
+            <div class="button-row float-right">
+              <button mat-raised-button matTooltip="Filtrele" color="primary" type="button"
+                (click)="getStations(true)">Filtrele</button>&nbsp;
+              <button mat-raised-button matTooltip="Temizle" color="accent" type="button"
+                (click)="clearParameters()">Temizle</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- end: Filtering -->
+    <div class="row locationWrapper">
+      <div class="col-md-4 storelocator-panel">
+        <ul class="location-list">
+          <li *ngFor="let location of stationManagmentList.data, let i = index">
+            <div class="location" (click)="openWindow(location.id,location.longtitude,location.latitude, i)">
+              <div>
+                <mat-expansion-panel>
+                  <mat-expansion-panel-header>
+                    <mat-panel-title style="margin: auto;">
+                      {{ location.name }}
+                    </mat-panel-title>
+                    <button mat-button [matMenuTriggerFor]="menu">
+                      <mat-icon aria-hidden="false">dehaze</mat-icon>
+                    </button>
+                    <mat-panel-description>
+                    </mat-panel-description>
+                  </mat-expansion-panel-header>
+                  <p> <span>Açıklama: </span>{{location.description}}</p>
+                  <mat-menu #menu="matMenu">
+                    <!-- Yeni Sayfa olacak -->
+                    <button mat-menu-item (click)="onEditBtnClicked(location.id)">Detay</button>
+                    <!-- Yeni Sayfa olacak -->
+                    <button mat-menu-item (click)="onEditBtnClicked(location.id)">Düzenle</button>
+                    <!-- Modal -->
+                    <button mat-menu-item (click)="onEditBtnClicked(location.id)">Yönet</button>
+                    <!-- Modal -->
+                    <button mat-menu-item (click)="onEditBtnClicked(location.id)">Hareket Geçmişi</button>
+                    <!-- Modal -->
+                    <button mat-menu-item (click)="onEditBtnClicked(location.id)">Raporlar</button>
+                    <!-- Modal -->
+                    <button mat-menu-item (click)="onEditBtnClicked(location.id)">Loglar</button>
+                  </mat-menu>
+                </mat-expansion-panel>
+              </div>
+            </div>
+            <div class="detail">
+              <div class="detail-icon"></div>
+            </div>
+          </li>
+        </ul>
+      </div>
+      <div class="col-md-8">
+        <agm-map (mapReady)="mapReady($event)" #stationMapElement [(latitude)]="lat" [(longitude)]="lng" [zoom]="zoom"
+          [disableDefaultUI]="false" [zoomControl]="false">
+
+          <agm-marker *ngFor="let m of stationManagmentList.data; let i = index" [latitude]="m.latitude"
+            [longitude]="m.longtitude">
+            <agm-info-window [isOpen]="m.isOpen">
+              <br>
+              <div class="title">{{ m.name }}</div>
+              <br>
+
+              <div class="title" *ngIf="m.stationType == stationManagmentType.AC">
+                <span>Tipi: Ac</span>
+              </div>
+              <div *ngIf="m.stationType ==  stationManagmentType.DC">
+                <span>Tipi: Dc</span>
+              </div>
+
+            </agm-info-window>
+
+          </agm-marker>
+
+        </agm-map>
+      </div>
+    </div>
+
+    <div class="mat-table__wrapper">
+      <mat-table #sortStationManagmentTable="matSort" [dataSource]="stationManagmentList" matSort>
+        <ng-container matColumnDef="Id">
+          <mat-header-cell [style.flex]="'0 0 10%'" *matHeaderCellDef>#</mat-header-cell>
+          <mat-cell [style.flex]="'0 0 10%'" *matCellDef="let row">
+            {{row.id}}
+          </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="Name">
+          <mat-header-cell [style.flex]="'0 0 15%'" *matHeaderCellDef mat-sort-header> İsim</mat-header-cell>
+          <mat-cell [style.flex]="'0 0 15%'" *matCellDef="let row">{{row.name}} </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="Description">
+          <mat-header-cell [style.flex]="'0 0 30%'" *matHeaderCellDef mat-sort-header> Açıklama</mat-header-cell>
+          <mat-cell [style.flex]="'0 0 30%'" *matCellDef="let row">{{row.description}} </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="TotalLoadedKw">
+          <mat-header-cell [style.flex]="'0 0 10%'" *matHeaderCellDef mat-sort-header> Harcanılan Kw</mat-header-cell>
+          <mat-cell [style.flex]="'0 0 10%'" *matCellDef="let row">{{row.totalLoadedKw}} </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="TotalPaidPrice">
+          <mat-header-cell [style.flex]="'0 0 10%'" *matHeaderCellDef mat-sort-header> Ödenilen Tutar</mat-header-cell>
+          <mat-cell [style.flex]="'0 0 10%'" *matCellDef="let row"> {{row.totalPaidPrice|currency:"TRY":"symbol"}}  </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="IsActive">
+
+          <mat-header-cell [style.flex]="'0 0 15%'" *matHeaderCellDef> Aktiflik Durumu</mat-header-cell>
+          <mat-cell [style.flex]="'0 0 15%'" *matCellDef="let row">
+            <section class="example-section">
+              <mat-slide-toggle
+                (change)="changeActiveStateDialog(row.id,row.isActive,$event)"
+                  class="example-margin"
+                  [color]="'primary'"
+                  [checked]="row.isActive"
+                  >
+              </mat-slide-toggle>
+            </section>
+          </mat-cell>
+          <!-- <mat-cell [style.flex]="'0 0 15%'" *matCellDef="let row">
+            <div *ngIf="row.isActive == true">
+              <span class="label label-lg label-inline label-{{ row.isActive | activePassiveCss }}">
+                Aktif
+              </span>
+            </div>
+            <div *ngIf="row.isActive == false">
+              <span class="label label-lg label-inline label-{{ row.isActive | activePassiveCss }}">
+                Aktif Değil
+              </span>
+            </div>
+          </mat-cell> -->
+
+        </ng-container>
+        <ng-container matColumnDef="Edit">
+
+          <mat-header-cell [style.flex]="'0 0 10%'" *matHeaderCellDef> </mat-header-cell>
+          <mat-cell [style.flex]="'0 0 10%'" *matCellDef="let row">
+            <button mat-button [matMenuTriggerFor]="menu">
+              <mat-icon aria-hidden="false">dehaze</mat-icon>
+            </button>
+            <mat-menu #menu="matMenu">
+              <!-- Yeni Sayfa olacak (içinde loglar,raporlar ve hareket geçmişi olcak) -->
+              <button mat-menu-item (click)="onEditBtnClicked(row.id)">Detay</button>
+              <!-- Yeni Sayfa olacak -->
+              <button mat-menu-item (click)="onEditBtnClicked(row.id)">Düzenle</button>
+              <button mat-menu-item (click)="goChargeDeviceListBtnClicked(row.id)">Cihazlar</button>
+              <!-- Modal -->
+              <button mat-menu-item (click)="goRemoteManagmentBtnClicked(row.id)">Uzaktan Yönetim</button>
+              <!-- Modal -->
+              <!-- <button mat-menu-item (click)="changeActiveState(row.id)">Durumunu Değiştir</button> -->
+              <button mat-menu-item (click)="removeStationDialog(row.id)">Kaldır</button>
+            </mat-menu>
+          </mat-cell>
+        </ng-container>
+        <mat-header-row *matHeaderRowDef="showingColumnNamesStationManagmentTable">
+        </mat-header-row>
+        <mat-row [ngClass]="{'high-light': rIndex % 2 == 0 }"
+          *matRowDef="let row; columns: showingColumnNamesStationManagmentTable; let rIndex = index;">
+        </mat-row>
+
+      </mat-table>
+    </div>
+    <!-- end: Table -->
+
+    <!-- begin: Pagination -->
+    <div class="mat-table__bottom row">
+      <div class="col-md-2">
+        <span>Kayıt sayısı: <b>{{totalRecordSizeStationManagmentTable}}</b></span>
+      </div>
+      <div class="col-md-10">
+        <mat-paginator #paginatorStationManagmentTable [pageSize]="15" [pageSizeOptions]="[10, 15, 30]"
+          [showFirstLastButtons]="true" [length]="totalRecordSizeStationManagmentTable">
+        </mat-paginator>
+      </div>
+    </div>
+  </div>
+</div>

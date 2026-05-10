@@ -1,0 +1,258 @@
+// KAYNAK: E:\Projeler\Backend\SarjAllPro
+// Proje: SarjAllPro (Sarj istasyonu ödeme + OCPP yönetim platformu — pixdinn marka)
+// .NET 5.0 (bazı FirmIntegration projeleri .NET 6.0)
+
+KLASOR YAPISI
+=============
+
+src/
+  Core/
+    Applications/
+      Api.Application/           -- Web panel + mobil API servisleri (Authentication, PanelAdmin, Policy, Parameter)
+        Bases/
+        Extentions/
+        Filters/MobilApi, WebApi
+        RabbitMq/Consumers/
+        Services/
+          MobilApiServices/
+          PanelServices/
+            Authentication/
+            AuthorizeManagment/
+            CountryCityAndTown/
+            PanelAdmin/
+            PanelAdminType/
+            Parameter/
+            ParameterGroup/
+            ParameterValue/
+            PolicyManagment/
+        UtilServices/
+        Validator/
+
+      Bank.Application/          -- Ödeme işlemleri (Moka/Banka entegrasyonu - Refit HTTP client)
+        Extentions/
+          FilterRegister.cs
+          RabbitMqRegister.cs
+        Filters/
+          BankApiRequestResponseFilterAttribute.cs
+        Interceptors/
+        RabbitMq/Consumers/
+
+      File.Application/          -- Dosya yükleme servisleri
+        Services/File/
+
+      GoogleService.Application/ -- Google Maps/Geocoding servisleri
+        Services/
+
+      Integration.Application/   -- Harici entegrasyon servisleri
+        Extentions/
+          ContextProviderRegister.cs
+          FilterRegister.cs
+          RabbitMqRegister.cs    (sadece ILogProducer kaydeder)
+        Filters/
+          IntegrationApiRequesResponsetLogFilterAttribute.cs
+        RabbitMq/Consumers/
+        Services/
+
+      Log.Application/           -- Log servisleri
+        Extensions/
+        RabbitMq/Consumers/
+          ExceptionLog/
+          MiddleWareLog/
+        Services/
+          Exceptions/
+          RequestResponses/
+
+      MailSms.Application/       -- Mail ve SMS gönderimi
+
+      ManagerRootAdmin.Application/ -- Root admin yönetimi
+
+      Notification.Application/  -- SignalR gerçek zamanlı bildirimler
+        Extensions/
+        Filters/
+        Hubs/
+        Services/
+
+      Ocpp.Application/          -- OCPP 1.6 WebSocket sunucusu (ANA FARK: VM projesiyle kıyasla)
+        Extentions/
+        RabbitMq/Consumers/
+          OcppTriggerMessage/
+        Services/
+          ConnectorConnection/
+          DeviceConnection/
+          Ocpp16/
+            Ocpp16AuthHorization/
+            Ocpp16BootNotification/
+            Ocpp16ChangeAvailability/
+            Ocpp16Connection/            <-- Ocpp16ConnectionService.cs (ana bağlantı servisi)
+            Ocpp16Handle/
+            Ocpp16HeartBeat/
+            Ocpp16MeterValues/
+            Ocpp16RemoteTransaction/
+            Ocpp16StartTransaction/
+            Ocpp16StatusNotification/
+            Ocpp16StopTransaction/
+          OcppCommandMessage/
+          OcppRequest/
+          OcppTriggerMessageManagment/
+          SocketMovement/
+
+      Tocken.Application/        -- JWT token servisleri
+        Services/
+
+      WorkerService.Application/ -- Background worker servisleri
+        Services/GeneralTask/
+
+    Persistences/
+      Api.Persistence/           -- Web/mobil API DB context
+        DataSeed/
+        DbContext/
+        EntityFluent/
+        Migrations/
+        Repositories/
+          PanelAdminRepositories/
+          PanelAdminTypeRepositories/
+          PanelRootAdminRepositories/
+          ParameterGroupRepositories/
+          ParameterRepositories/
+          ParameterValueRepositories/
+          PolicyRepositories/
+          TownRepositories/
+
+      Bank.Persistence/          -- Ödeme DB context (PaymentDbContext - Refit stubs mevcut)
+        DbContext/PaymentDbContext.cs
+
+      File.Persistence/
+      GoogleService.Persistence/
+      Integration.Persistence/   -- Entegrasyon DB context (Refit stubs mevcut)
+      Log.Persistence/
+        DbContext/
+        Repositories/
+          Exceptions/
+          RequestResponses/
+      MailSms.Persistence/
+      Notification.Persistence/
+      Ocpp.Persistence/          -- OCPP DB context
+        DbContext/OcppDbContext.cs
+        EntityFluent/
+        Migrations/
+        Repositories/
+          CommandMessageRepositories/
+          DeviceConnectionRepositories/
+          HeartBeatRepositories/
+          MeterValueRepositories/
+          StatusNotificationEventRepositories/
+          TransactionRepositories/
+      Station.Persistence/
+      Tocken.Persistence/
+      WorkerService.Persistence/
+
+  Presentation/
+    GateWay.Api/                 -- Ocelot API Gateway
+    Bank.Api/                    -- Ödeme API (Startup.cs - PaymentDbContext bağlıyor)
+    File.Api/
+      Controllers/
+        FileController.cs
+        FileViewController.cs
+    Log.Api/
+      Controllers/
+        ApiExceptionController.cs
+        MobilExceptionController.cs
+        RequestResponseController.cs
+    ManagerRootAdmin.Api/
+    MailSms.Api/
+    Mobil.Api/                   -- Mobil API (commented out in docker-compose)
+    Notification.Api/
+    Ocpp.Api/                    -- OCPP WebSocket sunucusu
+      Controllers/
+        OCPP16Controller.cs      <-- Ana bağlantı endpoint
+        OcppCommandMessageController.cs
+        OcppTriggerMessageManagmentController.cs
+        RemoteTransactionController.cs
+        SocketMovementController.cs
+    SarjAllMobil.Api/            -- Mobil uygulama API
+      Controllers/
+        ChargeController.cs      <-- Şarj işlem controller (PrepareCharge, Start/Stop, GetStatus, GetPayment)
+        StationController.cs
+        SupportController.cs
+        TokenController.cs
+    Station.Api/                 -- İstasyon yönetim API
+      Controllers/
+        ChargeDeviceConnectorOcppManagmentController.cs
+        ChargeDeviceOcppManagementController.cs
+        ChargeProcessManagmentController.cs
+        ChargeProcessOcppManagmentController.cs
+        CommandManagmentController.cs
+        OCPP16RemoteController.cs
+        TestController.cs
+    Tocken.Api/                  -- JWT token API
+      Controllers/
+        AdminUserTypeAuthController.cs
+        AdminUserTypeController.cs
+        AuthController.cs
+        PanelUserController.cs
+    Web.Api/                     -- Web panel API
+      Controllers/
+        AuthenticationController.cs
+        AuthorizeManagmentController.cs
+        CountryCityAndTownController.cs
+        PanelAdminController.cs
+        PanelAdminTypeController.cs
+        ParameterController.cs
+        ParameterGroupController.cs
+        ParameterValueController.cs
+        PolicyManagmentController.cs
+    WorkerService.Api/
+    WorkerService/               -- Background worker
+
+  Shared/
+    Shared.Domain/
+      ContextProviders/
+        Interfaces/TockenApi, WebApi
+        Models/TockenApi, WebApi
+      Dto/
+        ApiDto/       (AuthenticationDtos, PanelAdminDtos, PolicyDtos, ParameterDtos vb.)
+        FileDto/
+        LogDto/
+        TockenDto/    (AdminDtos, AdminUserTypeDtos, JwtTockenDtos vb.)
+        WorkerServiceDto/
+      Entities/
+        ApiEntities/  (AdminModule, LanguageModule, ParameterModule, PolicyModule, RegionModule)
+        FileEntities/
+        LogEntities/  (ApiException, MobilException, RequestResponse, WorkerServiceProcessInfo)
+        TockenEntities/ (AuthModule, GeneralUserModule, PanelAdminModule)
+        WorkerServiceEntities/
+      Enums/
+      Errors/
+      GeneralAttribute/
+      GeneralEnums/
+      GeneralProvider/
+      HttpClients/
+      RabbitMq/
+      RepositoryIntefaces/
+      ServiceIntefaces/
+      UtilServices/
+      WrapperModels/
+
+  FirmIntegration/               -- AYRI PROJE (.NET 6.0 - henüz iskelet)
+    Applications/
+      FirmIntegration.Application/  (Class1.cs - boş)
+      FirmIntegrationWorkerService.Application/ (boş)
+    Domains/
+      FirmIntegration.Domain/       (boş)
+      FirmIntegrationWorkerService.Domain/ (boş)
+    Persistences/
+      FirmIntegration.Persistence/  (boş)
+      FirmIntegrationWorkerService.Persistence/ (boş)
+    Presentation/
+      FirmIntegration.Api/
+        Program.cs                 (minimal API .NET 6)
+      FirmIntegration.WorkerService/
+        Worker.cs
+
+Framework/
+  Core/             (FrameworkCore - ortak framework kütüphanesi)
+
+docker-compose.yml (16 servis)
+docker-compose.override.yml
+docker-compose-test.yml
+docker-compose-test.override.yml

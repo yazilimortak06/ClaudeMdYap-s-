@@ -1,0 +1,133 @@
+<!-- Kaynak: E:\Projeler\Angular\rotawattqrweb-master\rotawattqrweb-master\src\app\features\charge\charging-status\charging-status.component.html -->
+<!-- ============================================================ -->
+<!-- Header - Turuncu bar, geri butonu ve baslik -->
+<!-- ============================================================ -->
+<div class="page-header">
+  <button class="header-back" routerLink="/home">←</button>
+  <span class="header-title">Şarj Oluyor</span>
+  <button class="header-home" routerLink="/home"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M3 12L12 3L21 12" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M5 10V19C5 19.55 5.45 20 6 20H10V14H14V20H18C18.55 20 19 19.55 19 19V10" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+</div>
+
+<div class="page-body">
+
+  <!-- Loading durumu -->
+  <div *ngIf="loading" class="loading-state">
+    <div class="loading-spinner"></div>
+  </div>
+
+  <!-- Hata durumu -->
+  <div *ngIf="errorMessage && !loading" class="error-state">
+    <p>{{ errorMessage }}</p>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- Sarj durumu icerigi -->
+  <!-- ============================================================ -->
+  <div *ngIf="!loading && !errorMessage && chargeStatus" class="content">
+
+    <!-- ============================================================ -->
+    <!-- Dairesel progress - Lottie animasyon + yuzde gosterimi -->
+    <!-- ============================================================ -->
+    <div class="progress-circle-wrapper">
+      <!-- Lottie animasyon container - lottie-web direkt yukler -->
+      <div class="lottie-container" #lottieContainer></div>
+      <!-- Yuzde degeri ortada gosterilir -->
+      <div class="progress-percent">
+        %{{ chargeStatus.chargePercent || 0 }}
+      </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- Durum etiketi (Sarj Oluyor / Tamamlandi vs.) -->
+    <!-- ============================================================ -->
+    <div class="status-label">
+      <span class="status-icon">✓</span>
+      <span class="status-text">{{ getStatusText() }}</span>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- Detay kartlari - her biri ikonlu satir -->
+    <!-- ============================================================ -->
+    <div class="detail-card">
+
+      <!-- Sarj Yuzdesi -->
+      <div class="detail-row">
+        <div class="detail-icon">🔋</div>
+        <div class="detail-label">Şarj Yüzdesi</div>
+        <div class="detail-line"></div>
+        <div class="detail-value">%{{ chargeStatus.chargePercent || 0 }}</div>
+      </div>
+
+      <!-- Yukleme Hizi (kW) -->
+      <div class="detail-row">
+        <div class="detail-icon">⇄</div>
+        <div class="detail-label">Yükleme Hızı</div>
+        <div class="detail-line"></div>
+        <div class="detail-value">{{ chargeStatus.chargePower || 0 }} kW</div>
+      </div>
+
+      <!-- Yuklenen Enerji (kWh) -->
+      <div class="detail-row">
+        <div class="detail-icon">⚡</div>
+        <div class="detail-label">Yüklenen Enerji</div>
+        <div class="detail-line"></div>
+        <div class="detail-value">{{ chargeStatus.chargeEnergy || 0 }} kWh</div>
+      </div>
+
+      <!-- Baslangic Tarihi -->
+      <div class="detail-row">
+        <div class="detail-icon">🕐</div>
+        <div class="detail-label">Başlangıç Tarihi</div>
+        <div class="detail-line"></div>
+        <div class="detail-value">{{ chargeStatus.startTime || '—' }}</div>
+      </div>
+
+      <!-- Gecen Sure -->
+      <div class="detail-row">
+        <div class="detail-icon">⏱</div>
+        <div class="detail-label">Geçen Süre</div>
+        <div class="detail-line"></div>
+        <div class="detail-value">{{ chargeStatus.elapsedMinutes || 0 }} Dakika</div>
+      </div>
+
+      <!-- Toplam Tutar -->
+      <div class="detail-row">
+        <div class="detail-icon">💰</div>
+        <div class="detail-label">Toplam Tutar</div>
+        <div class="detail-line"></div>
+        <div class="detail-value">{{ chargeStatus.totalPrice || 0 }} ₺</div>
+      </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- Hedef bilgisi - kullanicinin sectigi kWh veya tutar -->
+    <!-- Ornek: 10 kWh secmis, 3 kWh dolmus -->
+    <!-- ============================================================ -->
+    <div class="target-section" *ngIf="targetAmount">
+      <div class="target-header">
+        <span class="target-label">{{ targetType === ChargeAmountType.Kwh ? 'Hedef Enerji' : 'Hedef Tutar' }}</span>
+        <span class="target-value">{{ targetAmount }} {{ targetType === ChargeAmountType.Kwh ? 'kWh' : '₺' }}</span>
+      </div>
+      <div class="target-progress-bar">
+        <div class="target-progress-fill" [style.width.%]="targetProgress"></div>
+      </div>
+      <div class="target-footer">
+        <span class="target-current">{{ currentTargetValue }} / {{ targetAmount }} {{ targetType === ChargeAmountType.Kwh ? 'kWh' : '₺' }}</span>
+        <span class="target-remaining" *ngIf="estimatedRemainingMinutes > 0">~{{ estimatedRemainingMinutes }} dk kaldı</span>
+      </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- Durdur butonu - sadece sarj aktifken gosterilir -->
+    <!-- ============================================================ -->
+    <button
+      *ngIf="isCharging()"
+      class="btn-stop"
+      [disabled]="stopping"
+      (click)="stopCharge()"
+    >
+      {{ stopping ? 'Durduruluyor...' : 'Durdur' }}
+    </button>
+
+  </div>
+</div>

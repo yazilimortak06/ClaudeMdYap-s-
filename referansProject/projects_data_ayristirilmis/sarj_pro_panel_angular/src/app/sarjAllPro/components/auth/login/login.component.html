@@ -1,0 +1,85 @@
+<!-- KAYNAK: E:\Projeler\Angular\SarjAllProPanel\src\app\sarjAllPro\components\auth\login\login.component.html -->
+
+<angular-progress-spinner></angular-progress-spinner>
+
+<!--begin::Head-->
+<div class="d-flex flex-column flex-root h-100" id="kt_login_wrapper">
+    <!--begin::Login-->
+    <div class="login login-1 login-signin-on d-flex flex-column flex-lg-row flex-column-fluid bg-white" id="kt_login">
+        <div class="d-flex flex-center bgi-size-cover bgi-no-repeat flex-row-fluid"
+          style="background-image: url(./../../../../../assets/media/bg-1.jpg);">
+            <div class="login-content flex-row-fluid d-flex flex-column justify-content-center position-relative overflow-hidden p-7 mx-auto">
+                <!--begin::Content body-->
+                <div class="flex-column-fluid flex-center">
+                    <div class="kt-login__body">
+                        <!--begin::Signin-->
+                        <div class="login-form login-signin">
+                            <!--begin::Form-->
+                            <form class="form" [formGroup]="loginForm" novalidate="novalidate" id="kt_login_signin_form">
+                                <!--begin::Title-->
+                                <div class="pb-13 pt-lg-0 pt-5">
+                                    <h3 style="text-align:center ;color: white;">
+                                        EvTech | Yönetim Sistemi
+                                    </h3>
+                                </div>
+                                <!--end::Title-->
+
+                                <!-- Logo -->
+                                <ng-container>
+                                    <div class="aside-img d-flex flex-row-fluid bgi-no-repeat bgi-position-y-bottom bgi-position-x-center"
+                                      style="background-size:contain;margin: auto;background-position: center;margin: auto;height: 100px;width: 100px;background-image: url('./../../../../../assets/project-assets/evtechlogo.svg');">
+                                    </div>
+                                </ng-container>
+
+                                <!--begin::Form group - Kullanıcı Adı-->
+                                <div class="form-group">
+                                    <input [(ngModel)]="loginRequestModel.userName"
+                                      class="form-control h-auto text-white placeholder-white opacity-70 bg-dark-o-70 rounded-pill border-0 py-4 px-8 mb-5"
+                                      formControlName="userName"
+                                      autocomplete="off"
+                                      placeholder="Kullanıcı Adı"
+                                      style="margin-bottom:15px !important"
+                                      required />
+                                    <mat-error *ngIf="isControlHasError('userName','required')" style="color: black;">
+                                        <strong>*Kullanıcı adı alanı boş bırakılamaz.</strong>
+                                    </mat-error>
+                                </div>
+                                <!--end::Form group-->
+
+                                <!--begin::Form group - Şifre-->
+                                <div class="form-group">
+                                    <input [(ngModel)]="loginRequestModel.password"
+                                      class="form-control h-auto text-white placeholder-white opacity-70 bg-dark-o-70 rounded-pill border-0 py-4 px-8 mb-5"
+                                      type="password"
+                                      name="password"
+                                      autocomplete="off"
+                                      placeholder="Şifre"
+                                      formControlName="password"
+                                      style="margin-bottom:15px !important" />
+                                    <mat-error *ngIf="isControlHasError('password','required')" style="color: black;">
+                                        <strong>*Şifre alanı boş bırakılamaz.</strong>
+                                    </mat-error>
+                                </div>
+                                <!--end::Form group-->
+
+                                <!--begin::Action-->
+                                <div class="pb-lg-0 pb-5">
+                                    <button type="submit" id="kt_login_signin_submit" (click)="login()"
+                                      class="btn btn-pill btn-outline-white font-weight-bold opacity-90 px-15 py-3 float-right">
+                                        Giriş
+                                    </button>
+                                </div>
+                                <!--end::Action-->
+                            </form>
+                            <!--end::Form-->
+                        </div>
+                        <!--end::Signin-->
+                    </div>
+                </div>
+                <!--end::Content body-->
+            </div>
+        </div>
+    </div>
+    <!--end::Login-->
+</div>
+<!--end::Head-->

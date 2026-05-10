@@ -1,0 +1,145 @@
+<!-- Kaynak: E:\Projeler\Angular\PixdinnNewMenu\src\app\layouts\navbar\navbar.component.html -->
+<!-- Navigation -->
+    <div class="header">
+        <header class="full-width">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-12 mainNavCol">
+                        <!-- logo -->
+                        <div class="logo mainNavCol">
+                            <a routerLink="/">
+                                <img src="assets/img/logo.png" class="img-fluid" alt="Logo">
+                            </a>
+                        </div>
+                        <!-- logo -->
+                        <div class="main-search mainNavCol">
+                            <form class="main-search search-form full-width">
+                                <div class="row">
+                                    <!-- location picker -->
+                                    <div class="col-lg-6 col-md-5">
+                                        <a href="javascript:void(0)" class="delivery-add p-relative"> <span class="icon"><i class="fas fa-map-marker-alt"></i></span>
+                                            <span class="address">Brooklyn, NY</span>
+                                        </a>
+                                        <div class="location-picker">
+                                            <input type="text" class="form-control" placeholder="Enter a new address">
+                                        </div>
+                                    </div>
+                                    <!-- search -->
+                                    <div class="col-lg-6 col-md-7">
+                                        <div class="search-box padding-10">
+                                            <input type="text" class="form-control" placeholder="Pizza, Burger, Chinese">
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="right-side fw-700 mainNavCol">
+                            <div class="gem-points">
+                                <a href="javascript:void(0)"> <i class="fas fa-concierge-bell"></i>
+                                    <span>Order Now</span>
+                                </a>
+                            </div>
+                            <div class="catring parent-megamenu">
+                                <a href="javascript:void(0)"> <span>Pages <i class="fas fa-caret-down"></i></span>
+                                </a>
+                                <div class="megamenu">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <div class="row">
+                                                <div class="col-lg-3 col-sm-6">
+                                                    <div class="menu-style">
+                                                        <div class="menu-title">
+                                                            <h6 class="cat-name"><a href="#" class="text-light-black">Home Pages</a></h6>
+                                                        </div>
+                                                        <ul>
+                                                            <li><a routerLink="/" class="text-light-white fw-500" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Landing Page</a></li>
+                                                            <li><a routerLink="/homepage1" class="text-light-white fw-500" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Home Page 1</a></li>
+                                                            <li><a routerLink="/homepage2" class="text-light-white fw-500" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Home Page 2</a></li>
+                                                            <li><a routerLink="/homepage3" class="text-light-white fw-500" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Home Page 3</a></li>
+                                                            <li><a routerLink="/homepage4" class="text-light-white fw-500" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Home Page 4</a></li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-3 col-sm-6">
+                                                    <div class="menu-style">
+                                                        <div class="menu-title">
+                                                            <h6 class="cat-name"><a href="#" class="text-light-black">Inner Pages</a></h6>
+                                                        </div>
+                                                        <ul>
+                                                            <li><a routerLink="/blog" class="text-light-white fw-500" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Blog Grid View</a></li>
+                                                            <li><a routerLink="/blog-style-2" class="text-light-white fw-500" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Blog Grid View 2</a></li>
+                                                            <li><a routerLink="/blog-details" class="text-light-white fw-500" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Blog Details</a></li>
+                                                            <li><a routerLink="/ex-deals" class="text-light-white fw-500" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Ex Deals</a></li>
+                                                            <li><a routerLink="/about" class="text-light-white fw-500" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">About Us</a></li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-3 col-sm-6">
+                                                    <div class="menu-style">
+                                                        <div class="menu-title">
+                                                            <h6 class="cat-name"><a href="#" class="text-light-black">Related Pages</a></h6>
+                                                        </div>
+                                                        <ul>
+                                                            <li><a routerLink="/restaurant" class="text-light-white fw-500" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Restaurant</a></li>
+                                                            <li><a routerLink="/restaurant-style-1" class="text-light-white fw-500" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Restaurant 1</a></li>
+                                                            <li><a routerLink="/restaurant-style-2" class="text-light-white fw-500" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Restaurant 2</a></li>
+                                                            <li><a routerLink="/add-restaurant" class="text-light-white fw-500" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Add Restaurant</a></li>
+                                                            <li><a routerLink="/listview" class="text-light-white fw-500" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">List View</a></li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-3 col-sm-6">
+                                                    <div class="menu-style">
+                                                        <div class="menu-title">
+                                                            <h6 class="cat-name"><a href="#" class="text-light-black">Additional Pages</a></h6>
+                                                        </div>
+                                                        <ul>
+                                                            <li><a routerLink="/login" class="text-light-white fw-500" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Login &amp; Signup</a></li>
+                                                            <li><a routerLink="/contact" class="text-light-white fw-500" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Contact</a></li>
+                                                            <li><a routerLink="/checkout" class="text-light-white fw-500" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Checkout</a></li>
+                                                            <li><a routerLink="/orderdetails" class="text-light-white fw-500" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Order Details</a></li>
+                                                            <li><a routerLink="/geolocator" class="text-light-white fw-500" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Geo Locator</a></li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- user account -->
+                            <div class="user-details p-relative">
+                                <a href="javascript:void(0)" class="text-light-white fw-500">
+                                    <img src="assets/img/user-1.png" class="rounded-circle" alt="userimg"> <span>Hi, Kate</span>
+                                </a>
+                                <div class="user-dropdown">
+                                    <ul>
+                                        <li><a routerLink="/orderdetails"><div class="icon"><i class="flaticon-rewind"></i></div> <span class="details">Past Orders</span></a></li>
+                                        <li><a routerLink="/orderdetails"><div class="icon"><i class="flaticon-takeaway"></i></div> <span class="details">Upcoming Orders</span></a></li>
+                                        <li><a href="javascript:void(0)"><div class="icon"><i class="flaticon-user"></i></div> <span class="details">Account</span></a></li>
+                                    </ul>
+                                    <div class="user-footer"> <span class="text-light-black">Not Jhon?</span> <a href="javascript:void(0)">Sign Out</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- user cart -->
+                            <div class="cart-btn cart-dropdown">
+                                <a href="javascript:void(0)" class="text-light-green fw-700"> <i class="fas fa-shopping-bag"></i>
+                                    <span class="user-alert-cart">3</span>
+                                </a>
+                                <div class="cart-detail-box">
+                                    <div class="card">
+                                        <div class="card-header padding-15">Your Order</div>
+                                        <div class="card-footer padding-15"> <a routerLink="/checkout" class="btn-first green-btn text-custom-white full-width fw-500">Proceed to Checkout</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+    </div>
+    <div class="main-sec"></div>
+    <!-- Navigation -->
