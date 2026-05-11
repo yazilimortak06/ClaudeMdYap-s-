@@ -87,23 +87,66 @@ Tüm referans projeleri gerçek kaynak koddan didik didik et:
 | 7935997 | Domain rules, mimari gelisen, backend+angular rules |
 | fbf210f | Tasks, agent_rules, tecrube, logs, ortak, shared |
 | cbb1702 | İlk gerçek kod çıkarımı (base projeler + ayristirilmis tur 1) |
-| (bekleniyor) | angular_base tam rewrite + dotnet_base tüm API'ler + analiz kitap kalitesi |
+| (bekle-son) | Tüm tur 2 işleri — EN SONA PUSH |
 
 ---
 
-## Sonraki Yapılacaklar (Sıralı)
+## Tamamlanan (Bu Oturum Tur 2)
 
-1. [ ] angular_base tur 2 tamamla (ajan bekle)
-2. [ ] dotnet_base tur 2 tamamla (ajan bekle)  
-3. [ ] sarj_ev_panel_angular analiz kitap kalitesi (ajan bekle)
-4. [ ] sarj_backend_dotnet analiz — tüm API'ler (Mobil, Web, Station, Ocpp)
-5. [ ] sarj_vm_backend_dotnet analiz — genişlet
-6. [ ] crm_backend analiz — tam kod
-7. [ ] qr_menu_mvc analiz — Views dahil tam kod
-8. [ ] sarj_pro_panel_angular analiz — tam kod
-9. [ ] sarj_qr_web_angular analiz — tam kod
-10. [ ] dijital_menu_angular analiz — tam kod
-11. [ ] yonetim_panel_angular analiz — tam kod
-12. [ ] sarj_ev_panel_angular ayristirilmis — dialog, chart, form, signalr patterns
-13. [ ] sarj_backend_dotnet ayristirilmis — Mobil.Api, Web.Api, Station.Api
-14. [ ] dotnet_base tur 3 — Integration, Ocpp, MailSms API'leri
+- [x] sarj_backend_dotnet analiz → Mobil.Api, Web.Api, Station.Api, Ocpp.Api, Notification.Api, WorkerService, Gateway, Integration.Api (8 API + 8 kural)
+- [x] sarj_vm_backend_dotnet analiz → tüm VmPanel controllers, entities, DbContext, Startup'lar
+- [x] sarj_vm_backend_dotnet ayristirilmis → controllers_vmpanel, entities, startup (yeni dosyalar)
+- [x] perde_iot_backend analiz → YENİDEN YAZILDI (iskelet proje gerçek durumu belgelendi)
+- [x] perde_iot_backend ayristirilmis → startup_gercek.cs, controllers_gercek.cs
+- [x] qr_menu_mvc analiz → YENİDEN YAZILDI (65+ entity, 7 controller, Redis, QR üretimi, Views)
+- [x] qr_menu_mvc rules → 15 kural
+- [x] crm_backend analiz → YENİDEN YAZILDI (13 entity, 7 service, 12 repo, 7 controller, 27 kural)
+- [x] dijital_menu_angular analiz → YENİDEN YAZILDI (tam kod, emailJS, reCAPTCHA bug'ları)
+- [x] yonetim_panel_angular analiz → YENİDEN YAZILDI (tam kod, 6 bug tespit)
+- [x] sarj_ev_panel_angular ayristirilmis → dialog, form-add, form-edit, chart, signalr, pdf, file-upload, map, list, detail (10 pattern örneği + core/directives/pipes/base-datatable)
+- [x] angular_base core/ modülü → adapters, bases, configs, date-core, directives, pipes, services, wrapper-core
+- [x] dotnet_base Bank.Api, Mobil.Api, Station.Api, Notification.Api, Web.Api, GateWay.Api, WorkerService (88 dosya toplam)
+
+## Limit Durumu
+- Rate limit geldi: 04:10 Istanbul'da sıfırlanıyor
+- Limit sonrası devam edilecek
+
+## Kalan Yapılacaklar (Limit Sonrası)
+
+### angular_base — shared_admin + feature şablonu EKSİK
+- core/ eklendi ✓
+- [ ] shared_admin/: layout.module, layout.component, aside, header, topbar, subheader, dialogs
+- [ ] shared_admin/auth/: auth.guard, authentication-service
+- [ ] shared_admin/utils/interseptors/: http interceptor
+- [ ] shared_admin/general-material.module.ts
+- [ ] shared_admin/template/error-pages/ (404, 403, 500)
+- [ ] Feature şablon modülü (boş ama routing + module + component yapısı)
+- [ ] Login sayfası
+
+### sarj_ev_panel_angular analiz — EKSİK (ajan limit yedi)
+- [ ] analiz.md: core/ tüm dosyalar tam kod, shared_admin/ tüm dosyalar, feature modülü tam kod
+- [ ] rules.md: 20+ kural kod örnekleriyle
+
+### sarj_qr_web_angular analiz — EKSİK
+- [ ] analiz.md: models, enums, services, guards, modules tam kod
+- [ ] rules.md
+
+### sarj_pro_panel_angular analiz — EKSİK
+- [ ] analiz.md + rules.md tam kod
+
+### sarj_pro_backend_dotnet analiz — EKSİK
+- [ ] analiz.md + rules.md tam kod
+
+### dotnet_base tur 3 — EKSİK
+- [ ] Integration.Api: Startup + controllers
+- [ ] Ocpp.Api: Startup + WebSocket controller
+- [ ] MailSms.Api: Startup + controller
+- [ ] Application-Examples/: PaymentService, WalletService, consumer, Refit client
+- [ ] Persistence-Examples/: Bank DbContext, repositories, EntityFluent
+- [ ] Shared.Domain/ tam
+
+### sarj_backend_dotnet ayristirilmis tur 3 — EKSİK
+- [ ] controllers/mobil-api/ TÜM controller'lar
+- [ ] controllers/web-api/ TÜM controller'lar
+- [ ] controllers/station-api/ + ocpp-api/
+- [ ] application/mobil-services/ + web-services/

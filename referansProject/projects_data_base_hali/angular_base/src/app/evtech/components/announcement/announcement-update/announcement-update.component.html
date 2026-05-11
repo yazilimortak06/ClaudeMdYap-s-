@@ -1,0 +1,46 @@
+<!-- Kaynak: E:\Projeler\Angular\EvTechPanelAltunkaya\src\app\evtech\components\announcement\announcement-update\announcement-update.component.html -->
+<mat-horizontal-stepper linear #stepper>
+  <mat-step label="Duyuru Icerigi">
+    <form #form2="ngForm">
+      <ng-container>
+        <div class="row">
+          <div class="col-md-6">
+            <mat-form-field>
+              <mat-label>Gecerlilik Suresi Girin (Opsiyonel)</mat-label>
+              <input matInput [ngModelOptions]="{standalone: true}" [min]="todayDate" [matDatepicker]="picker" [(ngModel)]="announcementUpdateModel.announcement.validityDate" disabled>
+              <mat-hint>DD.MM.YYYY</mat-hint>
+              <mat-datepicker-toggle matSuffix [for]="picker">
+                <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
+              </mat-datepicker-toggle>
+              <mat-datepicker #picker disabled="false"></mat-datepicker>
+            </mat-form-field>
+            <button mat-raised-button matTooltip="Temizle" style="margin-left: 25px;" color="accent" type="button" (click)="resetValidityDate()">Sifirla</button>
+          </div>
+        </div>
+        <div class="row">
+          <PixdinnDropzone style="width: 100%;" #addAnnouncementPictureDropzone [isSingleFileSelectable]="true" [multiple]="false" [accept]="'*'" [title]="'Duyuru Resmi'"></PixdinnDropzone>
+        </div>
+        <hr style="width: 100%;" />
+        <div class="row" *ngFor="let contentLanguage of contentInputs; let i = index">
+          <div class="col-md-1" style="margin:auto;text-align:end">
+            <label>{{contentLanguage.description}}</label>
+          </div>
+          <div class="col-md-11">
+            <mat-form-field class="col-md-12">
+              <mat-label>Baslik</mat-label>
+              <input matInput value="{{contentLanguage.announcementTitle}}" [(ngModel)]="contentLanguage.announcementTitle" [name]="'announcementTitle'+i">
+            </mat-form-field>
+            <mat-form-field class="col-md-12">
+              <mat-label>Icerik</mat-label>
+              <textarea matInput value="{{contentLanguage.announcementContent}}" [(ngModel)]="contentLanguage.announcementContent" [name]="'announcementContent'+i"></textarea>
+            </mat-form-field>
+          </div>
+          <hr style="width: 100%;" />
+        </div>
+      </ng-container>
+      <div class="form-button-group col-md-12">
+        <button mat-button (click)="update();">Kaydet</button>
+      </div>
+    </form>
+  </mat-step>
+</mat-horizontal-stepper>
