@@ -131,10 +131,24 @@ Yeni bir karar alındığında buraya eklenir.
 - Akış: planlama → (kesinleşince) → havuz → (iş alınınca) → yapilacaklar
 - Proje üstü genel tasks klasörü yok, sadece proje bazlı
 
+### Kullanıcı Tipleri
+- `gelistirici` — kişi bazlı (ali, muhammed_ali, said...), kod yazar, `current_md/<proje>/<isim>/` altında çalışır
+- `is_analisti` — özel tip, proje başına tek, `current_md/<proje>/is_analisti/` altında çalışır
+  - `private/`: notlar, taslaklar, tartışma
+  - `public/`: analizler, tasklar, gereksinimler, akışlar, sorular, test_senaryolari
+- `yonetici` — özel tip, proje başına tek, `current_md/<proje>/yonetici/` altında çalışır
+  - `private/`: notlar, kararlar
+  - `public/`: ilerleme_raporu, is_atamalari, sprint_plani, riskler, toplanti_notlari
+- `tester` — özel tip, proje başına tek, `current_md/<proje>/tester/` altında çalışır
+  - `private/`: notlar, taslaklar
+  - `public/`: test_senaryolari, bug_raporlari, test_sonuclari, regression_listesi, cozulmus_buglar
+- Geliştirici için path sorulur; is_analisti, yonetici, tester için sorulmaz
+
 ### Agent Akışı (main.md)
-1. Kullanıcıyı belirle
-2. Proje seç (yoksa ekle, path yoksa al)
-3. Mod seç: Geliştirme / Analiz / Domainsel kural tanımlama / İş ekleme
+1. Kullanıcıyı belirle (tip: gelistirici / is_analisti / yonetici / tester)
+2. Proje seç (yoksa ekle; geliştirici ise path yoksa al)
+3. Tipe göre bağlam yükle
+4. Tipe göre mod menüsü göster
 
 ### Referans Proje Sistemi
 - Ham proje klasörleri `projects_data/<ProjeAdı>/` altına bırakılır (karışık, sırasız olabilir)
