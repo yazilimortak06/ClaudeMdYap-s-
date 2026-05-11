@@ -46,15 +46,36 @@ Yeni bir karar alındığında buraya eklenir.
 │       ├── muhammed_ali.md
 │       └── said.md
 ├── current_md/
+│   ├── _ilerleme/                 # Kişi bazlı tüm projeler özet
+│   │   ├── ali.md
+│   │   ├── muhammed_ali.md
+│   │   ├── said.md
+│   │   └── ortak.md               # Herkesin tüm projelerdeki durumu
 │   └── <ProjeAdı>/
 │       ├── agent.md               # Agent bağlamı, aktif görev
-│       ├── mimari_gelisen.md      # Kararlarla büyüyen mimari döküman
+│       ├── mimari_gelisen.md      # Proje geneli kararlarla büyüyen mimari (herkes için geçerli)
 │       ├── ortak/
 │       │   ├── ortak.md           # Her commit/push sonrası güncellenir
-│       │   └── analiz.md          # Kesinleşmiş analizler (bağlayıcı)
+│       │   ├── analiz.md          # Kesinleşmiş analizler (bağlayıcı)
+│       │   ├── ilerleme.md        # Ortak proje ilerleyişi
+│       │   ├── is_listesi.md      # Ortak iş listesi
+│       │   ├── backlog.md         # Ortak backlog
+│       │   ├── kurallar.md        # Ortak kurallar
+│       │   ├── takilmalar.md      # Ortak takılınan noktalar
+│       │   ├── is_notlari.md      # Ortak iş notları
+│       │   ├── notlar.md          # Ortak genel notlar
+│       │   └── mimari_kararlar.md # Ortak gelişen mimari kararlar
 │       └── <kullanıcı>/
 │           ├── current.md         # Çalışılan modül, ne yapacak, ilerleme
-│           └── analiz.md          # Kişisel analiz taslağı
+│           ├── analiz.md          # Kişisel analiz taslağı
+│           ├── ilerleme.md        # Kişinin proje ilerleyişi
+│           ├── is_listesi.md      # Aktif iş listesi
+│           ├── backlog.md         # Sonra yapılacaklar
+│           ├── kurallar.md        # Kişinin keşfettiği kurallar
+│           ├── takilmalar.md      # Takılınan noktalar
+│           ├── is_notlari.md      # Oturum bazlı teknik notlar
+│           ├── notlar.md          # Genel notlar, fikirler
+│           └── mimari_kararlar.md # Çalışma sırasında ortaya çıkan mimari kararlar
 ├── shared/
 │   └── <ProjeA>--<ProjeB>/        # Bağlantılı proje çiftleri için ortak alan
 │       └── shared.md
