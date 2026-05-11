@@ -1,6 +1,6 @@
-# said
+# ortak
 
-- **İsim:** said
+- **İsim:** ortak
 - **Rol:** geliştirici
 
 ## Proje Pathler

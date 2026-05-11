@@ -1,62 +1,56 @@
 # Settings
 
-## Kullanıcı Dosyası Şeması
-
-Her kullanıcı için `settings/users/<isim>.md` adında bir dosya bulunur.
-Kullanıcı adı kişi + makine kombinasyonundan oluşur (örn: `saidMasaustu`, `aliLaptop`).
-Bu sayede aynı kişinin birden fazla bilgisayarı farklı dosyalarla temsil edilebilir.
-
 ## Kullanıcı Tipleri
 
-| Tip | Açıklama | Ana Klasör |
-|-----|----------|------------|
-| `gelistirici` | Kod yazar, geliştirme yapar | `current_md/<proje>/<kullaniciAdi>/` |
-| `is_analisti` | Derin analiz, task oluşturma, tartışma — kod yazmaz | `current_md/<proje>/is_analisti/` |
-| `yonetici` | İlerleme takibi, iş atama, raporlama — kod yazmaz | `current_md/<proje>/yonetici/` |
-| `tester` | Test senaryoları, bug raporlama, regresyon — kod yazmaz | `current_md/<proje>/tester/` |
-
-> `is_analisti`, `yonetici`, `tester` özel kullanıcı tipleridir — proje başına bir tane, kişiye özgü değil.
-> `gelistirici` tipi kişi bazlıdır (ali, muhammed_ali, said...).
+| Tip | Açıklama |
+|-----|----------|
+| `normal` | İsim + rol sahibi kullanıcı (geliştirici, tester, analiz_uzmani, task_uzmani, tasarimci) |
+| `yonetici` | Rol sorusu yoktur, direkt proje seçer |
 
 ---
 
-### Örnek kullanıcı dosyası — geliştirici (`saidMasaustu.md`)
+## Roller (normal tip kullanıcılar için)
 
+| Rol | Açıklama | Çalışma Klasörü |
+|-----|----------|-----------------|
+| `gelistirici` | Kod yazar | `current_md/<proje>/<isim>/` |
+| `tester` | Test yazar, bug raporlar | `current_md/<proje>/<isim>/` + `tester/public/` |
+| `analiz_uzmani` | Derin analiz, gereksinim | `current_md/<proje>/<isim>/` + `is_analisti/public/` |
+| `task_uzmani` | Task oluşturur, backlog yönetir | `current_md/<proje>/<isim>/` + `tasks/<proje>/` |
+| `tasarimci` | UI/UX tasarımı | `current_md/<proje>/<isim>/` + `tasarimci/public/` |
+
+---
+
+## Kullanıcı Dosyası Şeması
+
+### Normal kullanıcı (`ali.md`)
 ```markdown
-# saidMasaustu
+# ali
 
-- **Kullanıcı adı:** saidMasaustu
-- **Tip:** gelistirici
+- **İsim:** ali
+- **Rol:** gelistirici
 
 ## Proje Pathler
 
 | Proje | Path |
 |-------|------|
 | RestaurantSystemBackend | C:\Projects\RestaurantSystemBackend |
-| RestaurantSystemPanel   | C:\Projects\RestaurantSystemPanel   |
-| RestaurantSystemQr      | C:\Projects\RestaurantSystemQr      |
 ```
 
-### Örnek kullanıcı dosyası — özel tip (`is_analisti.md`)
-
+### Yönetici kullanıcı (`yoneticiSaid.md`)
 ```markdown
-# is_analisti
+# yoneticiSaid
 
-- **Kullanıcı adı:** is_analisti
-- **Tip:** is_analisti
-
-## Proje Pathler
-
-| Proje | Path |
-|-------|------|
-| RestaurantSystemBackend | - |
-| RestaurantSystemPanel   | - |
-| RestaurantSystemQr      | - |
+- **İsim:** yoneticiSaid
+- **Tip:** yonetici
 ```
+
+---
 
 ## Kurallar
 
-1. Kullanıcı dosyasındaki projeler `settings/projects.md` ile uyumlu olmalıdır.
-2. Kullanıcı çalışmak istediği projeyi seçer. Seçilen proje `settings/projects.md` de yoksa önce oraya eklenir, sonra devam edilir.
-3. Kullanıcı dosyasında projenin local pathi tanımlı değilse, kullanıcıdan path alınır ve dosyaya kaydedilir.
-4. Tüm proje isimleri `settings/projects.md` den gelir — bu tek kaynak of truth'tur.
+1. Kullanıcı adı: isim veya isim+makine kombinasyonu (örn: `saidMasaustu`)
+2. Yönetici tipinde `Rol` alanı yoktur, `Tip: yonetici` yeterlidir
+3. `gelistirici` rolü için proje local pathi sorulur; diğer roller için sorulmaz
+4. Tüm proje isimleri `settings/projects.md` den gelir — tek kaynak
+5. `proje: tüm projeler` seçilince cross-project `_ilerleme/` görünümü açılır
