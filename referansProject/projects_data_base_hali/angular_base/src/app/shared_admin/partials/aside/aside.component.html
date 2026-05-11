@@ -1,0 +1,563 @@
+<!--begin::Brand-->
+<div class="brand flex-column-auto" id="kt_brand" [ngClass]="brandClasses">
+  <!--begin::Logo-->
+  <a routerLink="/" class="brand-logo">
+    <img alt="Logo" style="height:120px;width:120px" [attr.src]="headerLogo" />
+  </a>
+  <!--end::Logo-->
+
+  <ng-container *ngIf="asideSelfMinimizeToggle">
+    <button class="brand-toggle btn btn-sm px-0" id="kt_aside_toggle">
+      <span [inlineSVG]="
+          './assets/media/svg/icons/Navigation/Angle-double-left.svg'
+        " cacheSVG="true" class="svg-icon svg-icon-xl"></span>
+    </button>
+  </ng-container>
+</div>
+<!--end::Brand-->
+
+<!--begin::Aside Menu-->
+<div class="aside-menu-wrapper flex-column-fluid" id="kt_aside_menu_wrapper">
+  <ng-container *ngIf="disableAsideSelfDisplay">
+    <!--begin::Header Logo-->
+    <a routerLink="/">
+      <img alt="Logo" [attr.src]="headerLogo" />
+    </a>
+    <!--end::Header Logo-->
+  </ng-container>
+  <!--begin::Menu Container-->
+  <div id="kt_aside_menu" class="aside-menu" [ngClass]="asideMenuCSSClasses" data-menu-vertical="1"
+    [attr.data-menu-scroll]="asideMenuScroll" [attr.data-menu-dropdown]="asideMenuDropdown"
+    data-menu-dropdown-timeout="500">
+    <!-- begin::Menu Nav -->
+    <ul class="menu-nav" [ngClass]="ulCSSClasses">
+      <ng-container *ngIf="authenticationData.panelAdminUserType != panelAdminUserType.COMPANY_ADMIN_USER">
+      <li class="menu-item menu-item-submenu" aria-haspopup="true" data-menu-toggle="hover"
+        routerLinkActive="menu-item-open">
+        <a class="menu-link menu-toggle" routerLinkActive="active" href="/stations">
+          <span [inlineSVG]="'./assets/media/Home.svg'" cacheSVG="true"
+            class="svg-icon menu-icon"></span>
+          <span class="menu-text">İstasyon Yönetimi</span>
+          <i class="menu-arrow"></i>
+        </a>
+        <div class="menu-submenu">
+          <i class="menu-arrow"></i>
+          <ul class="menu-subnav">
+
+            <li class="menu-item" aria-haspopup="true" data-menu-toggle="hover" routerLinkActive="menu-item-active">
+              <a class="menu-link" routerLink="stations/list" routerLinkActive="active">
+                <i class="menu-bullet menu-bullet-dot">
+                  <span></span>
+                </i>
+                <span class="menu-text">İstasyon Listesi</span>
+              </a>
+            </li>
+            <li class="menu-item" aria-haspopup="true" data-menu-toggle="hover" routerLinkActive="menu-item-active">
+              <a class="menu-link" routerLink="chargeDevices/list" routerLinkActive="active">
+                <i class="menu-bullet menu-bullet-dot">
+                  <span></span>
+                </i>
+                <span class="menu-text">Şarj Cihaz Listesi</span>
+              </a>
+            </li>
+            <li class="menu-item" aria-haspopup="true" data-menu-toggle="hover" routerLinkActive="menu-item-active">
+              <a class="menu-link" routerLink="chargeDevices/remoteManagment" routerLinkActive="active">
+                <i class="menu-bullet menu-bullet-dot">
+                  <span></span>
+                </i>
+                <span class="menu-text">Uzaktan Yönetim</span>
+              </a>
+            </li>
+            <li class="menu-item" aria-haspopup="true" data-menu-toggle="hover" routerLinkActive="menu-item-active">
+              <a class="menu-link" routerLink="chargeManagment/list" routerLinkActive="active">
+                <i class="menu-bullet menu-bullet-dot">
+                  <span></span>
+                </i>
+                <span class="menu-text">Şarj İşlemleri</span>
+              </a>
+            </li>
+            <li class="menu-item" aria-haspopup="true" data-menu-toggle="hover" routerLinkActive="menu-item-active">
+              <a class="menu-link" routerLink="stations/chargeTransactionSelectableOptions" routerLinkActive="active">
+                <i class="menu-bullet menu-bullet-dot">
+                  <span></span>
+                </i>
+                <span class="menu-text">Şarj İşlem Seçenekleri</span>
+              </a>
+            </li>
+
+          </ul>
+        </div>
+      </li>
+      </ng-container>
+      <ng-container *ngIf="authenticationData.panelAdminUserType == panelAdminUserType.ADMIN_USER || authenticationData.panelAdminUserType == panelAdminUserType.ROOT_ADMIN_USER">
+        <li class="menu-item menu-item-submenu" aria-haspopup="true" data-menu-toggle="hover"
+          routerLinkActive="menu-item-open">
+          <a class="menu-link menu-toggle" routerLinkActive="active" href="/company">
+            <span [inlineSVG]="'./assets/media/Home.svg'" cacheSVG="true"
+              class="svg-icon menu-icon"></span>
+            <span class="menu-text">Firma Yönetimi</span>
+            <i class="menu-arrow"></i>
+          </a>
+          <div class="menu-submenu">
+            <i class="menu-arrow"></i>
+            <ul class="menu-subnav">
+
+              <li class="menu-item" aria-haspopup="true" data-menu-toggle="hover" routerLinkActive="menu-item-active">
+                <a class="menu-link" routerLink="company/companyList" routerLinkActive="active">
+                  <i class="menu-bullet menu-bullet-dot">
+                    <span></span>
+                  </i>
+                  <span class="menu-text">Firma Listesi</span>
+                </a>
+              </li>
+              <li class="menu-item" aria-haspopup="true" data-menu-toggle="hover" routerLinkActive="menu-item-active">
+                <a class="menu-link" routerLink="company/companyElectricBillList" routerLinkActive="active">
+                  <i class="menu-bullet menu-bullet-dot">
+                    <span></span>
+                  </i>
+                  <span class="menu-text">Firma Elektrik Fatura Listesi</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </li>
+      </ng-container>
+      <ng-container *ngIf="authenticationData.panelAdminUserType != panelAdminUserType.TEST_ADMIN_USER">
+        <li class="menu-item menu-item-submenu" aria-haspopup="true" data-menu-toggle="hover"
+        routerLinkActive="menu-item-open">
+        <a class="menu-link menu-toggle" routerLinkActive="active" href="/payments">
+          <span [inlineSVG]="'./assets/media/Home.svg'" cacheSVG="true"
+            class="svg-icon menu-icon"></span>
+          <span class="menu-text">Ödeme Yönetimi</span>
+          <i class="menu-arrow"></i>
+        </a>
+        <div class="menu-submenu">
+          <i class="menu-arrow"></i>
+          <ul class="menu-subnav">
+            <li class="menu-item" aria-haspopup="true" data-menu-toggle="hover" routerLinkActive="menu-item-active">
+              <a class="menu-link" routerLink="payments/generalPaymentReport" routerLinkActive="active">
+                <i class="menu-bullet menu-bullet-dot">
+                  <span></span>
+                </i>
+                <span class="menu-text">Kasa</span>
+              </a>
+            </li>
+            <li class="menu-item" aria-haspopup="true" data-menu-toggle="hover" routerLinkActive="menu-item-active">
+              <a class="menu-link" routerLink="payments/companyDividentList" routerLinkActive="active">
+                <i class="menu-bullet menu-bullet-dot">
+                  <span></span>
+                </i>
+                <span class="menu-text">Firma Kar Payı Listesi</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </li>
+      </ng-container>
+
+      <ng-container *ngIf="authenticationData.panelAdminUserType == panelAdminUserType.ADMIN_USER || authenticationData.panelAdminUserType == panelAdminUserType.ROOT_ADMIN_USER">
+        <li class="menu-item menu-item-submenu" aria-haspopup="true" data-menu-toggle="hover"
+          routerLinkActive="menu-item-open">
+          <a class="menu-link menu-toggle" routerLinkActive="active" href="/wallet">
+            <span [inlineSVG]="'./assets/media/Home.svg'" cacheSVG="true"
+              class="svg-icon menu-icon"></span>
+            <span class="menu-text">Cüzdan Yönetimi</span>
+            <i class="menu-arrow"></i>
+          </a>
+          <div class="menu-submenu">
+            <i class="menu-arrow"></i>
+            <ul class="menu-subnav">
+              <li class="menu-item" aria-haspopup="true" data-menu-toggle="hover" routerLinkActive="menu-item-active">
+                <a class="menu-link" routerLink="wallet/list" routerLinkActive="active">
+                  <i class="menu-bullet menu-bullet-dot">
+                    <span></span>
+                  </i>
+                  <span class="menu-text">Cüzdan Listesi</span>
+                </a>
+              </li>
+              <li class="menu-item" aria-haspopup="true" data-menu-toggle="hover" routerLinkActive="menu-item-active">
+                <a class="menu-link" routerLink="wallet/pullMoneyList" routerLinkActive="active">
+                  <i class="menu-bullet menu-bullet-dot">
+                    <span></span>
+                  </i>
+                  <span class="menu-text">Cüzdan Para Aktarma</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </li>
+      </ng-container>
+      <ng-container *ngIf="authenticationData.panelAdminUserType == panelAdminUserType.ADMIN_USER || authenticationData.panelAdminUserType == panelAdminUserType.ROOT_ADMIN_USER">
+        <li class="menu-item menu-item-submenu" aria-haspopup="true" data-menu-toggle="hover"
+          routerLinkActive="menu-item-open">
+          <a class="menu-link menu-toggle" routerLinkActive="active" href="/chargeDeviceReservation">
+            <span [inlineSVG]="'./assets/media/Home.svg'" cacheSVG="true"
+              class="svg-icon menu-icon"></span>
+            <span class="menu-text">Rezervasyon</span>
+            <i class="menu-arrow"></i>
+          </a>
+          <div class="menu-submenu">
+            <i class="menu-arrow"></i>
+            <ul class="menu-subnav">
+
+              <li class="menu-item" aria-haspopup="true" data-menu-toggle="hover" routerLinkActive="menu-item-active">
+                <a class="menu-link" routerLink="chargeDeviceReservation/managmentList" routerLinkActive="active">
+                  <i class="menu-bullet menu-bullet-dot">
+                    <span></span>
+                  </i>
+                  <span class="menu-text">Rezervasyon Yönetimi</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </li>
+      </ng-container>
+      <ng-container *ngIf="authenticationData.panelAdminUserType == panelAdminUserType.ADMIN_USER || authenticationData.panelAdminUserType == panelAdminUserType.ROOT_ADMIN_USER">
+        <li class="menu-item menu-item-submenu" aria-haspopup="true" data-menu-toggle="hover"
+          routerLinkActive="menu-item-open">
+          <a class="menu-link menu-toggle" routerLinkActive="active" href="/panelAdmin">
+            <span [inlineSVG]="'./assets/media/Home.svg'" cacheSVG="true"
+              class="svg-icon menu-icon"></span>
+            <span class="menu-text">Admin Yönetimi</span>
+            <i class="menu-arrow"></i>
+          </a>
+          <div class="menu-submenu">
+            <i class="menu-arrow"></i>
+            <ul class="menu-subnav">
+              <li class="menu-item" aria-haspopup="true" data-menu-toggle="hover" routerLinkActive="menu-item-active">
+                <a class="menu-link" routerLink="panelAdmin/list" routerLinkActive="active">
+                  <i class="menu-bullet menu-bullet-dot">
+                    <span></span>
+                  </i>
+                  <span class="menu-text">Adminler</span>
+                </a>
+              </li>
+              <li class="menu-item" aria-haspopup="true" data-menu-toggle="hover" routerLinkActive="menu-item-active">
+                <a class="menu-link" routerLink="panelAdmin/typeList" routerLinkActive="active">
+                  <i class="menu-bullet menu-bullet-dot">
+                    <span></span>
+                  </i>
+                  <span class="menu-text">Admin Tipleri</span>
+                </a>
+              </li>
+
+            </ul>
+          </div>
+        </li>
+      </ng-container>
+      <ng-container *ngIf="authenticationData.panelAdminUserType == panelAdminUserType.ADMIN_USER || authenticationData.panelAdminUserType == panelAdminUserType.ROOT_ADMIN_USER">
+        <li class="menu-item menu-item-submenu" aria-haspopup="true" data-menu-toggle="hover"
+        routerLinkActive="menu-item-open">
+        <a class="menu-link menu-toggle" routerLinkActive="active" href="/authority">
+          <span [inlineSVG]="'./assets/media/Home.svg'" cacheSVG="true"
+            class="svg-icon menu-icon"></span>
+          <span class="menu-text">Yetki Yönetimi</span>
+          <i class="menu-arrow"></i>
+        </a>
+        <div class="menu-submenu">
+          <i class="menu-arrow"></i>
+          <ul class="menu-subnav">
+
+            <li class="menu-item" aria-haspopup="true" data-menu-toggle="hover" routerLinkActive="menu-item-active">
+              <a class="menu-link" routerLink="authority/list" routerLinkActive="active">
+                <i class="menu-bullet menu-bullet-dot">
+                  <span></span>
+                </i>
+                <span class="menu-text">Yetki Listesi</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </li>
+      </ng-container>
+      <ng-container *ngIf="authenticationData.panelAdminUserType == panelAdminUserType.ADMIN_USER || authenticationData.panelAdminUserType == panelAdminUserType.ROOT_ADMIN_USER">
+        <li class="menu-item menu-item-submenu" aria-haspopup="true" data-menu-toggle="hover"
+        routerLinkActive="menu-item-open">
+        <a class="menu-link menu-toggle" routerLinkActive="active" href="/users">
+          <span [inlineSVG]="'./assets/media/Home.svg'" cacheSVG="true"
+            class="svg-icon menu-icon"></span>
+          <span class="menu-text">Kullanıcı Yönetimi</span>
+          <i class="menu-arrow"></i>
+        </a>
+        <div class="menu-submenu">
+          <i class="menu-arrow"></i>
+          <ul class="menu-subnav">
+            <li class="menu-item" aria-haspopup="true" data-menu-toggle="hover" routerLinkActive="menu-item-active">
+              <a class="menu-link" routerLink="users/list" routerLinkActive="active">
+                <i class="menu-bullet menu-bullet-dot">
+                  <span></span>
+                </i>
+                <span class="menu-text">Kullanıcı Listesi</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </li>
+      </ng-container>
+      <ng-container *ngIf="authenticationData.panelAdminUserType == panelAdminUserType.ADMIN_USER || authenticationData.panelAdminUserType == panelAdminUserType.ROOT_ADMIN_USER">
+        <li class="menu-item menu-item-submenu" aria-haspopup="true" data-menu-toggle="hover"
+        routerLinkActive="menu-item-open">
+        <a class="menu-link menu-toggle" routerLinkActive="active" href="/campaign">
+          <span [inlineSVG]="'./assets/media/Home.svg'" cacheSVG="true"
+            class="svg-icon menu-icon"></span>
+          <span class="menu-text">Kampanya İşlemleri</span>
+          <i class="menu-arrow"></i>
+        </a>
+        <div class="menu-submenu">
+          <i class="menu-arrow"></i>
+          <ul class="menu-subnav">
+
+            <li class="menu-item" aria-haspopup="true" data-menu-toggle="hover" routerLinkActive="menu-item-active">
+              <a class="menu-link" routerLink="campaign/list" routerLinkActive="active">
+                <i class="menu-bullet menu-bullet-dot">
+                  <span></span>
+                </i>
+                <span class="menu-text">Kampanya Listesi</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </li>
+      </ng-container>
+      <ng-container *ngIf="authenticationData.panelAdminUserType == panelAdminUserType.ADMIN_USER || authenticationData.panelAdminUserType == panelAdminUserType.ROOT_ADMIN_USER">
+        <li class="menu-item menu-item-submenu" aria-haspopup="true" data-menu-toggle="hover"
+        routerLinkActive="menu-item-open">
+        <a class="menu-link menu-toggle" routerLinkActive="active" href="/versionManagement">
+          <span [inlineSVG]="'./assets/media/Home.svg'" cacheSVG="true"
+            class="svg-icon menu-icon"></span>
+          <span class="menu-text">Versiyon Yönetimi</span>
+          <i class="menu-arrow"></i>
+        </a>
+        <div class="menu-submenu">
+          <i class="menu-arrow"></i>
+          <ul class="menu-subnav">
+
+            <li class="menu-item" aria-haspopup="true" data-menu-toggle="hover" routerLinkActive="menu-item-active">
+              <a class="menu-link" routerLink="versionManagement/list" routerLinkActive="active">
+                <i class="menu-bullet menu-bullet-dot">
+                  <span></span>
+                </i>
+                <span class="menu-text">Versiyon Listesi</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </li>
+      </ng-container>
+      <ng-container *ngIf="authenticationData.panelAdminUserType == panelAdminUserType.ADMIN_USER || authenticationData.panelAdminUserType == panelAdminUserType.ROOT_ADMIN_USER">
+        <li class="menu-item menu-item-submenu" aria-haspopup="true" data-menu-toggle="hover"
+        routerLinkActive="menu-item-open">
+        <a class="menu-link menu-toggle" routerLinkActive="active" href="/paramaters">
+          <span [inlineSVG]="'./assets/media/Home.svg'" cacheSVG="true"
+            class="svg-icon menu-icon"></span>
+          <span class="menu-text">Parametreler</span>
+          <i class="menu-arrow"></i>
+        </a>
+        <div class="menu-submenu">
+          <i class="menu-arrow"></i>
+          <ul class="menu-subnav">
+
+            <li class="menu-item" aria-haspopup="true" data-menu-toggle="hover" routerLinkActive="menu-item-active">
+              <a class="menu-link" routerLink="paramaters/list" routerLinkActive="active">
+                <i class="menu-bullet menu-bullet-dot">
+                  <span></span>
+                </i>
+                <span class="menu-text">Parametreler</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </li>
+      </ng-container>
+      <ng-container *ngIf="authenticationData.panelAdminUserType == panelAdminUserType.ADMIN_USER || authenticationData.panelAdminUserType == panelAdminUserType.ROOT_ADMIN_USER">
+      <li class="menu-item menu-item-submenu" aria-haspopup="true" data-menu-toggle="hover"
+        routerLinkActive="menu-item-open">
+        <a class="menu-link menu-toggle" routerLinkActive="active" href="/language">
+          <span [inlineSVG]="'./assets/media/Home.svg'" cacheSVG="true"
+            class="svg-icon menu-icon"></span>
+          <span class="menu-text">Dil Yönetimi</span>
+          <i class="menu-arrow"></i>
+        </a>
+        <div class="menu-submenu">
+          <i class="menu-arrow"></i>
+          <ul class="menu-subnav">
+
+            <li class="menu-item" aria-haspopup="true" data-menu-toggle="hover" routerLinkActive="menu-item-active">
+              <a class="menu-link" routerLink="language/list" routerLinkActive="active">
+                <i class="menu-bullet menu-bullet-dot">
+                  <span></span>
+                </i>
+                <span class="menu-text">Dil Listesi</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </li>
+      </ng-container>
+      <ng-container *ngIf="authenticationData.panelAdminUserType == panelAdminUserType.ADMIN_USER || authenticationData.panelAdminUserType == panelAdminUserType.ROOT_ADMIN_USER">
+        <li class="menu-item menu-item-submenu" aria-haspopup="true" data-menu-toggle="hover"
+        routerLinkActive="menu-item-open">
+        <a class="menu-link menu-toggle" routerLinkActive="active" href="/support">
+          <span [inlineSVG]="'./assets/media/Home.svg'" cacheSVG="true"
+            class="svg-icon menu-icon"></span>
+          <span class="menu-text">Destek Yönetimi</span>
+          <i class="menu-arrow"></i>
+        </a>
+        <div class="menu-submenu">
+          <i class="menu-arrow"></i>
+          <ul class="menu-subnav">
+
+            <li class="menu-item" aria-haspopup="true" data-menu-toggle="hover" routerLinkActive="menu-item-active">
+              <a class="menu-link" routerLink="support/list" routerLinkActive="active">
+                <i class="menu-bullet menu-bullet-dot">
+                  <span></span>
+                </i>
+                <span class="menu-text">Destek Listesi</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </li>
+      </ng-container>
+      <ng-container *ngIf="authenticationData.panelAdminUserType == panelAdminUserType.ADMIN_USER || authenticationData.panelAdminUserType == panelAdminUserType.ROOT_ADMIN_USER">
+        <li class="menu-item menu-item-submenu" aria-haspopup="true" data-menu-toggle="hover"
+        routerLinkActive="menu-item-open">
+        <a class="menu-link menu-toggle" routerLinkActive="active" href="/campaign">
+          <span [inlineSVG]="'./assets/media/Home.svg'" cacheSVG="true"
+            class="svg-icon menu-icon"></span>
+          <span class="menu-text">Bildirim İşlemleri</span>
+          <i class="menu-arrow"></i>
+        </a>
+        <div class="menu-submenu">
+          <i class="menu-arrow"></i>
+          <ul class="menu-subnav">
+
+            <li class="menu-item" aria-haspopup="true" data-menu-toggle="hover" routerLinkActive="menu-item-active">
+              <a class="menu-link" routerLink="announcement/list" routerLinkActive="active">
+                <i class="menu-bullet menu-bullet-dot">
+                  <span></span>
+                </i>
+                <span class="menu-text">Bildirim Listesi</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </li>
+      </ng-container>
+      <ng-container *ngIf="authenticationData.panelAdminUserType == panelAdminUserType.ADMIN_USER || authenticationData.panelAdminUserType == panelAdminUserType.ROOT_ADMIN_USER">
+        <li class="menu-item menu-item-submenu" aria-haspopup="true" data-menu-toggle="hover"
+        routerLinkActive="menu-item-open">
+        <a class="menu-link menu-toggle" routerLinkActive="active" href="/announcement">
+          <span [inlineSVG]="'./assets/media/Home.svg'" cacheSVG="true"
+            class="svg-icon menu-icon"></span>
+          <span class="menu-text">Duyuru İşlemleri</span>
+          <i class="menu-arrow"></i>
+        </a>
+        <div class="menu-submenu">
+          <i class="menu-arrow"></i>
+          <ul class="menu-subnav">
+
+            <li class="menu-item" aria-haspopup="true" data-menu-toggle="hover" routerLinkActive="menu-item-active">
+              <a class="menu-link" routerLink="announcement/list" routerLinkActive="active">
+                <i class="menu-bullet menu-bullet-dot">
+                  <span></span>
+                </i>
+                <span class="menu-text">Duyuru Listesi</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </li>
+      </ng-container>
+      <ng-container *ngIf="authenticationData.panelAdminUserType == panelAdminUserType.ADMIN_USER || authenticationData.panelAdminUserType == panelAdminUserType.ROOT_ADMIN_USER">
+        <li class="menu-item menu-item-submenu" aria-haspopup="true" data-menu-toggle="hover"
+        routerLinkActive="menu-item-open">
+        <a class="menu-link menu-toggle" routerLinkActive="active" href="/policy">
+          <span [inlineSVG]="'./assets/media/Home.svg'" cacheSVG="true"
+            class="svg-icon menu-icon"></span>
+          <span class="menu-text">Sözleşme İşlemleri</span>
+          <i class="menu-arrow"></i>
+        </a>
+        <div class="menu-submenu">
+          <i class="menu-arrow"></i>
+          <ul class="menu-subnav">
+            <li class="menu-item" aria-haspopup="true" data-menu-toggle="hover" routerLinkActive="menu-item-active">
+              <a class="menu-link" routerLink="policy/policyManagment" routerLinkActive="active">
+                <i class="menu-bullet menu-bullet-dot">
+                  <span></span>
+                </i>
+                <span class="menu-text">Sözleşme Yönetimi</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </li>
+      </ng-container>
+      <ng-container *ngIf="authenticationData.panelAdminUserType == panelAdminUserType.ADMIN_USER || authenticationData.panelAdminUserType == panelAdminUserType.ROOT_ADMIN_USER">
+        <li class="menu-item menu-item-submenu" aria-haspopup="true" data-menu-toggle="hover"
+        routerLinkActive="menu-item-open">
+        <a class="menu-link menu-toggle" routerLinkActive="active" href="/messagesender">
+          <span [inlineSVG]="'./assets/media/Home.svg'" cacheSVG="true"
+            class="svg-icon menu-icon"></span>
+          <span class="menu-text">Mesaj Gönderme İşlemleri</span>
+          <i class="menu-arrow"></i>
+        </a>
+        <div class="menu-submenu">
+          <i class="menu-arrow"></i>
+          <ul class="menu-subnav">
+
+            <li class="menu-item" aria-haspopup="true" data-menu-toggle="hover" routerLinkActive="menu-item-active">
+              <a class="menu-link" routerLink="messagesender/list" routerLinkActive="active">
+                <i class="menu-bullet menu-bullet-dot">
+                  <span></span>
+                </i>
+                <span class="menu-text">Mail Gönderme</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </li>
+      </ng-container>
+      <ng-container *ngIf="authenticationData.panelAdminUserType == panelAdminUserType.ADMIN_USER || authenticationData.panelAdminUserType == panelAdminUserType.ROOT_ADMIN_USER">
+        <li class="menu-item menu-item-submenu" aria-haspopup="true" data-menu-toggle="hover"
+        routerLinkActive="menu-item-open">
+        <a class="menu-link menu-toggle" routerLinkActive="active" href="/log">
+          <span [inlineSVG]="'./assets/media/Home.svg'" cacheSVG="true"
+            class="svg-icon menu-icon"></span>
+          <span class="menu-text">Log İşlemleri</span>
+          <i class="menu-arrow"></i>
+        </a>
+        <div class="menu-submenu">
+          <i class="menu-arrow"></i>
+          <ul class="menu-subnav">
+            <li class="menu-item" aria-haspopup="true" data-menu-toggle="hover" routerLinkActive="menu-item-active">
+              <a class="menu-link" routerLink="log/request-response-logs" routerLinkActive="active">
+                <i class="menu-bullet menu-bullet-dot">
+                  <span></span>
+                </i>
+                <span class="menu-text">Genel Loglar</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+        <div class="menu-submenu">
+          <i class="menu-arrow"></i>
+          <ul class="menu-subnav">
+            <li class="menu-item" aria-haspopup="true" data-menu-toggle="hover" routerLinkActive="menu-item-active">
+              <a class="menu-link" routerLink="log/exception-logs" routerLinkActive="active">
+                <i class="menu-bullet menu-bullet-dot">
+                  <span></span>
+                </i>
+                <span class="menu-text">Hatalar</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </li>
+      </ng-container>
+    </ul>
+    <!-- end::Menu Nav -->
+  </div>
+  <!--end::Menu Container-->
+</div>
+<!--end::Aside Menu-->

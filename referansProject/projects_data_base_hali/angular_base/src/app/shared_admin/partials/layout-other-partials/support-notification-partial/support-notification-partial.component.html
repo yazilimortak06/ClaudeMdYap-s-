@@ -1,0 +1,83 @@
+<!--begin::support notification Panel-->
+<div
+  id="support_notification_panel"
+  class="offcanvas pt-5 pb-10"
+  [ngClass]="extrasQuickPanelOffcanvasDirectionCSSClass"
+>
+  <!--begin::Header-->
+  <div
+    class="offcanvas-header offcanvas-header-navs d-flex align-items-center justify-content-between mb-5"
+  >
+    <ul
+      class="nav nav-bold nav-tabs nav-tabs-line nav-tabs-line-3x nav-tabs-primary flex-grow-1 px-10"
+      role="tablist"
+    >
+      <li class="nav-item">
+        <a
+          class="nav-link cursor-pointer"
+          data-toggle="tab"
+          [ngClass]="getActiveCSSClasses('kt_quick_panel_notifications')"
+          (click)="setActiveTabId('kt_quick_panel_notifications')"
+          >Destek-Talep</a
+        >
+      </li>
+    </ul>
+    <div class="offcanvas-close mt-n1 pr-5">
+      <a
+        href="#"
+        class="btn btn-xs btn-icon btn-light btn-hover-primary"
+        id="support_notification_partial_close"
+      >
+        <i class="ki ki-close icon-xs text-muted"></i>
+      </a>
+    </div>
+  </div>
+  <!--end::Header-->
+
+  <!--begin::Content-->
+  <div class="offcanvas-content px-10">
+    <div class="tab-content">
+      <!--begin::Tabpane-->
+      <div
+        class="tab-pane fade pt-3 pr-5 mr-n5"
+        id="kt_quick_panel_notifications"
+        [ngClass]="getActiveCSSClasses('kt_quick_panel_notifications')"
+        role="tabpanel"
+      >
+        <!--begin::Section-->
+        <div class="navi navi-icon-circle navi-spacer-x-0">
+          <h5 class="font-weight-bold mb-5">Cevap Bekleyen Destekler/Talepler</h5>
+          <ng-container >
+            <a (click)="goSupportDetail(support.supportId);" style="cursor: pointer;"  class="navi-item" *ngFor="let support of supportNotificationList$ | async ">
+              <div class="navi-link rounded">
+                <div class="symbol symbol-50 mr-3">
+                  <div class="symbol-label">
+                    <i class="flaticon-bell text-success icon-lg"></i>
+                  </div>
+                </div>
+                <div class="navi-text">
+                  <div class="font-weight-bold font-size-lg">
+                    {{support.summaryTitle}}
+                  </div>
+                  <div class="text-muted">
+                    {{support.userName}} &nbsp; {{ support.userSurname}} &nbsp;
+                    <br> {{support.lastUpdateDate| date :'dd/MM/yyyy HH:mm'}}
+
+                  </div>
+                </div>
+              </div>
+            </a>
+            </ng-container>
+
+        </div>
+        <!--end::Section-->
+
+        <!--end::Section-->
+      </div>
+      <!--end::Tabpane-->
+
+    </div>
+  </div>
+  <!--end::Content-->
+</div>
+<!--end::Quick Panel-->
