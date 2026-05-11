@@ -37,6 +37,29 @@
 | RestaurantSystemBackend | C:\Projects\RestaurantSystemBackend |
 ```
 
+### Ortak kullanıcı (`ortak.md`)
+Birden fazla kişi kullanır. Her kişinin her proje için ayrı path'i vardır.
+Proje seçimi sonrası "şu an kim kullanıyor?" sorusu sorulur.
+
+```markdown
+# ortak
+
+- **İsim:** ortak
+- **Rol:** gelistirici
+
+## Proje Pathler
+
+### ali
+| Proje | Path |
+|-------|------|
+| RestaurantSystemBackend | C:\Projects\... |
+
+### muhammed_ali
+| Proje | Path |
+|-------|------|
+| RestaurantSystemBackend | C:\Projects\... |
+```
+
 ### Yönetici kullanıcı (`yoneticiSaid.md`)
 ```markdown
 # yoneticiSaid

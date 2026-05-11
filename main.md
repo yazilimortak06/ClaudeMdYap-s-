@@ -43,10 +43,21 @@ Değiştirmek isterse → yeni rol seç ve dosyaya kaydet.
 1. `settings/projects.md` oku → proje listesi + **"Tüm Projeler"** seçeneği ekle.
 2. Kullanıcıya sor.
 3. Seçilen proje listede yoksa → `rules/proje_ekleme_rules.md` uygula.
-4. Rol `gelistirici` ise ve local path tanımlı değilse → sor:
-   > "**<ProjeAdı>** için local path nedir?"
-   
-   Path'i `settings/users/<isim>.md` e kaydet.
+
+**Kullanıcı `ortak` ise (proje seçimi sonrası):**
+- Sor: > "Şu an ortak hesabı kim kullanıyor? (ali / muhammed_ali / said / ...)"
+- Verilen ismi `aktif_kullanici` olarak not et.
+- `settings/users/ortak.md` → `### <aktif_kullanici>` bölümünden o projenin path'ini oku.
+- `settings/users/ortak.md` → `### <aktif_kullanici>` bölümüne bak.
+  - **Path `-` veya tanımsızsa → devam etme, MUTLAKA sor:**
+    > "**<aktif_kullanici>** için **<ProjeAdı>** local path nedir?"
+    
+    Cevabı al → `settings/users/ortak.md` içinde `### <aktif_kullanici>` tablosuna kaydet → sonra devam et.
+- Oturum boyunca `aktif_kullanici` adıyla çalış (log, notlar vb. bu isimle tutulur).
+
+**Normal kullanıcı, rol `gelistirici`, path tanımlı değilse:**
+- Sor: > "**<ProjeAdı>** için local path nedir?"
+- Path'i `settings/users/<isim>.md` e kaydet.
 
 > Diğer roller ve yönetici için path sorma.
 
