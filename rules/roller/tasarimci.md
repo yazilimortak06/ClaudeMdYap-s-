@@ -48,6 +48,8 @@ current_md/<proje>/tasarimci/
 - `project_Design/<proje>/mevcut_design/`
 - `project_Design/<proje>/example_design_duzenlenmis/`
 - `project_Design/<proje>/gecici/`
+- `project_Design/<proje>/yapilacak_design/` (geliştirici buraya bakarak UI yapar — spec dosyaları)
+- `project_Design/<proje>/yapilacak_design/oncelik_sirasi.md`
 
 ## Oturum Sonu Güncellenecekler
-`tasarimci/current.md`, `tasarimci/ilerleme.md`, taslaktan `public/`'a taşıma, ilgili `project_Design/<proje>/` dosyaları
+`tasarimci/current.md`, `tasarimci/ilerleme.md`, taslaktan `public/`'a taşıma, ilgili `project_Design/<proje>/` dosyaları, `claude_context/<oturum>/oturum.md`

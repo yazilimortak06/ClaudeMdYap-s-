@@ -42,18 +42,16 @@ Bu dosyayı okur okumaz adımları sırayla uygula.
 
 ### Adım 3 — Rol (Yönetici değilse)
 
-`settings/users/<isim>.md` içinde seçilen projenin satırına bak:
+**Rol her oturumda sorulur.** Aynı kişi birden fazla terminal açıp farklı proje/rol ile çalışabilir.
+Kullanıcı dosyasındaki kayıtlı rol "öneri" olarak gösterilir ama her oturumda seçim alınır.
 
-**Rol doluysa:**
-> "**<ProjeAdı>** için rolün **<rol>** olarak kayıtlı. Bu oturumda aynı rolle mi devam ediyorsun?"
+`settings/users/<isim>.md` içinde seçilen projenin Rol sütununu oku, sonra sor:
 
-Hayır → yeni rol seç, dosyaya kaydet.
-
-**Rol boşsa:**
-> "**<ProjeAdı>** için bu oturumda rolün ne?  
+> "**<ProjeAdı>** için bu oturumda hangi rolle çalışıyorsun?  
+> *(Son kayıtlı: **<rol>** — aynıysa Enter'a bas, farklıysa yaz)*  
 > `gelistirici` / `tester` / `analiz_uzmani` / `task_uzmani` / `tasarimci` / `arge_muhendisi` / `yazilim_mimari` / `kalite_muhendisi`"
 
-Cevabı al → kullanıcı dosyasındaki proje satırının Rol sütununa kaydet.
+Seçilen rol → kullanıcı dosyasının proje satırına kaydet.
 
 **Yönetici tipi kullanıcılar bu adımı atlar.**
 
@@ -83,6 +81,12 @@ Cevabı al → kullanıcı dosyasındaki proje satırının Rol sütununa kaydet
 | kalite_muhendisi | `current_md/<proje>/mimari_gelisen.md`, `current_md/<proje>/kalite_muhendisi/current.md`, `kalite_muhendisi/ilerleme.md`, `kalite_muhendisi/public/kalite_raporlari/README.md`, `kalite_muhendisi/public/standartlar/README.md` |
 | yonetici | `current_md/<proje>/mimari_gelisen.md`, `current_md/<proje>/yonetici/current.md`, `yonetici/ilerleme.md`, `yonetici/public/ilerleme_raporu.md`, `yonetici/public/sprint_plani.md` |
 | Tüm Projeler | + `current_md/_ilerleme/<isim>.md`, `current_md/_ilerleme/ortak.md` |
+
+**Oturum Klasörü Oluştur (Adım 4 başında):**
+`claude_context/` altında şu isimde klasör aç:
+`YYYY-MM-DD_HHmm_<isim>_<ProjeKisa>_<rol>/`
+İçine `meta.md`, `oturum.md`, `durum.md` oluştur. Şablon için `claude_context/README.md` oku.
+Bu klasör bu terminale aittir — terminal kapanınca pasif kalır.
 
 Kısa özet: "Kaldığın yer şu — ne yapmak istiyorsun?"
 
@@ -199,7 +203,7 @@ Kısa özet: "Kaldığın yer şu — ne yapmak istiyorsun?"
 
 ## Oturum Sonu
 
-Her oturum bitiminde güncelle:
+Her oturum bitiminde güncelle. **Tüm roller için:** `claude_context/<oturum>/oturum.md` ve `durum.md` güncelle.
 
 | Rol | Dosyalar |
 |-----|---------|
@@ -207,7 +211,7 @@ Her oturum bitiminde güncelle:
 | tester | `tester/current.md`, `tester/ilerleme.md`, ilgili `tester/public/` dosyaları |
 | analiz_uzmani | `is_analisti/current.md`, `is_analisti/ilerleme.md`, taslaktan `public/`'a taşıma |
 | task_uzmani | `task_uzmani/current.md`, `task_uzmani/ilerleme.md`, `tasks/<proje>/` dosyaları |
-| tasarimci | `tasarimci/current.md`, `tasarimci/ilerleme.md`, taslaktan `public/`'a taşıma |
+| tasarimci | `tasarimci/current.md`, `tasarimci/ilerleme.md`, taslaktan `public/`'a taşıma, `project_Design/<proje>/yapilacak_design/` güncellemeleri |
 | arge_muhendisi | `arge_muhendisi/current.md`, `arge_muhendisi/ilerleme.md`, taslaktan `public/`'a taşıma |
 | yazilim_mimari | `yazilim_mimari/current.md`, `yazilim_mimari/ilerleme.md`, taslaktan `public/`'a taşıma, `mimari_gelisen.md` |
 | kalite_muhendisi | `kalite_muhendisi/current.md`, `kalite_muhendisi/ilerleme.md`, taslaktan `public/`'a taşıma |

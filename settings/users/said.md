@@ -8,5 +8,5 @@
 | Proje | Rol | Path |
 |-------|-----|------|
 | RestaurantSystemBackend | - | - |
-| RestaurantSystemPanel | - | - |
+| RestaurantSystemPanel | gelistirici | - |
 | RestaurantSystemQr | - | - |
