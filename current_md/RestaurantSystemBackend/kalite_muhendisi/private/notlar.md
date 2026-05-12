@@ -1,0 +1,3 @@
+# Notlar — Kalite Mühendisi (RestaurantSystemBackend)
+
+---

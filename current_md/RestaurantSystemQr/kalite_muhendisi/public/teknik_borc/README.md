@@ -1,0 +1,1 @@
+# Teknik Borç Envanteri

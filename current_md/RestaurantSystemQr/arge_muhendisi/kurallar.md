@@ -1,0 +1,3 @@
+# Arge Mühendisi Kuralları — RestaurantSystemQr
+
+---

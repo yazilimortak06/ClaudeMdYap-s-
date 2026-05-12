@@ -1,12 +1,12 @@
 # said
 
 - **İsim:** said
-- **Rol:** geliştirici
+- **Tip:** normal
 
-## Proje Pathler
+## Projeler
 
-| Proje | Path |
-|-------|------|
-| RestaurantSystemBackend | - |
-| RestaurantSystemPanel | - |
-| RestaurantSystemQr | - |
+| Proje | Rol | Path |
+|-------|-----|------|
+| RestaurantSystemBackend | - | - |
+| RestaurantSystemPanel | - | - |
+| RestaurantSystemQr | - | - |

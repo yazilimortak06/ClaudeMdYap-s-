@@ -19,26 +19,14 @@ Bu dosyayı okur okumaz adımları sırayla uygula.
 **Yeni kullanıcı:**
 - İsim al.
 - Tip sor: `normal` mi `yonetici` mi?
-- Normal ise → Rol sor: `gelistirici` / `tester` / `analiz_uzmani` / `task_uzmani` / `tasarimci`
 - `settings/users/<isim>.md` oluştur.
 
 **Mevcut kullanıcı:**
-- `settings/users/<isim>.md` oku → `Tip` ve `Rol` alanlarını not et.
+- `settings/users/<isim>.md` oku → `Tip` alanını not et.
 
 ---
 
-### Adım 2 — Rol (Yönetici değilse)
-
-Kullanıcı dosyasındaki `Rol` varsayılan olarak göster:
-> "Rolün **gelistirici** olarak kayıtlı. Bu oturumda aynı rolle mi devam ediyorsun?"
-
-Değiştirmek isterse → yeni rol seç ve dosyaya kaydet.
-
-**Yönetici tipi kullanıcılar bu adımı atlar.**
-
----
-
-### Adım 3 — Proje Seç
+### Adım 2 — Proje Seç
 
 1. `settings/projects.md` oku → proje listesi + **"Tüm Projeler"** seçeneği ekle.
 2. Kullanıcıya sor.
@@ -47,35 +35,53 @@ Değiştirmek isterse → yeni rol seç ve dosyaya kaydet.
 **Kullanıcı `ortak` ise (proje seçimi sonrası):**
 - Sor: > "Şu an ortak hesabı kim kullanıyor? (ali / muhammed_ali / said / ...)"
 - Verilen ismi `aktif_kullanici` olarak not et.
-- `settings/users/ortak.md` → `### <aktif_kullanici>` bölümünden o projenin path'ini oku.
-- `settings/users/ortak.md` → `### <aktif_kullanici>` bölümüne bak.
-  - **Path `-` veya tanımsızsa → devam etme, MUTLAKA sor:**
-    > "**<aktif_kullanici>** için **<ProjeAdı>** local path nedir?"
-    
-    Cevabı al → `settings/users/ortak.md` içinde `### <aktif_kullanici>` tablosuna kaydet → sonra devam et.
+- `settings/users/ortak.md` → `### <aktif_kullanici>` bölümünden o projenin satırını oku.
 - Oturum boyunca `aktif_kullanici` adıyla çalış (log, notlar vb. bu isimle tutulur).
 
-**Normal kullanıcı, rol `gelistirici`, path tanımlı değilse:**
-- Sor: > "**<ProjeAdı>** için local path nedir?"
-- Path'i `settings/users/<isim>.md` e kaydet.
+---
 
-> Diğer roller ve yönetici için path sorma.
+### Adım 3 — Rol (Yönetici değilse)
+
+`settings/users/<isim>.md` içinde seçilen projenin satırına bak:
+
+**Rol doluysa:**
+> "**<ProjeAdı>** için rolün **<rol>** olarak kayıtlı. Bu oturumda aynı rolle mi devam ediyorsun?"
+
+Hayır → yeni rol seç, dosyaya kaydet.
+
+**Rol boşsa:**
+> "**<ProjeAdı>** için bu oturumda rolün ne?  
+> `gelistirici` / `tester` / `analiz_uzmani` / `task_uzmani` / `tasarimci` / `arge_muhendisi` / `yazilim_mimari` / `kalite_muhendisi`"
+
+Cevabı al → kullanıcı dosyasındaki proje satırının Rol sütununa kaydet.
+
+**Yönetici tipi kullanıcılar bu adımı atlar.**
+
+**Ortak kullanıcı:** `aktif_kullanici`'nın o proje satırına göre aynı işlem uygulanır.
+
+**Gelistirici rolü seçildi ve path tanımsızsa:**
+- Sor: > "**<ProjeAdı>** için local path nedir?"
+- Path'i kullanıcı dosyasına kaydet.
+
+> Diğer roller için path sorma.
 
 ---
 
 ### Adım 4 — Bağlam Yükle
 
-**Rol / Proje → Okunacak Dosyalar:**
+**Rol → Okunacak Dosyalar:**
 
-| Durum | Okunacak |
-|-------|---------|
-| Tüm roller | `current_md/<proje>/mimari_gelisen.md`, `current_md/<proje>/<isim>/current.md` |
-| gelistirici | + `current_md/<proje>/<isim>/ilerleme.md`, `is_listesi.md`, `kurallar.md` |
-| tester | + `current_md/<proje>/tester/public/bug_raporlari/README.md`, `regression_listesi/README.md` |
-| analiz_uzmani | + `current_md/<proje>/is_analisti/public/sorular/README.md`, `analiz_uzmani/public/analizler/README.md` |
-| task_uzmani | + `tasks/<proje>/havuz.md`, `tasks/<proje>/yapilacaklar.md` |
-| tasarimci | + `current_md/<proje>/tasarimci/public/tasarimlar/README.md`, `stiller/README.md` |
-| yonetici | + `current_md/<proje>/yonetici/public/ilerleme_raporu.md`, `sprint_plani.md` |
+| Rol | Okunacak |
+|-----|---------|
+| gelistirici | `current_md/<proje>/mimari_gelisen.md`, `current_md/<proje>/<isim>/current.md`, `ilerleme.md`, `is_listesi.md`, `kurallar.md` |
+| tester | `current_md/<proje>/mimari_gelisen.md`, `current_md/<proje>/tester/current.md`, `tester/ilerleme.md`, `tester/public/bug_raporlari/README.md`, `tester/public/regression_listesi/README.md` |
+| analiz_uzmani | `current_md/<proje>/mimari_gelisen.md`, `current_md/<proje>/is_analisti/current.md`, `is_analisti/ilerleme.md`, `is_analisti/public/sorular/README.md`, `is_analisti/public/analizler/README.md` |
+| task_uzmani | `current_md/<proje>/mimari_gelisen.md`, `current_md/<proje>/task_uzmani/current.md`, `task_uzmani/ilerleme.md`, `tasks/<proje>/havuz.md`, `tasks/<proje>/yapilacaklar.md` |
+| tasarimci | `current_md/<proje>/mimari_gelisen.md`, `current_md/<proje>/tasarimci/current.md`, `tasarimci/ilerleme.md`, `project_Design/<proje>/design_kurallari.md`, `project_Design/<proje>/arayuz_aciklamalari.md` |
+| arge_muhendisi | `current_md/<proje>/mimari_gelisen.md`, `current_md/<proje>/arge_muhendisi/current.md`, `arge_muhendisi/ilerleme.md`, `project_Design/<proje>/mevcut_design/README.md`, `arge_muhendisi/public/arastirmalar/README.md` |
+| yazilim_mimari | `current_md/<proje>/mimari_gelisen.md`, `current_md/<proje>/yazilim_mimari/current.md`, `yazilim_mimari/ilerleme.md`, `yazilim_mimari/public/mimariler/README.md`, `yazilim_mimari/public/kararlar/README.md` |
+| kalite_muhendisi | `current_md/<proje>/mimari_gelisen.md`, `current_md/<proje>/kalite_muhendisi/current.md`, `kalite_muhendisi/ilerleme.md`, `kalite_muhendisi/public/kalite_raporlari/README.md`, `kalite_muhendisi/public/standartlar/README.md` |
+| yonetici | `current_md/<proje>/mimari_gelisen.md`, `current_md/<proje>/yonetici/current.md`, `yonetici/ilerleme.md`, `yonetici/public/ilerleme_raporu.md`, `yonetici/public/sprint_plani.md` |
 | Tüm Projeler | + `current_md/_ilerleme/<isim>.md`, `current_md/_ilerleme/ortak.md` |
 
 Kısa özet: "Kaldığın yer şu — ne yapmak istiyorsun?"
@@ -115,12 +121,15 @@ Kısa özet: "Kaldığın yer şu — ne yapmak istiyorsun?"
 
 #### Task Uzmanı
 ```
-1) Task Oluştur
-2) Backlog Düzenle
-3) Havuza Ekle
-4) Task Ata
+1) Task Oluştur (analizden / manuel)
+2) Bug Task Aç (testerdan gelen bug'dan)
+3) Backlog Düzenle / Sırala
+4) Sprint Oluştur / Güncelle
+5) Tartışma Notu Al (analiz uzmanı / tasarımcı ile)
+6) Task Ata
 ```
-*Yazar:* `tasks/<proje>/`, `current_md/<proje>/is_analisti/public/tasklar/`
+*Okur:* `is_analisti/public/` (analiz ve gereksinimler), `tester/public/bug_raporlari/` (bug'lar), `tasarimci/public/` (tasarım kararları)
+*Yazar:* `task_uzmani/public/tasklar/`, `task_uzmani/public/sprintler/`, `task_uzmani/public/bug_tasklari/`, `task_uzmani/public/backlog/`, `task_uzmani/public/tartismalar/`
 
 #### Tasarımcı
 ```
@@ -130,8 +139,49 @@ Kısa özet: "Kaldığın yer şu — ne yapmak istiyorsun?"
 4) Kullanıcı Akışı Çiz
 5) Prototip Ekle
 ```
+*Okur:* `is_analisti/public/akislar/`, `project_Design/<proje>/` (design merkezi)
 *Taslak:* `current_md/<proje>/tasarimci/private/taslaklar/`
-*Nihai:* `current_md/<proje>/tasarimci/public/`
+*Nihai:* `tasarimci/public/`, `project_Design/<proje>/` (mevcut_design, design_kurallari, arayuz_aciklamalari)
+
+#### Arge Mühendisi
+```
+1) Araştırma Başlat
+2) Prototip / PoC Yap
+3) Teknoloji Değerlendir
+4) Teknik Rapor Yaz
+5) Öneri Oluştur
+6) Bulguları Paylaş
+```
+*Okur:* `referansProject/analiz/`, `rules/`, `is_analisti/public/`, mimari dosyaları, `project_Design/<proje>/`
+*Taslak:* `current_md/<proje>/arge_muhendisi/private/taslaklar/`
+*Nihai:* `arge_muhendisi/public/`, `project_Design/<proje>/arge_design/`
+
+#### Yazılım Mimarı
+```
+1) Mimari Tasarla
+2) Mimari Gözden Geçir
+3) Teknoloji Kararı Al
+4) Entegrasyon Deseni Tanımla
+5) ADR (Mimari Karar) Oluştur
+6) Mimari Doküman Yaz
+```
+*Okur:* `rules/proje_mimari_rules/`, `current_md/<proje>/mimari_gelisen.md`, `referansProject/`, `arge_muhendisi/public/`
+*Taslak:* `current_md/<proje>/yazilim_mimari/private/taslaklar/`
+*Nihai:* `current_md/<proje>/yazilim_mimari/public/`
+*Günceller:* `current_md/<proje>/mimari_gelisen.md` (karar kesinleşince)
+
+#### Kalite Mühendisi
+```
+1) Kalite Analizi Yap
+2) Kalite Standardı Tanımla
+3) Metrik Oluştur / Güncelle
+4) Teknik Borç Analizi
+5) Kalite Raporu Yaz
+6) Test Stratejisi Belirle
+```
+*Okur:* `tester/public/`, `rules/yazilim_bilgi/test_stratejileri.md`, `rules/yazilim_bilgi/prensipler.md`
+*Taslak:* `current_md/<proje>/kalite_muhendisi/private/taslaklar/`
+*Nihai:* `current_md/<proje>/kalite_muhendisi/public/`
 
 #### Yönetici
 ```
@@ -142,7 +192,7 @@ Kısa özet: "Kaldığın yer şu — ne yapmak istiyorsun?"
 5) Rapor Oluştur
 6) Toplantı Notu Al
 ```
-*Okur:* tüm kullanıcıların `ilerleme.md`, `_ilerleme/ortak.md`
+*Okur:* tüm rol klasörlerinin `ilerleme.md`, `_ilerleme/ortak.md`
 *Yazar:* `current_md/<proje>/yonetici/public/`
 
 ---
@@ -154,11 +204,14 @@ Her oturum bitiminde güncelle:
 | Rol | Dosyalar |
 |-----|---------|
 | gelistirici | `current.md`, `ilerleme.md`, `is_listesi.md`, `is_notlari.md`, `mimari_kararlar.md`, `mimari_gelisen.md`, `_ilerleme/<isim>.md`, `_ilerleme/ortak.md` |
-| tester | `current.md`, ilgili `tester/public/` dosyaları |
-| analiz_uzmani | `current.md`, taslaktan `public/`'a taşıma |
-| task_uzmani | `current.md`, `tasks/<proje>/` dosyaları |
-| tasarimci | `current.md`, taslaktan `public/`'a taşıma |
-| yonetici | `current.md`, `ilerleme_raporu.md`, `sprint_plani.md`, `_ilerleme/ortak.md` |
+| tester | `tester/current.md`, `tester/ilerleme.md`, ilgili `tester/public/` dosyaları |
+| analiz_uzmani | `is_analisti/current.md`, `is_analisti/ilerleme.md`, taslaktan `public/`'a taşıma |
+| task_uzmani | `task_uzmani/current.md`, `task_uzmani/ilerleme.md`, `tasks/<proje>/` dosyaları |
+| tasarimci | `tasarimci/current.md`, `tasarimci/ilerleme.md`, taslaktan `public/`'a taşıma |
+| arge_muhendisi | `arge_muhendisi/current.md`, `arge_muhendisi/ilerleme.md`, taslaktan `public/`'a taşıma |
+| yazilim_mimari | `yazilim_mimari/current.md`, `yazilim_mimari/ilerleme.md`, taslaktan `public/`'a taşıma, `mimari_gelisen.md` |
+| kalite_muhendisi | `kalite_muhendisi/current.md`, `kalite_muhendisi/ilerleme.md`, taslaktan `public/`'a taşıma |
+| yonetici | `yonetici/current.md`, `yonetici/ilerleme.md`, `ilerleme_raporu.md`, `sprint_plani.md`, `_ilerleme/ortak.md` |
 
 ---
 

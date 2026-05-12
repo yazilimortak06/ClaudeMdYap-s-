@@ -1,0 +1,3 @@
+# Kalite Mühendisi Kuralları — RestaurantSystemPanel
+
+---
