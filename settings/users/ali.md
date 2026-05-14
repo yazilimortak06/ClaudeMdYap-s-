@@ -4,9 +4,15 @@
 - **Tip:** normal
 
 ## Projeler
+| Proje | Rol |
+|-------|-----|
+| RestaurantSystemBackend | gelistirici |
+| RestaurantSystemPanel | - |
+| RestaurantSystemQr | - |
 
-| Proje | Rol | Path |
-|-------|-----|------|
-| RestaurantSystemBackend | gelistirici | C:\AliProjeler\RestaurantSystemBackend |
-| RestaurantSystemPanel | - | - |
-| RestaurantSystemQr | - | - |
+## Bilgisayar: ali-casper-laptop
+| Proje | Path |
+|-------|------|
+| RestaurantSystemBackend | C:\AliProjeler\RestaurantSystemBackend |
+| RestaurantSystemPanel | C:\AliProjeler\RestaurantSystemPanel |
+| RestaurantSystemQr | C:\AliProjeler\RestaurantSystemQr |
