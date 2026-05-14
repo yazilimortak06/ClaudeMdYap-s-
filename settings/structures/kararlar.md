@@ -181,6 +181,25 @@ Her rol klasörünün tam donanımı: `current.md`, `ilerleme.md`, `kurallar.md`
   - `arge_design/` — arge mühendisinin deneysel tasarım araştırmaları
   - `gecici/` — geçici/çer çöp dosyalar, periyodik temizlenir
 
+### Log Sistemi
+- Her agent, her oturum sonunda `logs/<ProjeAdı>/<isim>.md` dosyasına giriş yazar (zorunlu)
+- Format `rules/log_rules.md`'de tanımlı — Claude'un hızlı bağlam kurabilmesi için optimize edilmiş
+- Yeni girişler en üste eklenir — Claude sadece ilk bloğu okur, tüm geçmişi değil
+- Oturum başında (Adım 4): son log girişinin Özet + Yarım Kalanlar + Blokerlar kısmı okunur
+- Worktree koordinatörü: `logs/<ProjeAdı>/koordinator_<isim>.md` yazar, Agent Durumu tablosu içerir
+- Log ≠ tecrübe: log işlem kaydıdır, `rules/tecrube/` ise öğrenilen dersleri içerir
+
+### Worktree (Multi-Agent) Sistemi
+- `main.md` Adım 0'da mod seçimi eklendi: Normal / Worktree
+- Worktree seçilince `rules/worktree_rules.md` akışı devreye girer
+- **Tek terminal, çok agent:** Koordinatör ana agent olarak çalışır, her rol-proje için subagent spawn eder
+- Klasör yapısı: `worktree/<kullanıcıAdı>/<worktree-adı>/koordinator/` + `<rol>-<projeKisa>/`
+- Koordinatör dosyaları: `current.md` (kim ne yapıyor), `hafiza.md`, `agent_ortak.md` (paylaşılan API/kararlar), `ilerleme.md`
+- Her rol-proje dosyaları: `current.md`, `ilerleme.md`, `hafiza.md`
+- Worktree seçimi: mevcut listeyi açıklama + ilerleme ile göster, ya seç ya yeni oluştur
+- Rol-proje seçimi döngüseldir, koordinatör otomatik eklenir
+- `agent_ortak.md`: tüm agentların okuyup yazdığı ortak alan (API uç noktaları, veri modelleri, bağımlılıklar)
+
 ### Git & Branch Stratejisi
 - Pull alırken conflict varsa yerel değişiklikler öncelikli: `git pull -X ours`
 - Periyodik push hedefi: `said_local` branch'i
