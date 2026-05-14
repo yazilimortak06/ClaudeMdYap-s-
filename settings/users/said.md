@@ -4,9 +4,15 @@
 - **Tip:** normal
 
 ## Projeler
+| Proje | Rol |
+|-------|-----|
+| RestaurantSystemBackend | gelistirici |
+| RestaurantSystemPanel | gelistirici |
+| RestaurantSystemQr | gelistirici |
 
-| Proje | Rol | Path |
-|-------|-----|------|
-| RestaurantSystemBackend | - | - |
-| RestaurantSystemPanel | gelistirici | - |
-| RestaurantSystemQr | - | - |
+## Bilgisayar: masaustu
+| Proje | Path |
+|-------|------|
+| RestaurantSystemBackend | E:\Projeler\Backend\RestaurantSystemBackend |
+| RestaurantSystemPanel | E:\Projeler\Angular\RestaurantSystemPanel |
+| RestaurantSystemQr | E:\Projeler\Angular\RestaurantSystemQr |

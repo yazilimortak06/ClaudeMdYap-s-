@@ -10,6 +10,16 @@ Bu dosyayı okur okumaz adımları sırayla uygula.
 
 ---
 
+### Adım 0 — Mod Seç
+
+> "Normal modda mı yoksa **Worktree** modunda mı çalışmak istiyorsun?"
+> - **Normal** — Tek agent, standart akış → Adım 1'e geç
+> - **Worktree** — Paralel multi-agent çalışma (her rol-proje ayrı terminal)
+
+**Worktree seçildi:** `rules/worktree_rules.md` oku ve uygula. Aşağıdaki adımları atla.
+
+---
+
 ### Adım 1 — Kim Olduğunu Belirle
 
 1. `settings/users/` klasörünü tara.
@@ -23,6 +33,9 @@ Bu dosyayı okur okumaz adımları sırayla uygula.
 
 **Mevcut kullanıcı:**
 - `settings/users/<isim>.md` oku → `Tip` alanını not et.
+- `## Bilgisayar:` başlıklı section'ları tara → listele + "Yeni bilgisayar ekle" seçeneği ekle.
+- Seçimi al → `aktif_bilgisayar` olarak not et.
+- **Yeni bilgisayar:** isim al → `## Bilgisayar: <ad>` section'u oluştur, tüm projeler için path `-` ile başlat.
 
 ---
 
@@ -58,8 +71,9 @@ Seçilen rol → kullanıcı dosyasının proje satırına kaydet.
 **Ortak kullanıcı:** `aktif_kullanici`'nın o proje satırına göre aynı işlem uygulanır.
 
 **Gelistirici rolü seçildi ve path tanımsızsa:**
-- Sor: > "**<ProjeAdı>** için local path nedir?"
-- Path'i kullanıcı dosyasına kaydet.
+- `settings/users/<isim>.md` → `## Bilgisayar: <aktif_bilgisayar>` section'unda o projenin path'i `-` ise sor:
+  > "**<ProjeAdı>** için bu bilgisayardaki local path nedir?"
+- Path'i o section'daki proje satırına kaydet.
 
 > Diğer roller için path sorma.
 
@@ -87,6 +101,8 @@ Seçilen rol → kullanıcı dosyasının proje satırına kaydet.
 `YYYY-MM-DD_HHmm_<isim>_<ProjeKisa>_<rol>/`
 İçine `meta.md`, `oturum.md`, `durum.md` oluştur. Şablon için `claude_context/README.md` oku.
 Bu klasör bu terminale aittir — terminal kapanınca pasif kalır.
+
+**Log Oku:** `logs/<ProjeAdı>/<isim>.md` dosyası varsa en üstteki girişi oku — Özet, Yarım Kalanlar, Blokerlar kısmını bağlama ekle. Tüm dosyayı okuma.
 
 Kısa özet: "Kaldığın yer şu — ne yapmak istiyorsun?"
 
@@ -204,6 +220,8 @@ Kısa özet: "Kaldığın yer şu — ne yapmak istiyorsun?"
 ## Oturum Sonu
 
 Her oturum bitiminde güncelle. **Tüm roller için:** `claude_context/<oturum>/oturum.md` ve `durum.md` güncelle.
+
+**Log Yaz (tüm roller zorunlu):** `rules/log_rules.md` formatında `logs/<ProjeAdı>/<isim>.md` dosyasının en üstüne yeni bir giriş ekle.
 
 | Rol | Dosyalar |
 |-----|---------|
