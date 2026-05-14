@@ -13,6 +13,8 @@
 **Yeni kullanıcı:** `main.md` Adım 1'deki yeni kullanıcı akışını uygula, sonra WT-2'ye geç.
 
 **Mevcut kullanıcı:** `settings/users/<isim>.md` oku → Tip alanını not et.
+- `## Bilgisayar:` section'larını tara → listele + "Yeni bilgisayar ekle" seçeneği ekle.
+- Seçimi al → `aktif_bilgisayar` olarak not et.
 
 ---
 

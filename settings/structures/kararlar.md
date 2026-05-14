@@ -181,6 +181,14 @@ Her rol klasörünün tam donanımı: `current.md`, `ilerleme.md`, `kurallar.md`
   - `arge_design/` — arge mühendisinin deneysel tasarım araştırmaları
   - `gecici/` — geçici/çer çöp dosyalar, periyodik temizlenir
 
+### Bilgisayar Bazlı Path Sistemi
+- Kullanıcı dosyalarında rol ve path ayrıldı: `## Projeler` tablosu rol tutar (bilgisayardan bağımsız), `## Bilgisayar: <ad>` section'ları path tutar
+- Adım 1'de kullanıcı seçimi sonrası "Hangi bilgisayardasın?" sorusu eklendi — mevcut bilgisayarlar listelenir + "Yeni bilgisayar ekle"
+- Yeni bilgisayardan ilk girişte section oluşturulur, path'ler `-` ile başlar, geliştirici rolünde doldurulur
+- `aktif_bilgisayar` oturum boyunca not edilir — path okuma/yazma bu section'a göre yapılır
+- Aynı kural `ortak.md`'de de geçerli: her kişinin kendi section'ı içinde `### Bilgisayar: <ad>` yapısı kullanılır
+- `worktree_rules.md` WT-1 adımına da bilgisayar sorusu eklendi
+
 ### Log Sistemi
 - Her agent, her oturum sonunda `logs/<ProjeAdı>/<isim>.md` dosyasına giriş yazar (zorunlu)
 - Format `rules/log_rules.md`'de tanımlı — Claude'un hızlı bağlam kurabilmesi için optimize edilmiş

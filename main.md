@@ -33,6 +33,9 @@ Bu dosyayı okur okumaz adımları sırayla uygula.
 
 **Mevcut kullanıcı:**
 - `settings/users/<isim>.md` oku → `Tip` alanını not et.
+- `## Bilgisayar:` başlıklı section'ları tara → listele + "Yeni bilgisayar ekle" seçeneği ekle.
+- Seçimi al → `aktif_bilgisayar` olarak not et.
+- **Yeni bilgisayar:** isim al → `## Bilgisayar: <ad>` section'u oluştur, tüm projeler için path `-` ile başlat.
 
 ---
 
@@ -68,8 +71,9 @@ Seçilen rol → kullanıcı dosyasının proje satırına kaydet.
 **Ortak kullanıcı:** `aktif_kullanici`'nın o proje satırına göre aynı işlem uygulanır.
 
 **Gelistirici rolü seçildi ve path tanımsızsa:**
-- Sor: > "**<ProjeAdı>** için local path nedir?"
-- Path'i kullanıcı dosyasına kaydet.
+- `settings/users/<isim>.md` → `## Bilgisayar: <aktif_bilgisayar>` section'unda o projenin path'i `-` ise sor:
+  > "**<ProjeAdı>** için bu bilgisayardaki local path nedir?"
+- Path'i o section'daki proje satırına kaydet.
 
 > Diğer roller için path sorma.
 
