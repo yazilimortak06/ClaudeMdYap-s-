@@ -5,26 +5,31 @@
 
 > Ortak hesap birden fazla kişi tarafından kullanılır.
 > Proje seçimi sonrası "şu an kim kullanıyor?" sorusu sorulur.
+> Ardından o kişinin bilgisayar sorusu gelir.
 
-## Proje Pathler
+## ali
 
-### ali
-| Proje | Rol | Path |
-|-------|-----|------|
-| RestaurantSystemBackend | - | - |
-| RestaurantSystemPanel | - | - |
-| RestaurantSystemQr | - | - |
+### Projeler
+| Proje | Rol |
+|-------|-----|
+| RestaurantSystemBackend | - |
+| RestaurantSystemPanel | - |
+| RestaurantSystemQr | - |
 
-### muhammed_ali
-| Proje | Rol | Path |
-|-------|-----|------|
-| RestaurantSystemBackend | - | - |
-| RestaurantSystemPanel | - | - |
-| RestaurantSystemQr | - | - |
+## muhammed_ali
 
-### said
-| Proje | Rol | Path |
-|-------|-----|------|
-| RestaurantSystemBackend | - | - |
-| RestaurantSystemPanel | - | - |
-| RestaurantSystemQr | - | - |
+### Projeler
+| Proje | Rol |
+|-------|-----|
+| RestaurantSystemBackend | - |
+| RestaurantSystemPanel | - |
+| RestaurantSystemQr | - |
+
+## said
+
+### Projeler
+| Proje | Rol |
+|-------|-----|
+| RestaurantSystemBackend | - |
+| RestaurantSystemPanel | - |
+| RestaurantSystemQr | - |

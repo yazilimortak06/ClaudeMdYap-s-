@@ -4,9 +4,8 @@
 - **Tip:** normal
 
 ## Projeler
-
-| Proje | Rol | Path |
-|-------|-----|------|
-| RestaurantSystemBackend | - | - |
-| RestaurantSystemPanel | - | - |
-| RestaurantSystemQr | - | - |
+| Proje | Rol |
+|-------|-----|
+| RestaurantSystemBackend | - |
+| RestaurantSystemPanel | - |
+| RestaurantSystemQr | - |
