@@ -7,6 +7,6 @@
 
 | Proje | Rol | Path |
 |-------|-----|------|
-| RestaurantSystemBackend | - | - |
+| RestaurantSystemBackend | gelistirici | C:\AliProjeler\RestaurantSystemBackend |
 | RestaurantSystemPanel | - | - |
 | RestaurantSystemQr | - | - |
