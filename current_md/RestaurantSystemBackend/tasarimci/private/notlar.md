@@ -1,0 +1,3 @@
+# RestaurantSystemBackend — tasarimci Özel Notlar
+
+---

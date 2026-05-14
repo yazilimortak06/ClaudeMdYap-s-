@@ -1,0 +1,66 @@
+@* KAYNAK: E:\Projeler\Backend\QrMenu\pixdinn2\PixdinnQrMenu\PixDinn\Views\AdminMekan\Index.cshtml *@
+@model PixDinn.Models.AdminModels.AdminViewModels.AdminMekanModel
+@{
+    Response.Cache.SetCacheability(HttpCacheability.NoCache);
+    Response.Cache.AppendCacheExtension("no-store, must-revalidate");
+    Response.AppendHeader("Pragma", "no-cache");
+    Response.AppendHeader("Expires", "0");
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    var urlHelper = new UrlHelper(Html.ViewContext.RequestContext);
+    string baseUrl = urlHelper.Content("~");
+}
+
+<!-- Page header -->
+@{Html.RenderAction("PageHeaderBlock", "AdminBlock", new PixDinn.Models.AdminModels.AdminGlobalModels.AdminPageHeaderModel()
+    {
+        pagetitles = Model.pagetitles
+    });}
+<!-- /page header -->
+@{Html.RenderAction("AlertDialog", "AdminHelper");}
+
+<div class="page-container">
+    <div class="page-content">
+        <div class="content-wrapper">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            @if(Model.loginedAdminType == PixDinn.Processes.GlobalEnums.LoginAdminType.NORMAL || Model.loginedAdminType == PixDinn.Processes.GlobalEnums.LoginAdminType.ROOT){
+                                <h6 class="panel-title">
+                                    <button class="btn btn-primary legitRipple" onclick="location.href = '/adminMekan/addMekan'"><i class="icon-plus3"></i>Yeni Mekan Ekle</button>
+                                </h6>
+                            }
+                        </div>
+                        <div class="panel-body" style="overflow-x:scroll">
+                            @{Html.RenderAction("Index", "DataTable", new { tableName = "AdminMekan" });}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function mekanSilDialog(mekanId) {
+        var yesnocallback = function (result) {
+            if (result == true) {
+                $.ajax({
+                    type: "POST",
+                    async: true,
+                    url: "/AdminMekan/mekanSil",
+                    data: { id: mekanId },
+                    success: function (result) {
+                        if (result.IsSuccess == true) {
+                            SuccessAlert(result.MessageTitle, result.MessageBody);
+                            window.setTimeout(function () { location.reload(); }, 1500);
+                        } else {
+                            DangerAlert(result.MessageTitle, result.MessageBody);
+                        }
+                    }
+                });
+            }
+        };
+        YesNoAlert("Mekanı Sil", mekanId + " idli Mekanı silmek istiyormusunuz?", yesnocallback);
+    }
+</script>

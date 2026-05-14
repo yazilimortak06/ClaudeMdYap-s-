@@ -46,15 +46,36 @@ Yeni bir karar alındığında buraya eklenir.
 │       ├── muhammed_ali.md
 │       └── said.md
 ├── current_md/
+│   ├── _ilerleme/                 # Kişi bazlı tüm projeler özet
+│   │   ├── ali.md
+│   │   ├── muhammed_ali.md
+│   │   ├── said.md
+│   │   └── ortak.md               # Herkesin tüm projelerdeki durumu
 │   └── <ProjeAdı>/
 │       ├── agent.md               # Agent bağlamı, aktif görev
-│       ├── mimari_gelisen.md      # Kararlarla büyüyen mimari döküman
+│       ├── mimari_gelisen.md      # Proje geneli kararlarla büyüyen mimari (herkes için geçerli)
 │       ├── ortak/
 │       │   ├── ortak.md           # Her commit/push sonrası güncellenir
-│       │   └── analiz.md          # Kesinleşmiş analizler (bağlayıcı)
+│       │   ├── analiz.md          # Kesinleşmiş analizler (bağlayıcı)
+│       │   ├── ilerleme.md        # Ortak proje ilerleyişi
+│       │   ├── is_listesi.md      # Ortak iş listesi
+│       │   ├── backlog.md         # Ortak backlog
+│       │   ├── kurallar.md        # Ortak kurallar
+│       │   ├── takilmalar.md      # Ortak takılınan noktalar
+│       │   ├── is_notlari.md      # Ortak iş notları
+│       │   ├── notlar.md          # Ortak genel notlar
+│       │   └── mimari_kararlar.md # Ortak gelişen mimari kararlar
 │       └── <kullanıcı>/
 │           ├── current.md         # Çalışılan modül, ne yapacak, ilerleme
-│           └── analiz.md          # Kişisel analiz taslağı
+│           ├── analiz.md          # Kişisel analiz taslağı
+│           ├── ilerleme.md        # Kişinin proje ilerleyişi
+│           ├── is_listesi.md      # Aktif iş listesi
+│           ├── backlog.md         # Sonra yapılacaklar
+│           ├── kurallar.md        # Kişinin keşfettiği kurallar
+│           ├── takilmalar.md      # Takılınan noktalar
+│           ├── is_notlari.md      # Oturum bazlı teknik notlar
+│           ├── notlar.md          # Genel notlar, fikirler
+│           └── mimari_kararlar.md # Çalışma sırasında ortaya çıkan mimari kararlar
 ├── shared/
 │   └── <ProjeA>--<ProjeB>/        # Bağlantılı proje çiftleri için ortak alan
 │       └── shared.md
@@ -67,13 +88,18 @@ Yeni bir karar alındığında buraya eklenir.
 │   ├── referans_projects.md       # Master liste: tüm projeler, platform, tech, özet
 │   ├── projects_data/             # Ham proje klasörleri (kullanılınca silinecek)
 │   ├── projects_data_ayristirilmis/
-│   │   └── <anonim_isim>/         # Yapısal dosyalar, hassas bilgi temizlenmiş
+│   │   └── <anonim_isim>/         # Yapısal pattern dosyaları (domain genellikle çıkarılmış)
+│   │       ├── klasor_yapisi.md
+│   │       ├── controller_pattern.cs / .ts
+│   │       ├── persistence_pattern.md
+│   │       └── ... (proje yapısına göre değişir)
 │   ├── projects_data_base_hali/
 │   │   ├── angular_base/          # Angular base proje (sarj_qr_web baz alınmış)
 │   │   └── dotnet_base/           # .NET base proje (sarj_backend_dotnet baz alınmış)
-│   └── <anonim_isim>/
-│       ├── analiz.md              # Detaylı analiz ve çıkarımlar
-│       └── rules.md               # Bu projeden çıkarılan kurallar
+│   └── analiz/
+│       └── <anonim_isim>/
+│           ├── analiz.md          # Detaylı analiz — GERÇEK KOD İÇERİR (domain-intact, secret-stripped)
+│           └── rules.md           # Bu projeden çıkarılan tekrar edilebilir kurallar
 ```
 
 ---
@@ -105,46 +131,57 @@ Yeni bir karar alındığında buraya eklenir.
 - Akış: planlama → (kesinleşince) → havuz → (iş alınınca) → yapilacaklar
 - Proje üstü genel tasks klasörü yok, sadece proje bazlı
 
+### Kullanıcı Rolleri (Proje Bazlı — Kartezyen Çarpım)
+Bir kişi farklı projeler için farklı rollere sahip olabilir. Rol bilgisi kullanıcı dosyasındaki `Projeler` tablosuna (Proje | Rol | Path) kaydedilir. Rol sorusu Adım 3'te gelir, proje seçiminden SONRA.
+
+Her rol klasörünün tam donanımı: `current.md`, `ilerleme.md`, `kurallar.md` (root) + `private/` (notlar, tartisma, taslaklar) + `public/` (role özgü çıktılar).
+
+- `gelistirici` — kişi bazlı, `current_md/<proje>/<isim>/`. Path sorulur.
+- `analiz_uzmani` — klasör adı `is_analisti/`. `public/`: analizler, gereksinimler, akislar, sorular, tasklar, test_senaryolari
+- `tester` — `public/`: test_senaryolari, bug_raporlari, test_sonuclari, regression_listesi, cozulmus_buglar
+- `task_uzmani` — `public/`: tasklar, sprintler, bug_tasklari, backlog, tartismalar. Ayrıca `tasks/<proje>/`
+- `tasarimci` — `public/`: tasarimlar, komponentler, stiller, kullanici_akislari, prototipler
+- `arge_muhendisi` — Araştırma, PoC, teknoloji değerlendirme. `public/`: arastirmalar, prototipler, teknik_raporlar, teknoloji_degerlendirme, oneriler
+- `yazilim_mimari` — ADR, mimari tasarım. `public/`: mimariler, kararlar, entegrasyon_desenleri, mimari_dokumanlar. `mimari_gelisen.md` güncelleme yetkisi bu roldedir.
+- `kalite_muhendisi` — Kalite standartları, metrikler, teknik borç. `public/`: kalite_raporlari, standartlar, metrikler, teknik_borc
+- `yonetici` — Tip bazlı (Adım 3 atlanır). `public/`: ilerleme_raporu, is_atamalari, sprint_plani, riskler, toplanti_notlari
+
+> Rol tanımları ve klasör yapıları: `rules/roller/<rol>.md`
+
 ### Agent Akışı (main.md)
-1. Kullanıcıyı belirle
-2. Proje seç (yoksa ekle, path yoksa al)
-3. Mod seç: Geliştirme / Analiz / Domainsel kural tanımlama / İş ekleme
+1. Kullanıcıyı belirle (isim + tip: normal / yonetici) — rol SORULMAZ
+2. Proje seç (yoksa ekle)
+3. Proje bazlı rol göster/sor (yönetici hariç); gelistirici rolüyse path al
+4. Role göre bağlam yükle
+5. Role göre mod menüsü göster
 
 ### Referans Proje Sistemi
 - Ham proje klasörleri `projects_data/<ProjeAdı>/` altına bırakılır (karışık, sırasız olabilir)
 - Agent `projects_data/` tarar → platform, tech stack, yapı çıkarır → `referans_projects.md` doldurur
-- Her referans proje için `referansProject/<ProjeAdı>/analiz.md` ve `rules.md` oluşturulur
-- `analiz.md`: mimari kararlar, dikkat çeken desenler, çıkarımlar (detaylı)
-- `rules.md`: bu projeden üretilen, geliştirme sırasında uygulanabilir kurallar
+- Her referans proje için `referansProject/analiz/<ProjeAdı>/analiz.md` ve `rules.md` oluşturulur
+- `analiz.md`: detaylı mimari analiz + **gerçek domain kod blokları** (domain-intact, secret-stripped — parola/env/connectionstring yok)
+- `rules.md`: bu projeden üretilen, geliştirme sırasında uygulanabilir kurallar (kod örnekli)
+- `projects_data_ayristirilmis/<ProjeAdı>/`: yapısal pattern dosyaları (bazıları domain-stripped, bazıları domain-intact)
 - Hem yapı kurulumu sırasında hem `main.md` agent akışında (geliştirme modu) bu dosyalar okunabilir/güncellenebilir
 - Kullanıcı sözlü olarak da ekleme yapabilir, agent ilgili `analiz.md` / `rules.md` günceller
+- **Kullanım:** "Bu sayfayı şu referans projedeki gibi yap" denildiğinde → `analiz/` altındaki ilgili analiz.md okunur, kod bloğu referans alınır
 
----
+### project_Design Klasörü
+- Backend hariç frontend projeler için merkezi design alanı: `project_Design/<ProjeAdı>/`
+- Kapsam: RestaurantSystemPanel, RestaurantSystemQr
+- **Okuma:** Tüm roller
+- **Yazma:** `tasarimci` (tüm klasörler), `arge_muhendisi` (arge_design/), `analiz_uzmani` (design_metni, arayuz_aciklamalari)
+- Yapı:
+  - `design_kurallari.md` — renk, tipografi, boşluk, komponent standartları
+  - `design_metni.md` — tasarımın ruh/ton/kimlik metin hali (analiz_uzmani yazar)
+  - `arayuz_aciklamalari.md` — her ekran ve bileşenin detaylı açıklaması
+  - `example_design/` — referans/ilham alınan ham tasarımlar (screenshot, link)
+  - `example_design_duzenlenmis/` — notlanmış, uyarlama kararları eklenmiş referanslar
+  - `mevcut_design/` — projenin gerçek mevcut tasarım durumu
+  - `arge_design/` — arge mühendisinin deneysel tasarım araştırmaları
+  - `gecici/` — geçici/çer çöp dosyalar, periyodik temizlenir
 
-## 2026-05-05 — RestaurantSystemBackend Faz 1 Foundation (muhammed_ali)
-
-Detay: `current_md/RestaurantSystemBackend/mimari_gelisen.md`. Özet:
-
-### Domain Yerleşimi
-- Entity'ler: `src/Core/Persistences/Api.Persistence/Domain/Entities/<Modül>/`
-- Konfig'ler: `src/Core/Persistences/Api.Persistence/Domain/Configurations/<Modül>/`
-- Sebep: `RestaurantDbContext` `ApplyConfigurationsFromAssembly` kullanıyor (entity ve config aynı assembly'de).
-
-### Base Sınıflar
-- Framework `BaseEntity` korunur (Id + Deleted).
-- Yeni `AuditedEntity : BaseEntity` (CreatedAt + UpdatedAt) — tüm tenant verileri buradan türer.
-- `ITenantOwned`, `IBranchOwned` interface'leri (multi-tenant scoping için).
-
-### Para / Lokalizasyon
-- Money: `decimal(18,4)` + 3 char ISO 4217 currency.
-- Language code: 5 char (örn `tr-TR`).
-
-### Identity Bölünmesi
-- `User`, `Role`, `Permission`, `UserRole`, `RolePermission` → `Api.Persistence`.
-- `RefreshToken` → `Token.Persistence`. İki context aynı SQL Server DB'sine bakıyor (logical bounded contexts).
-
-### Soft Delete
-- Tüm entity konfigürasyonlarında `HasQueryFilter(x => !x.Deleted)`.
-
-### Tenant Scope
-- Global tenant filter altyapısı interface ile hazır; `TenantResolver` service eklenince aktive edilecek.
+### Git & Branch Stratejisi
+- Pull alırken conflict varsa yerel değişiklikler öncelikli: `git pull -X ours`
+- Periyodik push hedefi: `said_local` branch'i
+- Branch isimlendirme: `<kullanıcıAdı>_local` formatı (ali-laptop-local, muhammedali_local, said_local)

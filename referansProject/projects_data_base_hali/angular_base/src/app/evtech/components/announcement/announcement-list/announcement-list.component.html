@@ -1,0 +1,99 @@
+<!-- Kaynak: E:\Projeler\Angular\EvTechPanelAltunkaya\src\app\evtech\components\announcement\announcement-list\announcement-list.component.html -->
+<div class="card card-custom gutter-b">
+  <div class="card-header">
+    <div class="card-title">
+      <h3 class="card-label">Duyuru Listesi</h3>
+    </div>
+    <div class="card-toolbar">
+      <a (click)="onNewBtnClicked()" type="button" class="btn btn-primary ml-2" matTooltip="Yeni Duyuru Ekle">
+        Yeni Duyuru Ekle
+      </a>
+    </div>
+  </div>
+  <div class="card-body">
+    <!-- begin: Filtering-->
+    <div class="row">
+      <div class="form col-md-12" style="margin-bottom: 15px;">
+        <div class="form-group">
+          <div class="row">
+            <div class="col-lg-4">
+              <mat-form-field class="example-full-width">
+                <mat-label>Baslik</mat-label>
+                <input [(ngModel)]="searchCriterAnnouncement.data.title" matInput>
+              </mat-form-field>
+            </div>
+            <div class="col-lg-4">
+              <mat-form-field class="example-full-width">
+                <mat-label>Icerik</mat-label>
+                <input [(ngModel)]="searchCriterAnnouncement.data.content" matInput>
+              </mat-form-field>
+            </div>
+            <div class="col-lg-4" style="display:flex">
+              <div class="button-row float-right">
+                <button mat-raised-button matTooltip="Filtrele" color="primary" type="button" (click)="getAnnouncements(true)">Filtrele</button>&nbsp;
+                <button mat-raised-button matTooltip="Temizle" color="accent" type="button" (click)="clearParameters()">Temizle</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- end: Filtering -->
+    <div class="mat-table__wrapper table-responsive angular-bootstrap-table">
+      <mat-table #sortAnnouncementTable="matSort" [dataSource]="announcementList" matSort>
+        <ng-container matColumnDef="Id">
+          <mat-header-cell [style.flex]="'0 0 10%'" *matHeaderCellDef>#</mat-header-cell>
+          <mat-cell [style.flex]="'0 0 10%'" *matCellDef="let row">{{row.id}}</mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="Picture">
+          <mat-header-cell [style.flex]="'0 0 20%'" *matHeaderCellDef>Gorsel</mat-header-cell>
+          <mat-cell [style.flex]="'0 0 20%'" *matCellDef="let row">
+            <img src="{{row.mediaGuiId | imageSrc}}" />
+          </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="Title">
+          <mat-header-cell [style.flex]="'0 0 20%'" *matHeaderCellDef mat-sort-header>Baslik</mat-header-cell>
+          <mat-cell [style.flex]="'0 0 20%'" *matCellDef="let row">{{row.title}}</mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="Content">
+          <mat-header-cell [style.flex]="'0 0 30%'" *matHeaderCellDef mat-sort-header>Icerik</mat-header-cell>
+          <mat-cell [style.flex]="'0 0 30%'" style="padding: 10px 30px 10px 0px;" *matCellDef="let row">{{row.content}}</mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="State">
+          <mat-header-cell [style.flex]="'0 0 10%'" *matHeaderCellDef>Durumu</mat-header-cell>
+          <mat-cell [style.flex]="'0 0 10%'" *matCellDef="let row">
+            <section class="example-section">
+              <mat-slide-toggle (change)="changeActiveStateDialog(row.id,row.state,$event)" class="example-margin" [color]="'primary'" [checked]="row.state">
+              </mat-slide-toggle>
+            </section>
+          </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="Edit">
+          <mat-header-cell [style.flex]="'0 0 10%'" *matHeaderCellDef></mat-header-cell>
+          <mat-cell [style.flex]="'0 0 10%'" *matCellDef="let row">
+            <button mat-button [matMenuTriggerFor]="menu">
+              <mat-icon aria-hidden="false">dehaze</mat-icon>
+            </button>
+            <mat-menu #menu="matMenu">
+              <button mat-menu-item (click)="onEditBtnClicked(row.id)">Duzenle</button>
+              <button mat-menu-item (click)="removeDialog(row.id)">Kaldir</button>
+            </mat-menu>
+          </mat-cell>
+        </ng-container>
+        <mat-header-row *matHeaderRowDef="showingColumnNamesAnnouncementTable"></mat-header-row>
+        <mat-row [ngClass]="{'high-light': rIndex % 2 == 0}" *matRowDef="let row; columns: showingColumnNamesAnnouncementTable; let rIndex = index;"></mat-row>
+      </mat-table>
+    </div>
+    <!-- end: Table -->
+    <!-- begin: Pagination -->
+    <div class="mat-table__bottom row">
+      <div class="col-md-2">
+        <span>Kayit sayisi: <b>{{totalRecordSizeAnnouncementTable}}</b></span>
+      </div>
+      <div class="col-md-10">
+        <mat-paginator #paginatorAnnouncementTable [pageSize]="15" [pageSizeOptions]="[10, 15, 30]" [showFirstLastButtons]="true" [length]="totalRecordSizeAnnouncementTable">
+        </mat-paginator>
+      </div>
+    </div>
+  </div>
+</div>

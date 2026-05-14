@@ -1,29 +1,28 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
-import { AuthGuard } from './core/guards/auth.guard';
+// Kaynak: E:\Projeler\Angular\EvTechPanelAltunkaya\src\app\app-routing.module.ts
 
-const routes: Routes = [
+import { NgModule } from '@angular/core';
+import { Routes, RouterModule } from '@angular/router';
+import { AuthGuard } from './shared_admin/auth/auth.guard';
+
+
+export const routes: Routes = [
   {
     path: 'auth',
     loadChildren: () =>
-      import('./features/auth/auth.module').then((m) => m.AuthModule)
+      import('./evtech/components/auth/auth-module').then((m) => m.AuthModule),
   },
   {
     path: '',
     canActivate: [AuthGuard],
     loadChildren: () =>
-      import('./features/dashboard/dashboard.module').then(
-        (m) => m.DashboardModule
-      )
+      import('./shared_admin/layout.module').then((m) => m.LayoutModule),
   },
-  {
-    path: '**',
-    redirectTo: ''
-  }
+  { path: '**', loadChildren: () =>
+  import('./shared_admin/template/error-pages/error-page.module').then((m) => m.ErrorPageModule) },
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AppRoutingModule {}
+export class AppRoutingModule { }

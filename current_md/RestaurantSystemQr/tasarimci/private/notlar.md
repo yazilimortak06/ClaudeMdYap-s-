@@ -1,0 +1,3 @@
+# RestaurantSystemQr — tasarimci Özel Notlar
+
+---

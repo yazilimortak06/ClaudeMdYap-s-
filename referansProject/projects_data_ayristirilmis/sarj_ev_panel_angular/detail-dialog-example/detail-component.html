@@ -1,0 +1,126 @@
+<!-- Kaynak: E:\Projeler\Angular\EvTechPanelAltunkaya\src\app\evtech\components\chargeManagment\charge-detail-partial\charge-detail-partial.component.html -->
+<!-- Pattern: Detail Dialog HTML — widget card'lar (KW, Tutar, Süre), enum-based CSS class pipe,
+  mat-dialog-close butonu, currency pipe, date pipe, tablo ile detay alanları -->
+
+  <div class="card card-custom gutter-b">
+    <div class="card-header">
+        <div class="card-title">
+          <h2 class="card-label"> İşlem Detayı
+            <br>
+          <h5 style="margin-top:15px" class="label label-lg label-inline label-{{ chargeDetail.state | chargeStateCss }}">
+            {{chargeStateMapping[chargeState[chargeDetail.state]]}}
+          </h5>
+        </h2>
+        </div>
+        <div class="card-toolbar">
+            <div class="float-right">
+              <!-- Dialog kapatma butonu -->
+              <mat-icon mat-dialog-close >clear</mat-icon>
+            </div>
+        </div>
+      </div>
+    <div class="card-body">
+        <!-- Widget kartları — dinamik background ve text CSS class -->
+        <div class="row">
+            <div class="col-md-4">
+                <div
+                style="border-radius:0.625rem;background-color: #2c75e3 !important;"
+                class="card card-custom bg-"
+                [ngClass]="loadedKwCssClass"
+                [ngStyle]="{ height: loadedKwWidgetHeight }"
+              >
+                <div class="card-body">
+                  <mat-icon style="font-size:35px !important;color: white;" class="svg-icon svg-icon-3x svg-icon-white ml-n2">battery_charging_full</mat-icon>
+                  <div [ngClass]="loadedKwTextInverseCSSClass" class="font-weight-bolder font-size-h2 mt-3">
+                    {{chargeDetail.loadedKW}} Kw
+                  </div>
+                  <a [ngClass]="loadedKwTextInverseCSSClass" class="font-weight-bold font-size-lg mt-1">Toplam Harcanılan Kw</a>
+                </div>
+              </div>
+              </div>
+              <div class="col-md-4">
+                <div
+                style="border-radius:0.625rem;background-color: rgb(255, 144, 9) !important;"
+                class="card card-custom bg-"
+                [ngClass]="calculatedPriceCssClass"
+                [ngStyle]="{ height: calculatedPriceWidgetHeight }"
+              >
+                <div class="card-body">
+                    <mat-icon style="font-size:35px !important;color: white;" class="svg-icon svg-icon-3x svg-icon-white ml-n2">attach_money</mat-icon>
+                    <div [ngClass]="calculatedPriceTextInverseCSSClass" class="font-weight-bolder font-size-h2 mt-3">
+                      <!-- currency pipe — TRY sembolü ile fiyat gösterimi -->
+                      {{chargeDetail.calculatedPrice|currency:"TRY":"symbol"}}
+                    </div>
+                  <a [ngClass]="calculatedPriceTextInverseCSSClass" class="font-weight-bold font-size-lg mt-1">Toplam Hesaplanan Tutar</a>
+                </div>
+              </div>
+              </div>
+              <div class="col-md-4">
+                <div
+                style="border-radius:0.625rem;background-color: rgba(58, 199, 58, 0.952) !important;"
+                class="card card-custom bg-"
+                [ngClass]="calculatedPriceCssClass"
+                [ngStyle]="{ height: calculatedPriceWidgetHeight }"
+              >
+                <div class="card-body">
+                    <mat-icon style="font-size:35px !important;color: white;" class="svg-icon svg-icon-3x svg-icon-white ml-n2">av_timer</mat-icon>
+                    <div [ngClass]="calculatedPriceTextInverseCSSClass" class="font-weight-bolder font-size-h2 mt-3">
+                      {{chargeDetail.processingTime}}
+                    </div>
+                  <a [ngClass]="calculatedPriceTextInverseCSSClass" class="font-weight-bold font-size-lg mt-1">İşlem Süresi</a>
+                </div>
+              </div>
+              </div>
+         </div>
+         <!-- Detay tablo — renkli arka plan ile alan/değer çiftleri -->
+         <div class="row">
+            <table>
+                <tr>
+                    <td style="background-color: #1decff7d;border-color: #1decff7d;">İstasyon İsmi</td>
+                    <td style="background-color: #1decff2e;border-color: #1decff2e;">{{chargeDetail.stationName}}</td>
+                </tr>
+                <tr>
+                    <td style="background-color: #1decff7d;border-color: #1decff7d;">Cihaz İsmi</td>
+                    <td style="background-color: #1decff2e;border-color: #1decff2e;">{{chargeDetail.deviceName}}</td>
+                </tr>
+                <tr>
+                    <td style="background-color: #1decff7d;border-color: #1decff7d;">Soket İsmi/Numarası</td>
+                    <td style="background-color: #1decff2e;border-color: #1decff2e;">{{chargeDetail.connectorName}} / {{chargeDetail.connectorNumber}}</td>
+                </tr>
+                <tr>
+                    <td style="background-color: #1decff7d;border-color: #1decff7d;">İstasyon Adresi</td>
+                    <td style="background-color: #1decff2e;border-color: #1decff2e;">{{chargeDetail.stationAddress}}</td>
+                </tr>
+                <tr>
+                    <td style="background-color: #4dff427d;border-color: #4dff427d;">Kullanıcı Ad-Soyad</td>
+                    <td style="background-color: #4dff4238;border-color: #4dff4238;">{{chargeDetail.userName}} {{chargeDetail.userSurname}}</td>
+                </tr>
+                <tr>
+                    <td style="background-color: #4dff427d;border-color: #4dff427d;">Kullanıcı Telefon Numarası</td>
+                    <td style="background-color: #4dff4238;border-color: #4dff4238;">{{chargeDetail.phone}}</td>
+                </tr>
+                <tr>
+                    <td style="background-color: #ffd1427d;border-color: #ffd1427d;">İşlem Başlangıç Tarihi</td>
+                    <td style="background-color: #ffd1423d;border-color: #ffd1423d;">
+                      <!-- date pipe — Türk tarih formatı -->
+                      {{chargeDetail.startDate| date :'dd/MM/yyyy HH:mm:ss' }}
+                    </td>
+                </tr>
+                <tr>
+                    <td style="background-color: #ffd1427d;border-color: #ffd1427d;">İşlem Bitiş Tarihi</td>
+                    <td style="background-color: #ffd1423d;border-color: #ffd1423d;">
+                      <div *ngIf="chargeDetail.processEndDate ">
+                        {{chargeDetail.processEndDate| date :'dd/MM/yyyy HH:mm:ss' }}
+                      </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="background-color: #ffd1427d;border-color: #ffd1427d;">Son Güncellenme Tarihi</td>
+                    <td style="background-color: #ffd1423d;border-color: #ffd1423d;">
+                        {{chargeDetail.lastUpdateDate| date :'dd/MM/yyyy HH:mm:ss' }}
+                    </td>
+                </tr>
+              </table>
+         </div>
+    </div>
+  </div>

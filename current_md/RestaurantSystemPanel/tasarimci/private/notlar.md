@@ -1,0 +1,3 @@
+# RestaurantSystemPanel — tasarimci Özel Notlar
+
+---

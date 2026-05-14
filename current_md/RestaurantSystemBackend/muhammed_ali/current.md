@@ -1,10 +1,10 @@
-# muhammed_ali — RestaurantSystemBackend
+# RestaurantSystemBackend — Muhammed Ali — Aktif Çalışma
 
-## Çalışılan Modül / Konu
+## Çalışılan Modül
+(Henüz görev alınmadı)
 
-Faz 1 Foundation — Veritabanı + Domain Entities + EF Konfigürasyonu.
-
-## Ne Yapacak
+## Yapılacak
+(Görev alındığında burada ne yapılacağı detaylanır)
 
 `restaurant_saas_context` referansıyla aşağıdaki modüllerin entity'lerini ve EF mapping'lerini oluşturmak:
 
@@ -17,16 +17,6 @@ Faz 1 Foundation — Veritabanı + Domain Entities + EF Konfigürasyonu.
 Ek olarak `AuditedEntity`, `ITenantOwned` taban yapısı; `RestaurantDbContext` üzerinde DbSet'ler ve soft-delete global filter.
 
 ## İlerleme
+(Adım adım tamamlama durumu)
 
-- [x] Mimari karar (modular monolith, entity konumu, base classes)
-- [x] AuditedEntity + ITenantOwned eklendi
-- [x] Tenancy entity'leri (Tenant, Branch)
-- [x] Identity entity'leri
-- [x] Catalog entity'leri
-- [x] Menu entity'leri
-- [x] Subscription entity'leri
-- [x] EF Configuration'lar
-- [x] DbContext DbSet güncelleme + soft-delete global filter
-- [ ] Migration üretme (kullanıcı SQL Server connection string doğrulasın)
-- [ ] Seed data
-- [ ] Açık soruları tartışıp `ortak/analiz.md` kesinleştir
+## Notlar

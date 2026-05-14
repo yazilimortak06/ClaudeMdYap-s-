@@ -1,0 +1,120 @@
+# Kaynak: E:\Projeler\Backend\RotaWattBackEnd\docker-compose.yml
+#          E:\Projeler\Backend\RotaWattBackEnd\docker-compose.override.yml
+#
+# BASE ALTYAPI COMPOSE DOSYASI
+# Domain/business servisleri (mobil, web, station, ocpp vb.) çıkarılmıştır.
+# Sadece infrastructure servisleri ve temel cross-cutting concern servisleri bırakılmıştır:
+#   - rabbitmq     : Mesaj kuyruğu (event bus)
+#   - log.api      : Merkezi loglama servisi (request/response + exception log)
+#   - file.api     : Dosya yükleme, Excel/PDF oluşturma servisi
+#   - token.api    : JWT token ve yetkilendirme servisi
+#   - gateway.api  : API Gateway (opsiyonel, dış trafik yönetimi için)
+#
+# Kullanım: docker-compose -f docker-compose.base.yml up -d
+#
+# NOT: Gerçek projede SQL Server container yerine harici bir SQL Server kullanılmaktadır.
+#      appsettings.Prod.json dosyaları içindeki bağlantı bilgileri ile container dışı
+#      SQL Server'a bağlanılır. İsterseniz aşağıdaki sql.server servisini aktif edebilirsiniz.
+
+services:
+
+  # =============================================
+  # ALTYAPI SERVİSLERİ
+  # =============================================
+
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: rabbitmq
+    restart: always
+    environment:
+      - "RABBITMQ_DEFAULT_PASS=<RABBITMQ_PASSWORD>"
+      - "RABBITMQ_DEFAULT_USER=<RABBITMQ_USER>"
+    ports:
+      - "5672:5672"    # AMQP port
+      - "15672:15672"  # Management UI
+
+  # SQL Server (opsiyonel - harici DB kullanılıyorsa kaldırın)
+  # sql.server:
+  #   image: mcr.microsoft.com/mssql/server:2019-latest
+  #   container_name: sql.server
+  #   restart: always
+  #   environment:
+  #     - ACCEPT_EULA=Y
+  #     - SA_PASSWORD=<SA_PASSWORD>
+  #   ports:
+  #     - "1433:1433"
+
+  # =============================================
+  # CROSS-CUTTING CONCERN SERVİSLER
+  # =============================================
+
+  log.api:
+    image: <your-registry>/log.api:1
+    build:
+      context: .
+      dockerfile: src/Presentation/Log.Api/Dockerfile
+    container_name: log.api
+    restart: always
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Prod
+    ports:
+      - "8005:80"
+    depends_on:
+      - rabbitmq
+    logging:
+      options:
+        max-size: 50m
+
+  file.api:
+    image: <your-registry>/file.api:1
+    build:
+      context: .
+      dockerfile: src/Presentation/File.Api/Dockerfile
+    container_name: file.api
+    restart: always
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Prod
+    ports:
+      - "8099:80"
+    volumes:
+      # Yüklenen dosyaların host'ta kalıcı olması için volume mount
+      - ./Uploaded_Files:/app/Uploaded_Files
+    logging:
+      options:
+        max-size: 50m
+
+  token.api:
+    image: <your-registry>/token.api:1
+    build:
+      context: .
+      dockerfile: src/Presentation/Tocken.Api/Dockerfile
+    container_name: token.api
+    restart: always
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Prod
+    ports:
+      - "8097:80"
+    depends_on:
+      - rabbitmq
+    logging:
+      options:
+        max-size: 50m
+
+  # =============================================
+  # API GATEWAY (opsiyonel)
+  # Tüm dış trafiği yönlendirmek için kullanılır.
+  # =============================================
+
+  # gateway.api:
+  #   image: <your-registry>/gateway.api:1
+  #   build:
+  #     context: .
+  #     dockerfile: src/Presentation/GateWay.Api/Dockerfile
+  #   container_name: gatewayapi
+  #   environment:
+  #     - ASPNETCORE_ENVIRONMENT=Prod
+  #   ports:
+  #     - "5080:80"
+  #   logging:
+  #     options:
+  #       max-size: 50m

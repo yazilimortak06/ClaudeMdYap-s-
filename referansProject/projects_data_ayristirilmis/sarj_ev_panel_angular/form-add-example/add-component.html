@@ -1,0 +1,42 @@
+<!-- Kaynak: E:\Projeler\Angular\EvTechPanelAltunkaya\src\app\evtech\components\campaign\campaign-add\campaign-add.component.html -->
+<!-- Pattern: Add Form HTML — mat-horizontal-stepper, PixdinnDropzone, ngFor ile multi-language content inputs -->
+
+<mat-horizontal-stepper linear #stepper>
+    <mat-step  label="Kampanya İçeriği">
+
+      <form #form2="ngForm"  >
+        <ng-container >
+          <div class="row">
+            <PixdinnDropzone style="width: 100%;"  #addCampaignPictureDropzone [isSingleFileSelectable] = "true" [multiple]="false" [accept]="'*'" [title]="'Kampanya Resmi'"></PixdinnDropzone>
+          </div>
+          <hr style="width: 100%;"/>
+          <div class="row" *ngFor="let contentLanguage of contentInputs; let i = index">
+            <div class="col-md-1" style="margin:auto;text-align:end">
+              <label>
+                {{contentLanguage.description}}
+              </label>
+            </div>
+
+            <div class="col-md-11">
+              <mat-form-field  class="col-md-12">
+                <mat-label>Başlık</mat-label>
+                <input matInput value="{{contentLanguage.campaignTitle}}"  [(ngModel)]="contentLanguage.campaignTitle" [name]="'campaignTitle'+i"      >
+              </mat-form-field>
+              <mat-form-field  class="col-md-12">
+                <mat-label>İçerik</mat-label>
+                <input matInput value="{{contentLanguage.campaignContent}}" [(ngModel)]="contentLanguage.campaignContent" [name]="'campaignContent'+i"   >
+              </mat-form-field>
+
+            </div>
+            <hr style="width: 100%;"/>
+          </div>
+
+        </ng-container>
+
+        <div class="form-button-group col-md-12">
+          <button mat-button (click)="save();">Kaydet</button>
+        </div>
+      </form>
+    </mat-step>
+
+  </mat-horizontal-stepper>

@@ -1,10 +1,12 @@
 # ali
 
-- **Kullanıcı adı:** ali
+- **İsim:** ali
+- **Tip:** normal
 
-## Proje Pathler
+## Projeler
 
-| Proje | Local Path |
-|-------|------------|
-| RestaurantSystemBackend | C:\AliProjeler\RestaurantSystemBackend |
-| RestaurantSystemPanel | C:\AliProjeler\RestaurantSystemPanel |
+| Proje | Rol | Path |
+|-------|-----|------|
+| RestaurantSystemBackend | - | - |
+| RestaurantSystemPanel | - | - |
+| RestaurantSystemQr | - | - |

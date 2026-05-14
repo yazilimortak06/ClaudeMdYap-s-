@@ -1,0 +1,15 @@
+# RestaurantSystemBackend — muhammed_ali İlerleme
+
+## Genel Durum
+- Başlangıç: -
+- Son güncelleme: -
+- Genel ilerleme: %0
+
+## Tamamlananlar
+-
+
+## Devam Edenler
+-
+
+## Duraklayanlar
+-

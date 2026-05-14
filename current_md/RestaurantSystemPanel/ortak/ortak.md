@@ -1,8 +1,9 @@
-# RestaurantSystemPanel — Ortak
+# RestaurantSystemPanel — Ortak Durum
 
-Her commit/push sonrası güncellenir.
+Her commit/push sonrası güncellenir. Genel ilerleme ve son değişiklikler.
 
-## Son Değişiklikler
+## Son Güncelleme
+(Henüz güncelleme yok — proje başlangıç aşamasında)
 
 ### 2026-05-06 — Auth Ekranları (ali)
 - `AuthService`, `AuthInterceptor`, `AuthGuard`, `NoAuthGuard` yazıldı.
@@ -16,9 +17,8 @@ Her commit/push sonrası güncellenir.
 - Angular build: 0 hata.
 
 ## Genel İlerleme
-
-- [x] Auth ekranları (login, dashboard)
-- [x] Oturum yönetimi (localStorage, APP_INITIALIZER, guard'lar)
-- [x] Toast bildirim sistemi
-- [x] Lazy load routing
-- [ ] Diğer yönetim ekranları (tenant, branch, kullanıcı vs.)
+- [ ] Altyapı kurulumu
+- [ ] Temel CRUD endpoint'leri
+- [ ] Auth entegrasyonu
+- [ ] SignalR hub
+- [ ] Docker ortamı

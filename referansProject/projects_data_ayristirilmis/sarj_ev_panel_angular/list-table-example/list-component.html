@@ -1,0 +1,124 @@
+<!-- Kaynak: E:\Projeler\Angular\EvTechPanelAltunkaya\src\app\evtech\components\campaign\campaign-list\campaign-list.component.html -->
+<!-- Pattern: List/Table HTML — mat-table, matSort, matPaginator, filter inputs, mat-slide-toggle, mat-menu aksiyon,
+  | imageSrc pipe ile görsel, slide-toggle ile state yönetimi -->
+
+  <div class="card card-custom gutter-b">
+    <div class="card-header">
+      <div class="card-title">
+        <h3 class="card-label">Kampanya Listesi</h3>
+      </div>
+      <div class="card-toolbar">
+        <a (click)="onNewBtnClicked()" type="button" class="btn btn-primary ml-2" matTooltip="Yeni Kampanya Ekle">
+          Yeni Kampanya Ekle
+        </a>
+      </div>
+    </div>
+    <div class="card-body">
+       <!-- begin: Filtering-->
+       <div class="row">
+        <div class="form col-md-12" style="margin-bottom: 15px;">
+          <div class="form-group ">
+            <div class="row">
+              <div class="col-lg-4">
+                <mat-form-field class="example-full-width">
+                  <mat-label>Başlık</mat-label>
+                  <input [(ngModel)]="searchCriterCampaign.data.title" matInput>
+                </mat-form-field>
+              </div>
+              <div class="col-lg-4">
+                <mat-form-field class="example-full-width">
+                  <mat-label>İçerik</mat-label>
+                  <input [(ngModel)]="searchCriterCampaign.data.content" matInput>
+                </mat-form-field>
+              </div>
+              <div class="col-lg-4" style="margin: auto;display:flex">
+                <div class="button-row float-right">
+                  <button mat-raised-button matTooltip="Filtrele" color="primary"
+                    type="button" (click)="getCampaigns(true)">Filtrele</button>&nbsp;
+                  <button mat-raised-button matTooltip="Temizle" color="accent" type="button"
+                    (click)="clearParameters()">Temizle</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- end: Filtering -->
+      <div class="mat-table__wrapper">
+
+        <mat-table #sortCampaignTable="matSort" [dataSource]="campaignList" matSort>
+
+          <ng-container matColumnDef="Id">
+            <mat-header-cell [style.flex]="'0 0 10%'" *matHeaderCellDef>#</mat-header-cell>
+            <mat-cell [style.flex]="'0 0 10%'" *matCellDef="let row">{{row.id}}</mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="Picture">
+            <mat-header-cell [style.flex]="'0 0 20%'" *matHeaderCellDef >Görsel</mat-header-cell>
+            <mat-cell [style.flex]="'0 0 20%'" *matCellDef="let row">
+              <!-- imageSrc custom pipe — guid'i tam URL'e çeviriyor -->
+              <img src="{{row.mediaGuiId | imageSrc}}" />
+            </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="Title">
+            <mat-header-cell [style.flex]="'0 0 20%'" *matHeaderCellDef mat-sort-header>Başlık</mat-header-cell>
+            <mat-cell [style.flex]="'0 0 20%'" *matCellDef="let row">{{row.title}} </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="Content">
+            <mat-header-cell [style.flex]="'0 0 30%'" *matHeaderCellDef mat-sort-header>İçerik</mat-header-cell>
+            <mat-cell [style.flex]="'0 0 30%'" style="padding: 10px 30px 10px 0px;" *matCellDef="let row">{{row.content}} </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="State">
+            <mat-header-cell [style.flex]="'0 0 10%'" *matHeaderCellDef >Durumu</mat-header-cell>
+            <mat-cell [style.flex]="'0 0 10%'" *matCellDef="let row">
+              <section class="example-section">
+                <!-- MatSlideToggle ile aktif/pasif durumu yönetimi — onay dialog'lu -->
+                <mat-slide-toggle
+                  (change)="changeActiveStateDialog(row.id,row.state,$event)"
+                    class="example-margin"
+                    [color]="'primary'"
+                    [checked]="row.state"
+                    >
+                </mat-slide-toggle>
+              </section>
+            </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="Edit">
+            <mat-header-cell [style.flex]="'0 0 10%'" *matHeaderCellDef> </mat-header-cell>
+            <mat-cell [style.flex]="'0 0 10%'" *matCellDef="let row">
+                <!-- mat-menu ile satır bazlı aksiyon -->
+                <button mat-button [matMenuTriggerFor]="menu">
+                    <mat-icon aria-hidden="false">dehaze</mat-icon>
+                </button>
+                <mat-menu #menu="matMenu">
+                    <button mat-menu-item (click)="onEditBtnClicked(row.id)">Düzenle</button>
+                    <button mat-menu-item (click)="removeDialog(row.id)">Kaldır</button>
+                </mat-menu>
+            </mat-cell>
+          </ng-container>
+
+          <mat-header-row *matHeaderRowDef="showingColumnNamesCampaignTable"></mat-header-row>
+          <mat-row [ngClass]="{'high-light': rIndex % 2 == 0 }"
+            *matRowDef="let row; columns: showingColumnNamesCampaignTable; let rIndex = index;">
+          </mat-row>
+
+        </mat-table>
+      </div>
+      <!-- end: Table -->
+      <!-- begin: Pagination -->
+      <div class="mat-table__bottom row">
+        <div class="col-md-2">
+          <span>Kayıt sayısı: <b>{{totalRecordSizeCampaignTable}}</b></span>
+        </div>
+        <div class="col-md-10">
+          <mat-paginator #paginatorCampaignTable [pageSize]="15" [pageSizeOptions]="[10, 15, 30]"
+            [showFirstLastButtons]="true" [length]="totalRecordSizeCampaignTable">
+          </mat-paginator>
+        </div>
+      </div>
+    </div>
+  </div>

@@ -1,201 +1,358 @@
-# dijital_menu_angular — Çıkarılan Kurallar
+# dijital_menu_angular — Geliştirme Kuralları
 
-Bu dosya, projeyi analiz ederek çıkarılan tekrar edilebilir kural ve pattern'leri içerir.
-Backend bağımlılığı olmayan public Angular site geliştirirken referans olarak kullanılabilir.
+Bu dosya, gerçek projeden çıkarılan, yeni proje geliştirirken uygulanması gereken kuralları ve code pattern'lerini içerir.
 
 ---
 
-## 1. Public Site — Backend Gerektirmeyen Yapı
+## Kural 1: Environment'a Hardcoded Değer Yazma
 
-**Kural:** Statik içerik sunan public sitelerde backend API maliyetinden kaçınmak için emailJS veya benzeri SaaS form servislerini kullan.
+Her API URL, siteKey, endpoint mutlaka `environment.ts` üzerinden okunmalıdır.
 
-**Kural:** emailJS entegrasyon şablonu:
+**YANLIS:**
 ```typescript
-import emailjs from 'emailjs-com';
+ServerUrl = 'https://metropolitanhost.com/scripts/sendmail.php';
+```
 
-sendEmail(formData: ContactForm): Observable<boolean> {
-  return from(
-    emailjs.send(
-      environment.emailjsServiceId,
-      environment.emailjsTemplateId,
-      {
-        from_name: formData.name,
-        reply_to: formData.email,
-        message: formData.message
-      },
-      environment.emailjsUserId
-    )
-  ).pipe(
-    map(() => true),
-    catchError(() => of(false))
-  );
+**DOGRU:**
+```typescript
+// environment.ts
+export const environment = {
+  production: false,
+  contactApiUrl: 'https://metropolitanhost.com/scripts/sendmail.php',
+  recaptchaSiteKey: '6LdxUhMaAAAAAIrQt-_6Gz7F_58S4FlPWaxOh5ib'
+};
+
+// service içinde:
+import { environment } from 'src/environments/environment';
+ServerUrl = environment.contactApiUrl;
+```
+
+```html
+<!-- Template içinde de: -->
+<re-captcha [siteKey]="siteKey" ...></re-captcha>
+<!-- component.ts'de: siteKey = environment.recaptchaSiteKey; -->
+```
+
+---
+
+## Kural 2: Contact Form — Model-Driven Yaklaşım ile Yazılmalı
+
+Template-driven form (`[(ngModel)]`) ile reactive form (`FormGroup`) karıştırılmamalı. Reactive form tercih edilmeli.
+
+**Bu projede kullanılan pattern (template-driven, kabul edilebilir):**
+```typescript
+export class Contact {
+    id: number | undefined;
+    name: string | undefined;
+    email: string | undefined;
+    phone?: string | undefined;
+    subject: string | undefined;
+    message: string | undefined;
+    recaptcha: string | undefined;
+}
+```
+```html
+<form (ngSubmit)="onSubmit()" #contactForm="ngForm">
+  <input type="text" name="name" [(ngModel)]="model.name" required>
+  <button [disabled]="!contactForm.form.valid">Submit</button>
+</form>
+```
+
+**Tercih edilen reactive form alternatifi:**
+```typescript
+this.contactForm = this.fb.group({
+  name: ['', Validators.required],
+  email: ['', [Validators.required, Validators.email]],
+  phone: ['', Validators.required],
+  subject: ['', Validators.required],
+  message: ['', Validators.required],
+  recaptcha: ['', Validators.required]
+});
+```
+
+---
+
+## Kural 3: HTTP Service handleError Arrow Function Kullan
+
+`private handleError(error)` metodu class method olarak tanımlandığında `this` bağlamı kaybolur.
+
+**YANLIS:**
+```typescript
+private handleError(error: HttpErrorResponse) {
+    // this.errorData burada undefined olabilir
+    this.errorData = { ... };
+    return throwError(this.errorData);
 }
 ```
 
-**Kural:** emailJS credentials (serviceId, templateId, userId) `environment.ts` ve `environment.prod.ts`'de tutulsun. Component içinde hardcode edilmemeli.
-
-**Kural:** emailJS rate limit vardır (free plan: 200 email/ay). Yüksek trafik beklenen formlarda ücretli plan veya alternatif değerlendir.
+**DOGRU:**
+```typescript
+private handleError = (error: HttpErrorResponse) => {
+    this.errorData = { ... };
+    return throwError(() => this.errorData);
+};
+```
 
 ---
 
-## 2. reCAPTCHA Entegrasyonu
+## Kural 4: reCAPTCHA invisible Entegrasyon Pattern'i
 
-**Kural:** Public formlarda `ng-recaptcha` ile Google reCAPTCHA v2 ekle:
+Invisible reCAPTCHA kullanımı için standart pattern:
+
+```typescript
+// app.module.ts imports[]:
+RecaptchaModule,
+RecaptchaFormsModule
+
+// Contact model'e ekle:
+recaptcha: string | undefined;
+
+// Component metodu:
+resolved(captchaResponse: string) {
+  this.model.recaptcha = captchaResponse;
+  // Gerekirse console.log kaldırılmalı:
+  // console.log(`Resolved response token: ${captchaResponse}`);
+}
+```
 
 ```html
-<re-captcha (resolved)="onCaptchaResolved($event)" [siteKey]="siteKey">
+<re-captcha
+  (resolved)="resolved($event)"
+  name="recaptcha"
+  [(ngModel)]="model.recaptcha"
+  [siteKey]="recaptchaSiteKey"
+  size="invisible">
 </re-captcha>
 ```
 
+**Not:** `size="invisible"` — kullanıcı arayüzde görmez, form submit'te otomatik tetiklenir.
+
+---
+
+## Kural 5: Layout Bileşenlerini Merkezi Shell'e Taşı
+
+Her sayfa içine `<app-navbar>` ve `<app-footer>` koymak yerine merkezi bir shell component kullan.
+
+**Bu projede (tekrarlayan, kötü pattern):**
+```html
+<!-- her page template'inde: -->
+<app-navbar></app-navbar>
+<!-- sayfa içeriği -->
+<app-footer1></app-footer1>
+```
+
+**Tercih edilen pattern:**
 ```typescript
-onCaptchaResolved(token: string) {
-  this.captchaToken = token;
-}
+// shell.component.html
+<app-navbar></app-navbar>
+<router-outlet></router-outlet>
+<app-footer1></app-footer1>
 
-submitForm() {
-  if (!this.captchaToken) {
-    // CAPTCHA tamamlanmadan gönderme
-    return;
-  }
-  // form gönder
-}
-```
-
-**Kural:** reCAPTCHA site key `environment.ts`'de sakla. Secret key backend'de olmalı — client-side'da kullanılmaz.
-
----
-
-## 3. Monolithic Module — Ne Zaman Kabul Edilebilir
-
-**Kural:** Şu koşullarda tek AppModule (eager loading) tercih edilebilir:
-- 10'dan az sayfa
-- Route tabanlı code splitting gerekmiyorsa
-- Initial bundle boyutu < 500KB ise
-- Kullanıcı tüm sayfaları ziyaret edecekse
-
-**Kural:** Site 20+ sayfaya büyüyecekse baştan lazy loading mimarisini kur. Sonradan geçiş maliyetlidir.
-
-**Kural:** Sayfa sayısı > 15 olursa feature module ayrımı yap:
-```
-AppModule
-├── RestaurantModule (lazy)
-├── MenuModule (lazy)
-├── ContactModule (lazy)
-└── SharedModule (eager — layout component'ları)
-```
-
----
-
-## 4. PathLocationStrategy — Sunucu Konfigürasyonu
-
-**Kural:** `useHash: false` (PathLocationStrategy) kullanan Angular uygulamaları için mutlaka sunucu konfigürasyonu ekle.
-
-**Kural:** Nginx:
-```nginx
-server {
-    listen 80;
-    root /usr/share/nginx/html;
-    index index.html;
-
-    location / {
-        try_files $uri $uri/ /index.html;
-    }
+// routing:
+{
+  path: '',
+  component: ShellComponent,
+  children: [
+    { path: '', component: HomeComponent },
+    { path: 'contact', component: ContactComponent },
+  ]
 }
 ```
 
-**Kural:** Apache (.htaccess):
-```apache
-<IfModule mod_rewrite.c>
-    RewriteEngine On
-    RewriteBase /
-    RewriteRule ^index\.html$ - [L]
-    RewriteCond %{REQUEST_FILENAME} !-f
-    RewriteCond %{REQUEST_FILENAME} !-d
-    RewriteRule . /index.html [L]
-</IfModule>
-```
-
-**Kural:** GitHub Pages, Netlify, Vercel gibi static hosting platformları bunu otomatik yönetir. `_redirects` (Netlify) veya `vercel.json` konfigürasyonu ekle.
-
 ---
 
-## 5. Pages ve Layouts Ayrımı
+## Kural 6: Contact Form Başarı Kontrolü id'ye Değil status'e Bağla
 
-**Kural:** Public sitede `pages/` ve `layouts/` klasörlerini ayır:
-
+**YANLIS (kırılgan):**
+```html
+<div *ngIf="model.id">...</div>
 ```
-src/app/
-├── pages/          — Rota component'ları (bir URL = bir sayfa component)
-├── layouts/        — Çerçeve component'ları (header, footer, sidebar, nav)
-└── shared/         — Tekrar kullanılan UI parçaları (card, button vb.)
-```
+Backend id dönmezse başarı mesajı hiç gösterilmez.
 
-**Kural:** Layout component'ları `<router-outlet>` içersin. Sayfalar layout içine yüklenir:
+**DOGRU:**
 ```typescript
-const routes: Routes = [
-  {
-    path: '',
-    component: MainLayoutComponent,  // layouts/ içinden
-    children: [
-      { path: '', component: HomePageComponent },       // pages/ içinden
-      { path: 'menu', component: MenuPageComponent },
-      { path: 'contact', component: ContactPageComponent }
-    ]
-  }
-];
-```
+// component.ts
+submitted = false;
+submitSuccess = false;
+error: any = null;
 
-**Kural:** Farklı sayfa grupları için farklı layout kullanılabilir (örn: tam ekran menü sayfası, yan menüsüz galeri sayfası).
-
----
-
-## 6. Template Bazlı Geliştirme
-
-**Kural:** HTML/CSS template kullanılıyorsa Angular'a entegrasyon sırasında şunlara dikkat et:
-- Template'deki ID ve class adlarını değiştirme (CSS bozulur)
-- Template'deki global script referanslarını `angular.json`'da `scripts[]` array'ine ekle
-- `assets/` klasörüne template media dosyalarını ekle
-
-**Kural:** Template'den gelen CSS `styles.scss`'e import et:
-```scss
-@import "assets/template/css/bootstrap.min.css";
-@import "assets/template/css/theme.css";
-```
-
-**Kural:** Template'deki jQuery bağımlılıklarını Angular direktiflere dönüştür. jQuery ile Angular DOM manipülasyonu çakışır.
-
----
-
-## 7. UI Kütüphanesi Seçimi
-
-**Kural:** Angular Material ve @ng-bootstrap'i birlikte kullanmaktan kaçın. Birini seç:
-- `@angular/material` — Material Design, Google ekosistemi
-- `@ng-bootstrap` — Bootstrap tabanlı, jQuery bağımlılığı yok
-
-**Kural:** Public site (kullanıcı-facing) için template uyumlu kütüphane seç. Admin panelde Material, public sitede Bootstrap daha yaygın kullanılır.
-
----
-
-## 8. SEO için Başlık ve Meta Tag Yönetimi
-
-**Kural:** Public site SEO gerektirir. Her sayfa için başlık ve meta description güncelle:
-```typescript
-constructor(
-  private title: Title,
-  private meta: Meta
-) {}
-
-ngOnInit() {
-  this.title.setTitle('Restoran Adı - Dijital Menü');
-  this.meta.updateTag({
-    name: 'description',
-    content: 'Lezzetli yemekler, online menü...'
+onSubmit() {
+  this.contactService.contactForm(this.model).subscribe({
+    next: () => { this.submitSuccess = true; },
+    error: (err) => { this.error = err; }
   });
 }
 ```
-
-**Kural:** Social media paylaşımları için Open Graph tag'leri ekle:
-```typescript
-this.meta.updateTag({ property: 'og:title', content: 'Restoran Adı' });
-this.meta.updateTag({ property: 'og:image', content: 'https://...' });
+```html
+<div *ngIf="submitSuccess" class="contact-success">
+  <ngb-alert type="success" [dismissible]="false">
+    <strong>Success!</strong> Contact form submitted.
+  </ngb-alert>
+</div>
+<div *ngIf="error" class="service-error">
+  <ngb-alert type="danger" [dismissible]="false">
+    <strong>Oops!</strong> Something bad happened.
+  </ngb-alert>
+</div>
 ```
+
+---
+
+## Kural 7: Routing — Wildcard Route En Sonda Olmalı
+
+```typescript
+const routes: Routes = [
+  { path: '', component: HomeComponent },
+  // ... diğer rotalar
+  { path: 'error-page', component: ErrorPageComponent },
+  { path: '**', component: ErrorPageComponent }  // MUTLAKA EN SONDA
+];
+```
+
+---
+
+## Kural 8: PathLocationStrategy — Server Rewrite Unutma
+
+`PathLocationStrategy` (hash-less URL) kullandığında nginx veya Apache konfigürasyonu gerekir:
+
+**nginx örneği:**
+```nginx
+location / {
+  try_files $uri $uri/ /index.html;
+}
+```
+
+**Alternatif: HashLocationStrategy (daha basit deploy):**
+```typescript
+// app.module.ts providers[]:
+{ provide: LocationStrategy, useClass: HashLocationStrategy }
+// URL: example.com/#/contact
+```
+
+---
+
+## Kural 9: Tekrarlayan Banner Component'larını Parametrik Yap
+
+**YANLIS (3 ayrı component, kod tekrarı):**
+```html
+<app-advertisementbanner></app-advertisementbanner>
+<app-advertisementbanner1></app-advertisementbanner1>
+<app-advertisementbanner2></app-advertisementbanner2>
+```
+
+**DOGRU (tek parametrik component):**
+```typescript
+@Component({ selector: 'app-advertisement-banner' })
+export class AdvertisementBannerComponent {
+  @Input() imageUrl: string;
+  @Input() linkUrl: string;
+  @Input() altText: string;
+}
+```
+```html
+<app-advertisement-banner imageUrl="..." linkUrl="..." altText="..."></app-advertisement-banner>
+```
+
+---
+
+## Kural 10: throwError RxJS 7+ Uyumlu Kullanım
+
+```typescript
+// YANLIS (RxJS 7+ deprecated):
+return throwError(this.errorData);
+
+// DOGRU:
+return throwError(() => this.errorData);
+// veya:
+return throwError(() => new Error('Something went wrong'));
+```
+
+---
+
+## Kural 11: routerLinkActive ile Exact Match
+
+Aktif rota için hem `routerLinkActive` hem `routerLinkActiveOptions` kullan:
+
+```html
+<a routerLink="/"
+   routerLinkActive="active"
+   [routerLinkActiveOptions]="{exact: true}">
+  Landing Page
+</a>
+
+<!-- exact: true olmadan "/" tüm alt rotaları da aktif görür -->
+<a routerLink="/contact"
+   routerLinkActive="active"
+   [routerLinkActiveOptions]="{exact: true}">
+  Contact
+</a>
+```
+
+---
+
+## Kural 12: NgbModule — Alert Bileşeni Kullanımı
+
+ng-bootstrap alert bileşeni için `[dismissible]="false"` ile kullanıcı kapatmasını engelle:
+
+```html
+<!-- Hata mesajı -->
+<ngb-alert type="danger" class="mb-0 w-100" [dismissible]="false">
+  <strong>Oops!</strong> Something bad happened. Please try again later.
+</ngb-alert>
+
+<!-- Başarı mesajı -->
+<ngb-alert type="success" class="mb-0 w-100" [dismissible]="false">
+  <strong>Success!</strong> Form has been successfully submitted.
+</ngb-alert>
+```
+
+`type` değerleri: `"success"`, `"danger"`, `"warning"`, `"info"`, `"primary"`, `"secondary"`.
+
+---
+
+## Kural 13: providedIn: 'root' Servis Tanımı
+
+Uygulama genelinde kullanılacak servisler `providedIn: 'root'` ile tanımlanmalı — AppModule providers[] içine eklemeye gerek kalmaz:
+
+```typescript
+@Injectable({
+  providedIn: 'root'
+})
+export class ContactService {
+  constructor(private http: HttpClient) { }
+  // ...
+}
+```
+
+---
+
+## Kural 14: AppModule'da Location Strategy Kayıt Biçimi
+
+```typescript
+providers: [
+  Location,
+  {
+    provide: LocationStrategy,
+    useClass: PathLocationStrategy  // veya HashLocationStrategy
+  }
+]
+```
+
+`Location` servisi de providers'a eklenmeli — bazı component'lar Location servisini inject edebilir.
+
+---
+
+## Özet — Yeni Projede Yapılacaklar
+
+| Konu | Eylem |
+|---|---|
+| API URL | environment.ts'e taşı |
+| reCAPTCHA siteKey | environment.ts'e taşı |
+| handleError | Arrow function yap |
+| throwError | `() =>` factory kullan |
+| Başarı kontrolü | id yerine boolean flag kullan |
+| Layout | Shell component + router-outlet pattern |
+| Banner bileşenleri | Tek parametrik component yap |
+| Slider | ngx-swiper-wrapper veya Angular uyumlu paket kullan |
+| relativeLinkResolution | Kaldır (Angular 13+ desteklemiyor) |
+| Server deploy | nginx try_files ekle |

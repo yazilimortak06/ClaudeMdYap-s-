@@ -1,13 +1,6 @@
-# RestaurantSystemPanel — Muhammed Ali Logs
+# RestaurantSystemPanel — Muhammed Ali Log
 
-Muhammed Ali'nin panel projesindeki işlem geçmişi.
+Commit/push bazlı işlem geçmişi. Her önemli değişiklik kısa satırla kaydedilir.
 
-Format:
-```
-## [Tarih Saat] İşlem Başlığı
-**Yapılan:** Ne yapıldı?
-**Durum:** Tamamlandı / Devam ediyor / Askıda
-```
-
----
-
+## Log Şablonu
+[TARİH] | [Konu] | [Kısa açıklama]

@@ -1,11 +1,12 @@
 # muhammed_ali
 
-- **Kullanıcı adı:** muhammed_ali
+- **İsim:** muhammed_ali
+- **Tip:** normal
 
-## Proje Pathler
+## Projeler
 
-| Proje | Path |
-|-------|------|
-| RestaurantSystemBackend | C:\Users\maliy\projeler\RestaurantSystemBackend |
-| RestaurantSystemPanel   | C:\Users\maliy\projeler\RestaurantSystemPanel |
-| RestaurantSystemQr      | C:\Users\maliy\projeler\RestaurantSystemQr |
+| Proje | Rol | Path |
+|-------|-----|------|
+| RestaurantSystemBackend | - | - |
+| RestaurantSystemPanel | - | - |
+| RestaurantSystemQr | - | - |

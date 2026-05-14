@@ -1,0 +1,3 @@
+# Notlar — Arge Mühendisi (RestaurantSystemQr)
+
+---

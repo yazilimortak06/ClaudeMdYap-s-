@@ -1,8 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
+  KAYNAK: E:\Projeler\Backend\QrMenu\pixdinn2\PixdinnQrMenu\PixDinn\Web.config
   web.config.template — qr_menu_mvc
-  Hassas bilgiler [PLACEHOLDER] ile değiştirilmiştir.
-  Gerçek değerleri production sunucusunda ayarlayın.
+  Hassas bilgiler MASKELENDI / [PLACEHOLDER] ile değiştirilmiştir.
+
+  GERÇEK BAĞLANTI ÖZELLİKLERİ (maskelendi):
+    data source      = 213.159.x.x  (production sunucu IP)
+    initial catalog  = pixdinn
+    user id          = pixdinn  (MASKED)
+    password         = xxxxxxxx (MASKED)
+
+  LOCAL geliştirme:
+    data source = DESKTOP-QSS6NQF\MSSQLSERVERALI
+    integrated security = True
+
+  Entity Framework sürümü: 6.0
+  Target framework: .NET 4.7.2
+  Max request length: 1 GB (maxAllowedContentLength=1073741824)
 -->
 <configuration>
   <configSections>

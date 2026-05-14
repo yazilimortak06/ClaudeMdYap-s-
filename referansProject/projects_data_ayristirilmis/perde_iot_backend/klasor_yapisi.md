@@ -3,6 +3,34 @@
 ## Genel Bakış
 .NET 8 ASP.NET MVC tabanlı IoT perde kontrol sistemi. BaseStartup kalıtımı, Autofac DI ve Service/ServiceInterface katman ayrımı içerir. Web arayüzü (Views) ve servis katmanı aynı projede yer alır.
 
+## Gercek Kod Dosyalari (Kaynaktan Alinmis)
+
+Asagidaki dosyalar `E:\Projeler\Backend\PixdinnPerdeci\PixdinnPerdeci` kaynagindan alinmistir:
+
+| Dosya | Aciklama |
+|---|---|
+| `Program.cs` | Autofac DI, assembly tarama, startup zinciri |
+| `Startup.cs` | ConfigureServices + Configure, BaseStartup kalitimi |
+| `Bases/StartupBase/BaseStartup.cs` | ConfigureBuilderInit, CORS, GetAppSettingValue |
+| `Bases/StartupBase/ApiConfigureBaseContainerExtensions.cs` | Autofac: *Service siniflari AsImplementedInterfaces kaydeder |
+| `Bases/Models/ApiOptions.cs` | RegistrationAssemblies, ApiName, HubListSignalR |
+| `Controllers/HomeController.cs` | Index, Privacy, Error action'lari |
+| `Models/ErrorViewModel.cs` | RequestId + ShowRequestId |
+| `ServiceInterfaces/IServicePlaceholder.cs` | Henuz bos iskelet - gelecek interface'ler buraya |
+| `Services/ServicePlaceholder.cs` | Henuz bos iskelet - gelecek servisler buraya |
+| `appsettings.json` | Logging, AllowedHosts, hassas alanlar maskelenmis |
+
+### Onemli Mimari Notlar (Gercek Projeden)
+
+1. **Autofac + AutoMapper**: `Program.cs`'de `UseServiceProviderFactory(new AutofacServiceProviderFactory())` ile Autofac devreye girer; `ApiConfigureBaseContainerExtensions.ConfigureServices()` assembly taramasi yapar.
+2. **Assembly filtreleme**: Sadece `PixdinnPerdeci` veya `Shared` ile baslayan DLL'ler taranir.
+3. **Service kaydi otomasyonu**: `t.Name.EndsWith("Service")` ile biten tum siniflar interface'leriyle otomatik inject edilir.
+4. **BaseStartup kalitimi**: `Startup` sinifi `BaseStartup`'tan turetilir; `ProjectPrefix` appsettings'ten alinir.
+5. **CORS**: `ConfigureBuilderInit` icinde `app.UseCors("_myAllowSpecificOrigins")` cagrilir (politika tanimi baska bir yerde).
+6. **ServiceInterfaces/Services klasorleri**: Gercek projede henuz sadece bos iskelet siniflar var — domain servisleri baska assembly'de olabilir.
+
+
+
 ---
 
 ## Ana Proje Yapısı

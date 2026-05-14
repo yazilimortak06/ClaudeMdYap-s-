@@ -1,0 +1,24 @@
+  <!--begin::destek-talep-bildirim-sayısı-->
+  <ng-container *ngIf="admin.panelAdminUserType == adminUserType.ADMIN_USER || admin.panelAdminUserType == adminUserType.ROOT_ADMIN_USER ">
+    <div class="topbar-item">
+      <div class="btn btn-icon btn-icon-mobile btn-clean btn-lg mr-1 pulse pulse-primary" id="support_notification_partial_toggle">
+        <span [inlineSVG]="'./assets/media/Mail-heart.svg'" cacheSVG="true"
+          class="svg-icon svg-icon-xl svg-icon-primary"></span>
+          <span class="top-bar-notification-count-span">{{this.supportNotificationList$.getValue().length}}</span>
+          <span class="pulse-ring"></span>
+      </div>
+    </div>
+  </ng-container>
+  <!--end::destek-talep-bildirim-sayısı-->
+    <!--begin::kullanıcı-->
+    <div class="topbar-item">
+      <div class="btn btn-icon btn-icon-mobile w-auto btn-clean d-flex align-items-center btn-lg px-2"
+        id="user_partial_toggle">
+        <span style="display: inherit !important;" class="text-muted font-weight-bold font-size-base d-none d-md-inline mr-1">Merhaba,</span>
+        <span
+          class="text-dark-50 font-weight-bolder font-size-base d-none d-md-inline mr-3" style="display: inherit !important;">{{ admin.name }} {{admin.surname}}</span>
+        <span class="symbol symbol-lg-35 symbol-25 symbol-light-success" style="display: inherit !important;">
+        </span>
+      </div>
+    </div>
+    <!--end::kullanıcı-->

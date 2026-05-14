@@ -1,6 +1,8 @@
-# RestaurantSystemBackend — Agent
+# RestaurantSystemBackend — Agent Bağlamı
 
 ## Proje Bağlamı
+.NET 8 Clean Architecture backend. RestaurantSystem paneli ve QR uygulamasına servis sunar.
+Tech: .NET 8 | EF Core | SQL Server | Autofac | MassTransit+RabbitMQ | SignalR | JWT | Docker
 
 Multi-tenant, modüler monolith restoran SaaS backend.
 Stack: .NET 5.0 + EF Core 5.0.9 + SQL Server + Autofac DI.
@@ -11,6 +13,9 @@ Stack: .NET 5.0 + EF Core 5.0.9 + SQL Server + Autofac DI.
 Detay için: `current_md/RestaurantSystemBackend/mimari_gelisen.md`.
 
 ## Aktif Görev
+(Henüz görev alınmadı — havuz.md'den görev seçilmesi bekleniyor)
+
+## Son Çalışma Notları
 
 **Aktif görev yok — auth sistemi tamamlandı.**
 
@@ -35,6 +40,5 @@ Bir sonraki adım: Faz 1 Extension (Order snapshot, Tables, QR codes) veya açı
 - IIS Express launchSettings (44301/44302/44303)
 
 ## Bağlı Projeler ile Paylaşılan
-
 - Shared klasör: `shared/RestaurantSystemBackend--RestaurantSystemPanel/`
 - Shared klasör: `shared/RestaurantSystemBackend--RestaurantSystemQr/`

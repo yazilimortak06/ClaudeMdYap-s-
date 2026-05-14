@@ -1,0 +1,3 @@
+# Yazılım Mimarı Kuralları — RestaurantSystemQr
+
+---

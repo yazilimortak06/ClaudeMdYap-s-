@@ -24,7 +24,10 @@
       "PowerShell(New-Item -ItemType Directory *)",
       "PowerShell(ls *)",
       "Skill(update-config)",
-      "Bash(git checkout *)"
+      "Bash(git checkout *)",
+      "PowerShell(Get-ChildItem -Path \"E:\\\\Projeler\\\\ClaudeMdProje\\\\RestoranSistemleri\" -Recurse -Depth 3 | Where-Object { $_.PSIsContainer } | Select-Object FullName | Sort-Object FullName)",
+      "PowerShell(Get-ChildItem \"E:\\\\Projeler\\\\ClaudeMdProje\\\\RestoranSistemleri\\\\current_md\" -Recurse | ForEach-Object { $_.FullName }esi a rolü iç22)",
+      "PowerShell(Get-ChildItem \"E:\\\\Projeler\\\\ClaudeMdProje\\\\RestoranSistemleri\\\\current_md\\\\RestaurantSystemPanel\" -Recurse | ForEach-Object { $_.FullName.Replace\\(\"E:\\\\Projeler\\\\ClaudeMdProje\\\\RestoranSistemleri\\\\current_md\\\\RestaurantSystemPanel\\\\\", \"\"\\) })"
     ]
   }
 }

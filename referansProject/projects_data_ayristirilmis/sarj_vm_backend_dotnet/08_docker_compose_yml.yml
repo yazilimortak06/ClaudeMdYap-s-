@@ -1,0 +1,42 @@
+# KAYNAK: E:\Projeler\Backend\rotawattvmbackend-develop (1)\rotawattvmbackend-develop\docker-compose.yml
+# Credentials maskelendi (RABBITMQ_DEFAULT_PASS, RABBITMQ_DEFAULT_USER gizlendi)
+# Servisler: gateway.api, rabbitmq, vm.api, vmpanel.api, vmlog.api
+
+services:
+
+  gateway.api:
+    image: rotawatt/gatewayapi:1
+    build:
+      context: .
+      dockerfile: src/Presentation/GateWay.Api/Dockerfile
+
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    environment:
+      - "RABBITMQ_DEFAULT_PASS=***MASKED***"
+      - "RABBITMQ_DEFAULT_USER=***MASKED***"
+
+  vm.api:
+    image: rotawatt/vm:1
+    build:
+      context: .
+      dockerfile: src/Presentation/Vm.Api/Dockerfile
+
+  vmpanel.api:
+    image: rotawatt/vmpanel:1
+    build:
+      context: .
+      dockerfile: src/Presentation/VmPanel.Api/Dockerfile
+
+  vmlog.api:
+    image: rotawatt/vmlog:1
+    build:
+      context: .
+      dockerfile: src/Presentation/VmLog.Api/Dockerfile
+
+# NOTLAR:
+# - vm.api: WebSocket OCPP endpoint (device bağlantıları buraya gelir)
+# - vmpanel.api: REST API panel
+# - vmlog.api: Log servisi (RabbitMQ consumer)
+# - gateway.api: Ocelot gateway (dış traffic buradan yönlendiriliyor)
+# - rabbitmq: Log mesajları için message broker

@@ -1,0 +1,275 @@
+@* KAYNAK: E:\Projeler\Backend\QrMenu\pixdinn2\PixdinnQrMenu\PixDinn\Views\AdminKategori\addKategori.cshtml *@
+@model PixDinn.Models.AdminModels.AdminViewModels.AdminKategoriViewModel
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    Response.Cache.SetCacheability(HttpCacheability.NoCache);
+    Response.Cache.AppendCacheExtension("no-store, must-revalidate");
+    Response.AppendHeader("Pragma", "no-cache");
+    Response.AppendHeader("Expires", "0");
+    var urlHelper = new UrlHelper(Html.ViewContext.RequestContext);
+    string baseUrl = urlHelper.Content("~");
+    bool aktif = true;
+}
+
+<!-- Page header -->
+@{Html.RenderAction("PageHeaderBlock", "AdminBlock", new PixDinn.Models.AdminModels.AdminGlobalModels.AdminPageHeaderModel()
+    { pagetitles = Model.pagetitles });}
+<!-- /page header -->
+@{Html.RenderAction("AlertDialog", "AdminHelper");}
+@{Html.RenderAction("MediaSelectDialog", "Media");}
+
+<div class="page-container">
+    <div class="page-content">
+        <div class="content-wrapper">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="panel panel-white">
+                        <div class="panel-heading">
+                            <h6 class="panel-title">Kategori Ekle/Düzenle</h6>
+                        </div>
+                        @using (Ajax.BeginForm("addKategori", "AdminKategori", FormMethod.Post, new AjaxOptions { OnSuccess = "OnSuccess", OnBegin = "OnBegin", OnComplete = "OnComplete" }, htmlAttributes: new { @class = "stepy-callbacks", @id = "kategoriForm" }))
+                        {
+                            @Html.AntiForgeryToken()
+                            @Html.HiddenFor(m => m.id, new { id = "kategoriId" })
+                            @Html.HiddenFor(m => m.mekanId, new { id = "mekanId" })
+                            @Html.HiddenFor(m => m.ustId, new { id = "kategoriUstId" })
+                            @Html.HiddenFor(m => m.kategoriLevel, new { id = "kategoriLevel" })
+                            @Html.HiddenFor(m => m.kategoriResmi, new { id = "kategoriResimId" })
+                            @Html.HiddenFor(m => m.kategoriResmiUrl, new { id = "kategoriResimUrl" })
+                            @Html.HiddenFor(m => m.infoJsonValue, new { id = "infoJson" })
+                            @Html.HiddenFor(m => m.formType)
+
+                            <fieldset title="1">
+                                <legend class="text-semibold">Kategori İçeriği</legend>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label>Kategori Url</label>
+                                            @Html.TextBoxFor(modelitem => Model.kategoriUrl, new { Type = "text", Class = "form-control", Id = "kategoriUrl" })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tabbable">
+                                    <ul class="nav nav-xs nav-tabs nav-tabs-solid nav-tabs-component" style="background-color:white;margin-bottom:0px;">
+                                        @foreach (var item in Model.languages)
+                                        {
+                                            <li class="@(aktif?"active":"")"><a href="#kategoriInfoTab-@(item.Value)" data-toggle="tab" class="legitRipple">@item.Text</a></li>
+                                            aktif = false;
+                                        }
+                                    </ul>
+                                    <div class="tab-content">
+                                        @{ aktif = true;}
+                                        @foreach (var item in Model.languages)
+                                        {
+                                            <input type="hidden" id="infoPictureId-@(item.Value)" value="0"/>
+                                            <input type="hidden" id="subInfoPictureId-@(item.Value)" value="0"/>
+                                            <div class="@(aktif ? "active" : "") tab-pane" id="kategoriInfoTab-@(item.Value)">
+                                                <div class="dilTabContainer" data-id="@item.Value">
+                                                    <div class="panel panel-flat">
+                                                        <div class="panel-body">
+                                                            <div class="row">
+                                                                <div class="col-md-12">
+                                                                    <div class="form-group" id="language-container">
+                                                                        <label>Kategori İsmi</label>
+                                                                        <input type="text" id="KategoriIsmi" class="form-control" />
+                                                                        <input type="text" id="InfoId" style="display:none;" value="0" />
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-12">
+                                                                    <div class="form-group">
+                                                                        <label>Kategori Başlığı</label>
+                                                                        <input type="text" id="KategoriTitle" class="form-control" />
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-12">
+                                                                    <div class="form-group">
+                                                                        <label>Resim:</label><br />
+                                                                        <div style="width:300px;min-height:300px;border:2px dashed #ddd;">
+                                                                            <img id="infoPicture-@(item.Value)" style="width:100%;height:auto;" />
+                                                                        </div><br />
+                                                                        <button type="button" onclick="resimSecInfo(@(item.Value))" class="btn bg-teal-400 btn-labeled"><b><i class="icon-file-media"></i></b> Resim Seçiniz</button>
+                                                                        <button type="button" onclick="resimKaldirInfo(@(item.Value))" class="btn btn-danger"><b><i class="icon-x"></i></b> Resmi Kaldır</button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            aktif = false;
+                                        }
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <fieldset title="2">
+                                <legend class="text-semibold">Kategori Resim Bilgileri</legend>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label>Resim:</label><br />
+                                            <div style="width:300px;min-height:300px;border:2px dashed #ddd;">
+                                                <img id="kategoriResim" style="width:100%;height:auto;" />
+                                            </div><br />
+                                            <button type="button" onclick="resimSec()" class="btn bg-teal-400 btn-labeled"><b><i class="icon-file-media"></i></b> Resim Seçiniz</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <fieldset title="3">
+                                <legend class="text-semibold">Kategori Bilgileri</legend>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label>Mekan</label>
+                                            @Html.DropDownListFor(x => x.mekanId, Model.mekanlar, new { @class = "select", @disabled = true })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label>Durumu</label>
+                                            @Html.DropDownListFor(x => x.state, Model.kategoriState, new { @class = "select" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <button style="display:none;" id="submitButton"></button>
+                            <button type="button" onclick="addKategoriAction();" class="btn btn-primary stepy-finish">Kaydet <i class="icon-check position-right"></i></button>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function initForm() {
+        if ($("#kategoriId").val() != 0) {
+            var obj = JSON.parse($("#infoJson").val());
+            for (var i = 0; i < obj.length; i++) {
+                $("[data-id=" + obj[i].languageId + "]").find("#KategoriIsmi").val(obj[i].kategoriAdi);
+                $("[data-id=" + obj[i].languageId + "]").find("#InfoId").val(obj[i].id);
+                $("[data-id=" + obj[i].languageId + "]").find("#KategoriTitle").val(obj[i].title);
+                $("#infoPictureId-" + obj[i].languageId).val(obj[i].resimId);
+                $("#infoPicture-" + obj[i].languageId).attr("src", "/" + obj[i].resimUrl);
+                $("#subInfoPictureId-" + obj[i].languageId).val(obj[i].subResimId);
+                $("#subInfoPicture-" + obj[i].languageId).attr("src", "/" + obj[i].subResimInfoUrl);
+            }
+            var url = document.getElementById("kategoriResimUrl").value;
+            if (url != "") {
+                document.getElementById("kategoriResim").setAttribute("src", "/" + url);
+            }
+        }
+    };
+
+    $(function () {
+        $.fn.stepy.defaults.legend = false;
+        $.fn.stepy.defaults.transition = 'fade';
+        $.fn.stepy.defaults.duration = 150;
+        $.fn.stepy.defaults.backLabel = '<i class="icon-arrow-left13 position-left"></i> Geri';
+        $.fn.stepy.defaults.nextLabel = 'İleri <i class="icon-arrow-right14 position-right"></i>';
+
+        $(".stepy-callbacks").stepy({
+            next: function (index) {
+                formPrepare();
+                validatePost(index, "kategoriForm", "submitButton");
+                return false;
+            },
+            back: function (index) { },
+            finish: function () { return false; }
+        });
+
+        $('.stepy-step').find('.button-next').addClass('btn btn-primary');
+        $('.stepy-step').find('.button-back').addClass('btn btn-default');
+    });
+
+    function OnSuccess(result) {
+        if (result.IsSuccess == true) {
+            SuccessAlert(result.MessageTitle, result.MessageBody);
+            if (result.redirect == true) {
+                window.setTimeout(function () { parent.location = result.redirectUrl; }, 2500);
+            } else {
+                activeUi();
+            }
+        } else {
+            DangerAlert(result.MessageTitle, result.MessageBody);
+            if (result.redirect == true) {
+                window.setTimeout(function () { parent.location = result.redirectUrl; }, 2500);
+            } else {
+                activeUi();
+            }
+        }
+    }
+
+    function OnBegin() {}
+    function OnComplete() {}
+
+    function addKategoriAction() {
+        validation = false;
+        blockUi();
+        formPrepare();
+        $("#kategoriForm").attr('action', '/AdminKategori/addKategori');
+        document.getElementById("submitButton").click();
+    }
+
+    $(document).ready(function () {
+        if ($("#kategoriId").val() != 0) {
+            initForm();
+        }
+        $('.select').select2();
+    });
+
+    function formPrepare() {
+        getInfo();
+    }
+
+    function getInfo() {
+        var returning = [];
+        document.querySelectorAll(".dilTabContainer").forEach(function (item) {
+            var itemTemp = new Object();
+            itemTemp.kategoriAdi = item.querySelector("#KategoriIsmi").value;
+            itemTemp.title = item.querySelector("#KategoriTitle").value;
+            itemTemp.id = item.querySelector("#InfoId").value;
+            itemTemp.languageId = item.getAttribute("data-id");
+            itemTemp.resimId = $("#infoPictureId-" + itemTemp.languageId).val();
+            itemTemp.subResimId = $("#subInfoPictureId-" + itemTemp.languageId).val();
+            returning.push(itemTemp);
+        });
+        $("#infoJson").val(JSON.stringify(returning));
+    }
+
+    function resimSec() {
+        openMediaSelectModal("Kategori Resmi Seçiniz", null, function (action, selectedId, selectedUrl) {
+            if (action == "SELECTED") {
+                cropDataOrijinal("/" + selectedUrl, 300, 200, function (id, url) {
+                    document.getElementById("kategoriResim").setAttribute("src", url);
+                    document.getElementById("kategoriResimId").value = id;
+                }, $("#mekanId").val(), selectedId);
+            }
+        });
+    }
+
+    function resimSecInfo(languageId) {
+        openMediaSelectModal("Resim Seçiniz", null, function (action, selectedId, selectedUrl) {
+            if (action == "SELECTED") {
+                cropDataOrijinal("/" + selectedUrl, 300, 200, function (id, url) {
+                    document.getElementById("infoPicture-" + languageId).setAttribute("src", url);
+                    document.getElementById("infoPictureId-" + languageId).value = id;
+                }, $("#mekanId").val(), selectedId);
+            }
+        });
+    }
+
+    function resimKaldirInfo(languageId) {
+        var yesnocallback = function (result) {
+            if (result == true) {
+                document.getElementById("infoPicture-" + languageId).setAttribute("src", "");
+                document.getElementById("infoPictureId-" + languageId).value = 0;
+            }
+        };
+        YesNoAlert("Resmi Kaldır", "Resmi kaldırmak istiyormusunuz?", yesnocallback);
+    }
+</script>

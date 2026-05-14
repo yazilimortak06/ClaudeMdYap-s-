@@ -1,3 +1,6 @@
+# KAYNAK: E:\Projeler\Backend\PixdinnCrm\PixdinnCrmProjectBackEnd\docker-compose.yml
+# NOT: Credentials ve registry bilgileri MASKELENDI
+# Orijinal docker-compose.yml'de rabbitmq ve logdb (mongo) servisleri var
 version: "3.8"
 
 services:

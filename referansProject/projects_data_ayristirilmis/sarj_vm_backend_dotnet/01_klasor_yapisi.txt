@@ -1,0 +1,154 @@
+// KAYNAK: E:\Projeler\Backend\rotawattvmbackend-develop (1)\rotawattvmbackend-develop
+// Proje: VmBackend (OCPP Virtual Middleware - RotaWatt)
+
+KLASOR YAPISI
+=============
+
+src/
+  Core/
+    Applications/
+      Vm.Application/
+        Services/
+          ConnectionManagement/
+            VmConnectionService.cs                        (partial - ana dosya, ConnectionDevice, MainProcess)
+            VmConnectionService.Setup.cs                  (partial - Server/CPO WebSocket kurulum)
+            VmConnectionService.Listeners.cs             (partial - ListenServerMessages, ListenCpoMessages)
+            VmConnectionService.Reconnect.cs             (partial - CheckAndReconnect, ReconnectInBackground)
+            VmConnectionService.Monitoring.cs            (partial - Heartbeat monitor, ConnectionHealthMonitor)
+            VmConnectionService.Persistence.cs           (partial - DB save/update operations)
+            VmConnectionService.WebSocketSend.cs         (partial - SendDeviceMessageToCpo/Server, SendMessageToDevice)
+            VmConnectionService.CompensatingActions.cs   (partial - hata durumu compensating actions)
+            VmConnectionService.ConnectionLifecycle.cs  (partial - bağlantı yaşam döngüsü)
+            VmConnectionService.DeviceForwarding.cs      (partial - cihaz mesaj iletimi)
+            VmConnectionService.DeviceResponses.cs       (partial - cihaza yanıt gönderme)
+            VmConnectionService.MeterValuesReconnectDrain.cs (partial - bağlantı koptuğunda biriken MeterValues)
+            VmConnectionService.Reconciliation.cs        (partial - orphan transaction taraması)
+            VmConnectionService.ResponseProcessors.cs    (partial - CPO/Server yanıt işleme)
+            VmConnectionService.StartTransactionWait.cs  (partial - StartTransaction harici bekleme)
+            VmConnectionService.StopTransactionRetry.cs  (partial - StopTransaction retry)
+            VmConnectionService.Utility.cs               (partial - yardımcı metodlar)
+          AuthorizeManagement/
+          BootNotificationManagement/
+          CpoManagement/
+          DeviceManagement/
+          GetConfigurationManagement/
+          TransactionManagement/
+        Extentions/
+        Filters/
+        StaticServices/
+
+      VmLog.Application/
+        RabbitMq/
+          Consumers/
+            MiddleWareLog/
+              RequestResponseLogInfoConsumer.cs  (RabbitMQ consumer: log + exception kuyrukları)
+        Services/
+          ExceptionLogServices/
+          RequestResponseLogServices/
+        Extensions/
+
+      VmPanel.Application/
+        Services/
+          Authentication/
+          CpoManagement/
+          TockenHelperServices/
+          VmConnectorConnectionManagement/
+          VmConnectorManagement/
+          VmDeviceConnectionManagement/
+          VmDeviceManagement/
+          VmPanelAdminManagement/
+          VmPanelHomeManagement/
+          VmStationManagement/
+          VmTransactionManagement/
+        Extentions/
+        Filters/
+
+    Persistences/
+      Vm.Persistence/
+        DataSeed/
+        DbContext/
+        EntityFluent/
+        Migrations/
+        Repositories/
+          VmCommandMessageRepositories/
+          VmConnectorConnectionRepositories/
+          VmConnectorPowerTypeRepositories/
+          VmCpoConnectionRepositories/
+          VmCpoRepositories/
+          VmDeviceConnectionRepositories/
+          VmEvccIdRepositories/
+          VmIdTagRepositories/
+          VmPanelAdminRepositories/
+          VmParameterRepositories/
+          VmServerConnectionRepositories/
+          VmStationRepositories/
+          VmTransactionRepositories/
+
+      VmLog.Persistence/
+        DbContext/
+        Migrations/
+        Repositories/
+          ExceptionLogRepositories/
+          RequestResponseLogRepositories/
+
+  Presentation/
+    GateWay.Api/                  (Ocelot API Gateway)
+      ocelot.json
+      ocelot.Dev.json
+      ocelot.Development.json
+      ocelot.Local.json
+      ocelot.Prod.json
+      ocelot.Test.json
+
+    Vm.Api/                       (WebSocket OCPP endpoint)
+      Controllers/
+        MocppController.cs        (tek endpoint: /Mocpp/{Identifier})
+
+    VmLog.Api/
+      Controllers/
+        RequestResponseController.cs
+
+    VmPanel.Api/
+      Controllers/
+        AuthenticationController.cs
+        CpoManagementController.cs
+        VmConnectorConnectionManagementController.cs
+        VmConnectorManagementController.cs
+        VmDeviceConnectionManagementController.cs
+        VmDeviceManagementController.cs
+        VmPanelAdminManagementController.cs
+        VmPanelHomeManagementController.cs
+        VmStationManagementController.cs
+        VmTransactionManagementController.cs
+
+  Shared/
+    Shared.Domain/
+      Entities/
+        VmEntities/
+          VmCommandMessageModule/    VmCommandMessage.cs
+          VmConnectionModule/        VmConnectorConnection.cs, VmCpoConnection.cs, VmDeviceConnection.cs, VmServerConnection.cs
+          VmCpoModule/               VmCpo.cs, VmConnector.cs, VmConnectorPowerType.cs, VmDevice.cs, VmStation.cs
+          VmEvccIdModule/            VmEvccId.cs
+          VmIdTagModule/             VmIdTagInfo.cs
+          VmIntegrationConfigModule/ VmIntegrationConfig.cs
+          VmPanelAdminModule/        VmPanelAdmin.cs, VmPanelRootAdmin.cs, PanelDevice.cs, PanelLoginAttention.cs, PanelLoginSession.cs
+          VmParameterModule/         VmParameter.cs
+          VmRemoteCommandModule/     VmRemoteCommand.cs
+          VmTransactionModule/       VmStartTransaction.cs, VmMeterValue.cs, VmMeterSampledValue.cs
+        VmLogEntities/
+          ExceptionLog.cs
+          RequestResponseLog.cs
+      Dto/
+        VmDto/           (OcppDeviceResponseDtos, VmAuthHorizationDtos, VmBootNotificationDtos, vb.)
+        VmLogDto/        (ExceptionLogDtos, RequestResponseLogDtos)
+        VmPanelDto/      (AuthenticationDtos, CpoManagementDtos, JwtTockenDtos, vb.)
+      Enums/
+        VmEnums/
+        VmPanelEnums/
+      Errors/
+      RabbitMq/
+      RepositoryInterfaces/
+      ServiceInterfaces/
+
+Framework/
+  Core/            (FrameworkCore - BaseService, BaseEntity, BaseStartup, WrapperCore vb.)

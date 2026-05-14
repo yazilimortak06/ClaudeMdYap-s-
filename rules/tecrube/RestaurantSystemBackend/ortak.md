@@ -1,16 +1,15 @@
 # RestaurantSystemBackend — Ortak Tecrübeler
 
-Backend projesinde tüm ekip için geçerli, paylaşılan hatalar ve dersler.
-Herkes yazabilir.
-
-Format:
-```
-## [Tarih] Kısa Başlık
-**Hata / Durum:** Ne oldu?
-**Neden:** Kök neden neydi?
-**Çözüm:** Nasıl düzeltildi?
-**Önlem:** Bir daha olmaması için ne yapılmalı?
-```
+Bu dosya tüm projelerde tekrar yaşanmaması gereken deneyimleri içerir.
 
 ---
 
+(Henüz kayıt yok. Hata veya ders çıkarıldığında buraya eklenir.)
+
+## Şablon — Yeni Kayıt Ekleme
+
+**[TARİH] — [Kısa Başlık]**
+- **Ne oldu:** ...
+- **Neden oldu:** ...
+- **Çözüm:** ...
+- **Genel Kural:** ...

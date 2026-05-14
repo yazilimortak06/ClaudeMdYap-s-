@@ -1,0 +1,40 @@
+// KAYNAK: E:\Projeler\Backend\rotawattvmbackend-develop (1)\rotawattvmbackend-develop\src\Presentation\GateWay.Api\ocelot.json
+// API Gateway routing konfigürasyonu (Ocelot)
+// Route 1: /vm/** → ws://vm.api:80 (WebSocket — OCPP cihaz bağlantısı)
+// Route 2: /web/** → http://vmpanel.api:80/v1/** (VmPanel REST API)
+
+{
+  "Routes": [
+    {
+      "DownstreamPathTemplate": "/{url}",
+      "DownstreamScheme": "ws",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "vm.api",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/vm/{url}",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE", "OPTIONS" ]
+    },
+    {
+      "DownstreamPathTemplate": "/v1/{url}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "vmpanel.api",
+          "Port": "80"
+        }
+      ],
+      "UpstreamPathTemplate": "/web/{url}",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE", "OPTIONS" ],
+      "FileCacheOptions": { "TtlSeconds": 0 },
+      "LoadBalancerOptions": { "Type": "LeastConnection" },
+      "DangerousAcceptAnyServerCertificateValidator": true
+    }
+  ],
+  "GlobalConfiguration": {
+    "BaseUrl": "gatewayapi:5080",
+    "DangerousAcceptAnyServerCertificateValidator": true
+  }
+}

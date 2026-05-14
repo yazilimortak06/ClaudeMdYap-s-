@@ -1,0 +1,3 @@
+# Notlar — Yazılım Mimarı (RestaurantSystemQr)
+
+---

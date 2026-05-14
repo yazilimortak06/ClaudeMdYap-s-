@@ -1,2 +1,7 @@
-# said — RestaurantSystemQr Analiz Taslağı
+# RestaurantSystemQr — Said — Analiz Taslağı
 
+Kişisel analiz alanı. Bağlayıcı değil. Kesinleşince ortak/analiz.md'ye taşınır.
+
+---
+
+(Henüz analiz çalışması başlatılmadı)

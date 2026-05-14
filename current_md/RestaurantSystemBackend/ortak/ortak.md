@@ -1,8 +1,9 @@
-# RestaurantSystemBackend — Ortak
+# RestaurantSystemBackend — Ortak Durum
 
-Her commit/push sonrası güncellenir.
+Her commit/push sonrası güncellenir. Genel ilerleme ve son değişiklikler.
 
-## Son Değişiklikler
+## Son Güncelleme
+(Henüz güncelleme yok — proje başlangıç aşamasında)
 
 ### 2026-05-05 — Faz 1 Foundation (muhammed_ali)
 - Domain entity yapısı kuruldu: 16 entity (Tenancy + Identity + Catalog + Menu + Subscription).
@@ -26,14 +27,8 @@ Her commit/push sonrası güncellenir.
 - Her API'ye `Dockerfile`, solution root'a `docker-compose.yml`.
 
 ## Genel İlerleme
-
-- [x] Mimari karar (modular monolith, entity konumu, base classes) — `mimari_gelisen.md`
-- [x] Faz 1 entity'leri ve EF mapping'leri
-- [x] DbContext güncellemeleri ve build doğrulaması
-- [x] DI register ve migration (RestaurantSystemDb @ localhost)
-- [x] Seed data (Plans, Permissions, Roles, Features, PlanFeatures)
-- [x] Auth & oturum sistemi (Token.Api)
-- [x] Docker desteği
-- [ ] Açık soruların kesinleşmesi (`muhammed_ali/analiz.md` → `ortak/analiz.md`)
-- [ ] Faz 1 Extension: Order snapshot, Tables, QR codes
-- [ ] Faz 2: Pricing engine, Menu design engine, POS mapping
+- [ ] Altyapı kurulumu
+- [ ] Temel CRUD endpoint'leri
+- [ ] Auth entegrasyonu
+- [ ] SignalR hub
+- [ ] Docker ortamı

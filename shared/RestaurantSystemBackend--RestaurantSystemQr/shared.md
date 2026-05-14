@@ -1,10 +1,23 @@
-# Shared — RestaurantSystemBackend & RestaurantSystemQr
+# Backend ↔ QR App Paylaşım Alanı
 
-Her iki projenin agentları bu klasörü okuyup yazabilir.
+Backend agenı endpoint tanımlarını buraya yazar. QR App agenı buradan okur.
 
-## Endpoint Tanımları
+## Public API Endpoint'leri
 
-## Kontratlar / Arayüz Anlaşmaları
+### Menu
+(Henüz tanımlanmadı)
 
-## Notlar
+### Order
+(Henüz tanımlanmadı)
 
+### Table
+(Henüz tanımlanmadı)
+
+## QR URL Formatı
+(Henüz tanımlanmadı)
+
+## SignalR Hub
+(Henüz tanımlanmadı)
+
+## DTO Sözleşmeleri
+(Henüz tanımlanmadı)

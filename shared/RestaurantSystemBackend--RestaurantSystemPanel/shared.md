@@ -1,27 +1,23 @@
-# Shared — RestaurantSystemBackend & RestaurantSystemPanel
+# Backend ↔ Panel Paylaşım Alanı
 
-Her iki projenin agentları bu klasörü okuyup yazabilir.
+Backend agenı endpoint tanımlarını buraya yazar. Panel agenı buradan okur.
 
-## Endpoint Tanımları
+## API Endpoint'leri
 
-### Auth (Token.Api)
+### Auth
+(Henüz tanımlanmadı)
 
-| Method | Path | Request | Response |
-|--------|------|---------|----------|
-| POST | `/api/auth/login` | `{ email, password, rememberMe }` | `{ accessToken, refreshToken, expiresIn, user: { id, fullName, email, tenantId, branchId, roles } }` |
-| POST | `/api/auth/refresh` | `{ refreshToken }` | `{ accessToken, refreshToken, expiresIn }` |
-| POST | `/api/auth/logout` | `{ refreshToken }` | `200 OK` |
-| POST | `/api/auth/logout-all` | _(Authorization header yeterli)_ | `200 OK` |
+### Menu
+(Henüz tanımlanmadı)
 
-## Kontratlar / Arayüz Anlaşmaları
+### Order
+(Henüz tanımlanmadı)
 
-- Access token süresi: **15 dakika**
-- Refresh token süresi: `rememberMe=false` → **1 gün**, `rememberMe=true` → **30 gün**
-- Access token taşıma: `Authorization: Bearer <token>` header
-- 401 alındığında Panel otomatik refresh dener; refresh da başarısızsa `/login`'e yönlendirir
-- Roller token claim'inde `roles` array olarak gelir
+### Table
+(Henüz tanımlanmadı)
 
-## Notlar
+## SignalR Hub
+(Henüz tanımlanmadı)
 
-- Token.Api auth endpoint'lerinin host/portu `.env` ile yönetilecek (Panel tarafında environment config)
-
+## DTO Sözleşmeleri
+(Henüz tanımlanmadı)
