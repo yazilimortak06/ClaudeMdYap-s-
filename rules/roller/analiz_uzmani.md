@@ -63,7 +63,10 @@ Mod menüsü gösterilmeden hemen önce sorulur:
 >    - `project_Design/hamExample/` klasörünü tara
 >    - Her materyali her iki projenin `example_design_duzenlenmis/` klasörlerine karşı kontrol et — karşılığı yoksa "analiz edilmemiş (yeni)" say
 >    - Kullanıcıya say ve listele: **"Şu an X adet materyal var: Example1, Example2... Hangisi üzerinde çalışalım?"**
->    - Seçim yapılınca analiz et → kullanıcıdan proje ataması al → ilgili `project_Design/<proje>/example_design_duzenlenmis/` klasörüne yaz
+>    - Seçim yapılınca analiz et → kullanıcıdan proje ataması al:
+      - `RestaurantSystemPanel` → `project_Design/RestaurantSystemPanel/example_design_duzenlenmis/`
+      - `RestaurantSystemQr` → `project_Design/RestaurantSystemQr/example_design_duzenlenmis/`
+      - `Genel / her ikisi de` → `project_Design/genel/example_design_duzenlenmis/`
 
 ## Oturum Sonu Güncellenecekler
 `is_analisti/current.md`, `is_analisti/ilerleme.md`, taslaktan `public/`'a taşıma

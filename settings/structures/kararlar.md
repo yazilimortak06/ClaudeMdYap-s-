@@ -186,7 +186,10 @@ Her rol klasörünün tam donanımı: `current.md`, `ilerleme.md`, `kurallar.md`
 - **Amaç:** Hangi projeye ait olduğu belirsiz veya her iki projeyi kapsayan dökümanların "önce at, sonra analiz et" alanı
 - **Yapı:** Flat (alt klasör yok) — `example1`, `example2` gibi dosyalar doğrudan klasörde
 - **Kural:** Bu klasöre dosyaları HEP KULLANICI koyar, Claude eklemez
-- **Analiz akışı:** tasarimci / arge_muhendisi / analiz_uzmani rolleri, mod menüsünden önce "projeye devam mı, hamExample analizi mi?" sorar → analiz seçilirse dosyalar listelenir, analiz edilir, kullanıcıdan proje ataması istenir → ilgili `project_Design/<proje>/example_design_duzenlenmis/` klasörüne yazılır
+- **Analiz akışı:** tasarimci / arge_muhendisi / analiz_uzmani rolleri, mod menüsünden önce "projeye devam mı, genel analiz mi?" sorar → analiz seçilirse dosyalar listelenir, analiz edilir, kullanıcıdan proje ataması istenir:
+  - Panel → `project_Design/RestaurantSystemPanel/example_design_duzenlenmis/`
+  - QR → `project_Design/RestaurantSystemQr/example_design_duzenlenmis/`
+  - Genel / her ikisi de → `project_Design/genel/example_design_duzenlenmis/`
 - **Temizlik:** Analizi tamamlanan materyaller ilgili proje klasörüne taşınır, `hamExample/` periyodik temizlenir
 - `example_design/` farkı: `example_design/` proje bazlı, curated referanslar içerir; `hamExample/` proje-üstü, ham, sırasız döküman deposudur
 
