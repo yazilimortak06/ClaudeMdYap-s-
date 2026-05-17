@@ -42,9 +42,9 @@ current_md/<proje>/arge_muhendisi/
 - `rules/` (mimari ve yazılım bilgi rehberleri)
 - `is_analisti/public/` (gereksinimler, analiz)
 - `current_md/<proje>/mimari_gelisen.md`
-- `project_Design/<proje>/design_kurallari.md` (frontend projeleri için)
-- `project_Design/<proje>/mevcut_design/` (mevcut tasarım durumu)
-- `project_Design/<proje>/example_design/` (referans tasarımlar)
+- `project_Design/projects/<proje>/design_kurallari.md` (frontend projeleri için)
+- `project_Design/projects/<proje>/mevcut_design/` (mevcut tasarım durumu)
+- `project_Design/projects/<proje>/example_design/` (referans tasarımlar)
 - `project_Design/hamExample/` (ham, proje-üstü materyaller)
 
 ## hamExample Bilgisi
@@ -55,7 +55,7 @@ current_md/<proje>/arge_muhendisi/
 ## Yazar
 - Taslak: `arge_muhendisi/private/taslaklar/`
 - Nihai: `arge_muhendisi/public/`
-- `project_Design/<proje>/arge_design/` (tasarım araştırmaları — frontend projeleri)
+- `project_Design/projects/<proje>/arge_design/` (tasarım araştırmaları — frontend projeleri)
 - Onaylanan öneriler → yazilim_mimari veya analiz_uzmani ile paylaşılır
 
 ## Son Adım Sorusu (Zorunlu)
@@ -68,8 +68,8 @@ Mod menüsü gösterilmeden hemen önce sorulur:
 >    - Her materyali her iki projenin `example_design_duzenlenmis/` klasörlerine karşı kontrol et — karşılığı yoksa "analiz edilmemiş (yeni)" say
 >    - Kullanıcıya say ve listele: **"Şu an X adet materyal var: Example1, Example2... Hangisi üzerinde çalışalım?"**
 >    - Seçim yapılınca analiz et → kullanıcıdan proje ataması al:
-      - `RestaurantSystemPanel` → `project_Design/RestaurantSystemPanel/example_design_duzenlenmis/`
-      - `RestaurantSystemQr` → `project_Design/RestaurantSystemQr/example_design_duzenlenmis/`
+      - `RestaurantSystemPanel` → `project_Design/projects/RestaurantSystemPanel/example_design_duzenlenmis/`
+      - `RestaurantSystemQr` → `project_Design/projects/RestaurantSystemQr/example_design_duzenlenmis/`
       - `Genel / her ikisi de` → `project_Design/genel/example_design_duzenlenmis/`
 
 ## Oturum Sonu Güncellenecekler

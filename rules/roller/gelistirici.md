@@ -29,8 +29,8 @@ current_md/<proje>/<isim>/
 - `rules/proje_mimari_rules/`
 - `rules/proje_domain_rules/<proje>.md`
 - `current_md/<proje>/ortak/`
-- `project_Design/<proje>/yapilacak_design/` (frontend projeleri — UI kodu yazmadan önce oku)
-- `project_Design/<proje>/yapilacak_design/oncelik_sirasi.md` (önce hangi ekran)
+- `project_Design/projects/<proje>/yapilacak_design/` (frontend projeleri — UI kodu yazmadan önce oku)
+- `project_Design/projects/<proje>/yapilacak_design/oncelik_sirasi.md` (önce hangi ekran)
 
 ## Yazar
 - Kendi `current_md/<proje>/<isim>/` klasörü

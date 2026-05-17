@@ -32,12 +32,12 @@ current_md/<proje>/tasarimci/
 - `is_analisti/public/akislar/` (kullanıcı akışları)
 - `is_analisti/public/gereksinimler/`
 - `current_md/<proje>/mimari_gelisen.md`
-- `project_Design/<proje>/design_kurallari.md`
-- `project_Design/<proje>/design_metni.md`
-- `project_Design/<proje>/arayuz_aciklamalari.md`
-- `project_Design/<proje>/example_design/` (referans tasarımlar)
-- `project_Design/<proje>/example_design_duzenlenmis/`
-- `project_Design/<proje>/arge_design/` (arge önerileri)
+- `project_Design/projects/<proje>/design_kurallari.md`
+- `project_Design/projects/<proje>/design_metni.md`
+- `project_Design/projects/<proje>/arayuz_aciklamalari.md`
+- `project_Design/projects/<proje>/example_design/` (referans tasarımlar)
+- `project_Design/projects/<proje>/example_design_duzenlenmis/`
+- `project_Design/projects/<proje>/arge_design/` (arge önerileri)
 - `project_Design/hamExample/` (ham, proje-üstü materyaller)
 
 ## hamExample Bilgisi
@@ -48,14 +48,14 @@ current_md/<proje>/tasarimci/
 ## Yazar
 - Taslak: `tasarimci/private/taslaklar/`
 - Nihai: `tasarimci/public/`
-- `project_Design/<proje>/design_kurallari.md`
-- `project_Design/<proje>/design_metni.md`
-- `project_Design/<proje>/arayuz_aciklamalari.md`
-- `project_Design/<proje>/mevcut_design/`
-- `project_Design/<proje>/example_design_duzenlenmis/`
-- `project_Design/<proje>/gecici/`
-- `project_Design/<proje>/yapilacak_design/` (geliştirici buraya bakarak UI yapar — spec dosyaları)
-- `project_Design/<proje>/yapilacak_design/oncelik_sirasi.md`
+- `project_Design/projects/<proje>/design_kurallari.md`
+- `project_Design/projects/<proje>/design_metni.md`
+- `project_Design/projects/<proje>/arayuz_aciklamalari.md`
+- `project_Design/projects/<proje>/mevcut_design/`
+- `project_Design/projects/<proje>/example_design_duzenlenmis/`
+- `project_Design/projects/<proje>/gecici/`
+- `project_Design/projects/<proje>/yapilacak_design/` (geliştirici buraya bakarak UI yapar — spec dosyaları)
+- `project_Design/projects/<proje>/yapilacak_design/oncelik_sirasi.md`
 
 ## Son Adım Sorusu (Zorunlu)
 Mod menüsü gösterilmeden hemen önce sorulur:
@@ -67,8 +67,8 @@ Mod menüsü gösterilmeden hemen önce sorulur:
 >    - Her materyali her iki projenin `example_design_duzenlenmis/` klasörlerine karşı kontrol et — karşılığı yoksa "analiz edilmemiş (yeni)" say
 >    - Kullanıcıya say ve listele: **"Şu an X adet materyal var: Example1, Example2... Hangisi üzerinde çalışalım?"**
 >    - Seçim yapılınca analiz et → kullanıcıdan proje ataması al:
-      - `RestaurantSystemPanel` → `project_Design/RestaurantSystemPanel/example_design_duzenlenmis/`
-      - `RestaurantSystemQr` → `project_Design/RestaurantSystemQr/example_design_duzenlenmis/`
+      - `RestaurantSystemPanel` → `project_Design/projects/RestaurantSystemPanel/example_design_duzenlenmis/`
+      - `RestaurantSystemQr` → `project_Design/projects/RestaurantSystemQr/example_design_duzenlenmis/`
       - `Genel / her ikisi de` → `project_Design/genel/example_design_duzenlenmis/`
 
 ## Oturum Sonu Güncellenecekler
