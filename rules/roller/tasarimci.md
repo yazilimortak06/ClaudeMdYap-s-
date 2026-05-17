@@ -60,9 +60,13 @@ current_md/<proje>/tasarimci/
 ## Son Adım Sorusu (Zorunlu)
 Mod menüsü gösterilmeden hemen önce sorulur:
 
-> "Projelerde mi çalışmak istiyorsun yoksa hamExample analizi mi yapacaksın?"
+> "Projelerde mi çalışmak istiyorsun yoksa genel tasarım/analiz mi yapacaksın?"
 > 1. **Projeye devam** → normal mod menüsünü göster
-> 2. **hamExample analizi** → `project_Design/hamExample/` içindeki dosyaları listele, analiz et, her dosya için kullanıcıya "hangi projeye ait?" diye sor → ilgili `project_Design/<proje>/example_design_duzenlenmis/` klasörüne yaz
+> 2. **Genel / hamExample** →
+>    - `project_Design/hamExample/` klasörünü tara
+>    - Her materyali her iki projenin `example_design_duzenlenmis/` klasörlerine karşı kontrol et — karşılığı yoksa "analiz edilmemiş (yeni)" say
+>    - Kullanıcıya say ve listele: **"Şu an X adet materyal var: Example1, Example2... Hangisi üzerinde çalışalım?"**
+>    - Seçim yapılınca analiz et → kullanıcıdan proje ataması al → ilgili `project_Design/<proje>/example_design_duzenlenmis/` klasörüne yaz
 
 ## Oturum Sonu Güncellenecekler
 `tasarimci/current.md`, `tasarimci/ilerleme.md`, taslaktan `public/`'a taşıma, ilgili `project_Design/<proje>/` dosyaları, `claude_context/<oturum>/oturum.md`
