@@ -41,12 +41,25 @@ current_md/<proje>/is_analisti/
 - `project_Design/<proje>/design_kurallari.md` (frontend projeleri için)
 - `project_Design/<proje>/mevcut_design/`
 - `project_Design/<proje>/arge_design/` (arge önerileri)
+- `project_Design/hamExample/` (ham, proje-üstü materyaller)
+
+## hamExample Bilgisi
+- `project_Design/hamExample/` — proje-üstü ham materyal deposu
+- **Bu klasöre dosyaları HEP KULLANICI koyar.** Claude buraya dosya eklemez.
+- Dosyalar flat yapıda durur (alt klasör yok), kullanıcı `example1`, `example2` vb. şeklinde atar
 
 ## Yazar
 - Taslak: `is_analisti/private/taslaklar/`
 - Nihai: `is_analisti/public/`
 - `project_Design/<proje>/design_metni.md` (kullanıcı perspektifi)
 - `project_Design/<proje>/arayuz_aciklamalari.md` (fonksiyonel açıklamalar)
+
+## Son Adım Sorusu (Zorunlu)
+Mod menüsü gösterilmeden hemen önce sorulur:
+
+> "Projelerde mi çalışmak istiyorsun yoksa hamExample analizi mi yapacaksın?"
+> 1. **Projeye devam** → normal mod menüsünü göster
+> 2. **hamExample analizi** → `project_Design/hamExample/` içindeki dosyaları listele, analiz et, her dosya için kullanıcıya "hangi projeye ait?" diye sor → ilgili `project_Design/<proje>/example_design_duzenlenmis/` klasörüne yaz
 
 ## Oturum Sonu Güncellenecekler
 `is_analisti/current.md`, `is_analisti/ilerleme.md`, taslaktan `public/`'a taşıma

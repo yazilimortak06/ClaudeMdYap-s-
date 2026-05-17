@@ -181,6 +181,15 @@ Her rol klasörünün tam donanımı: `current.md`, `ilerleme.md`, `kurallar.md`
   - `arge_design/` — arge mühendisinin deneysel tasarım araştırmaları
   - `gecici/` — geçici/çer çöp dosyalar, periyodik temizlenir
 
+### hamExample Klasörü (project_Design altında, proje bazlı değil)
+- Konum: `project_Design/hamExample/` — proje ayrımı yapmadan sistemin bütününü ilgilendiren ham materyaller
+- **Amaç:** Hangi projeye ait olduğu belirsiz veya her iki projeyi kapsayan dökümanların "önce at, sonra analiz et" alanı
+- **Yapı:** Flat (alt klasör yok) — `example1`, `example2` gibi dosyalar doğrudan klasörde
+- **Kural:** Bu klasöre dosyaları HEP KULLANICI koyar, Claude eklemez
+- **Analiz akışı:** tasarimci / arge_muhendisi / analiz_uzmani rolleri, mod menüsünden önce "projeye devam mı, hamExample analizi mi?" sorar → analiz seçilirse dosyalar listelenir, analiz edilir, kullanıcıdan proje ataması istenir → ilgili `project_Design/<proje>/example_design_duzenlenmis/` klasörüne yazılır
+- **Temizlik:** Analizi tamamlanan materyaller ilgili proje klasörüne taşınır, `hamExample/` periyodik temizlenir
+- `example_design/` farkı: `example_design/` proje bazlı, curated referanslar içerir; `hamExample/` proje-üstü, ham, sırasız döküman deposudur
+
 ### Bilgisayar Bazlı Path Sistemi
 - Kullanıcı dosyalarında rol ve path ayrıldı: `## Projeler` tablosu rol tutar (bilgisayardan bağımsız), `## Bilgisayar: <ad>` section'ları path tutar
 - Adım 1'de kullanıcı seçimi sonrası "Hangi bilgisayardasın?" sorusu eklendi — mevcut bilgisayarlar listelenir + "Yeni bilgisayar ekle"
