@@ -1,0 +1,1191 @@
+# SYSTEM CONTEXT — Restaurant SaaS Platform
+
+## Goal
+
+Build a multi-tenant, modular restaurant SaaS platform where:
+
+- Restaurants/cafes are tenants.
+- A tenant can have one or more branches.
+- Each tenant gets an admin user with limited platform-level rights.
+- Tenant admins can create sub-users.
+- Products are the central core of the system.
+- Modules such as QR Menu, Table Ordering, Home Delivery, POS, Waiter Terminal and Reporting use the same product core.
+- Features are enabled/disabled based on subscription plan/entitlements.
+- System supports multi-branch, multi-language, channel-based pricing, dynamic menu design and future POS synchronization.
+
+The first phase includes:
+- QR Menu
+- Table Ordering / Order from Table
+
+Future phases may include:
+- POS system
+- Waiter handheld terminal
+- Home delivery ordering
+- Advanced reporting
+- Inventory
+- Campaigns
+- Loyalty
+- Reservations
+
+---
+
+## Core Architectural Principle
+
+Product is the central source of truth.
+
+Do NOT create completely separate product identities for each module such as:
+
+- Product
+- MenuProduct
+- PosSystemProduct
+- OrderFromHomeProduct
+- OrderFromTableProduct
+
+Instead:
+
+- Product = core identity
+- MenuItem / POS mapping / Table order settings / Home delivery settings = module-specific projections/configurations of the same product
+
+Correct mental model:
+
+```text
+Product Core
+   ├── QR Menu projection
+   ├── Table Order projection/settings
+   ├── Home Delivery projection/settings
+   ├── POS mapping
+   └── Reporting / Order snapshot usage
+```
+
+Product should answer:
+
+> “What is this item in our system?”
+
+Modules should answer:
+
+> “How is this product displayed, priced, enabled, mapped or used in this specific context?”
+
+---
+
+## Recommended Architecture
+
+Start with a modular monolith.
+
+Reason:
+- Faster development
+- Simpler deployment
+- Easier transaction management
+- Still possible to split into services later
+
+Suggested backend module structure:
+
+```text
+/modules
+  /core
+  /identity
+  /tenant
+  /branch
+  /product
+  /subscription
+  /qr-menu
+  /table-order
+  /pos-integration
+  /reporting
+  /import
+  /pricing
+  /design
+```
+
+Do not start with microservices unless scale forces it.
+
+---
+
+## Module Concept
+
+The word “module” must be separated into levels:
+
+```text
+1. Core Platform
+2. Business Modules
+3. Features / Entitlements
+4. Subscription Plans
+```
+
+### 1. Core Platform
+
+These are not optional customer-facing modules. They are required for the system to work.
+
+```text
+Core Platform
+- Tenant / restaurant owner management
+- Branch management
+- User management
+- Role / permission system
+- Product pool / product core
+- Category core
+- Media / image management
+- Audit logs
+- Subscription / plan / feature entitlement system
+```
+
+### 2. Business Modules
+
+These are sellable business capabilities:
+
+```text
+QR_MENU
+TABLE_ORDER
+HOME_DELIVERY
+POS
+WAITER_TERMINAL
+REPORTING
+INVENTORY
+CAMPAIGN
+LOYALTY
+RESERVATION
+```
+
+### 3. Features / Entitlements
+
+Features are plan-controlled capabilities inside modules.
+
+Example QR Menu features:
+
+```text
+QR_MENU_LIST
+QR_MENU_CREATE_MANUAL
+QR_MENU_CREATE_EXCEL
+QR_MENU_CREATE_AI
+QR_MENU_UPDATE_MANUAL
+QR_MENU_UPDATE_EXCEL
+QR_MENU_UPDATE_AI
+QR_MENU_DESIGNER_BASIC
+QR_MENU_DESIGNER_ADVANCED
+QR_MENU_TEMPLATES
+QR_MENU_DYNAMIC_PRICING
+QR_MENU_DYNAMIC_DESIGN
+QR_MENU_SCHEDULED_MENU
+QR_MENU_MULTILINGUAL
+QR_MENU_CATEGORY_MANAGEMENT
+QR_MENU_ALLERGEN_INFO
+QR_MENU_NUTRITION_INFO
+QR_MENU_THEME_CUSTOMIZATION
+```
+
+Important:
+
+> Not every feature needs its own table. Most features are access/entitlement checks.
+
+### 4. Plans
+
+Example packages:
+
+```text
+Starter Plan
+- QR Menu
+- Manual menu creation
+- Basic category management
+- Limited designer
+- 1 branch
+- 50 products
+
+Pro Plan
+- QR Menu
+- Excel import/export
+- Advanced designer
+- Templates
+- Multi-language support
+- 3 branches
+- 500 products
+
+Premium Plan
+- AI menu generation
+- Dynamic pricing
+- Dynamic design
+- Scheduled menu
+- Advanced reporting
+- More branches/products
+```
+
+---
+
+## Core Database Model
+
+### tenants
+
+```sql
+tenants(
+  id,
+  name,
+  status,
+  created_at,
+  updated_at
+)
+```
+
+### branches
+
+```sql
+branches(
+  id,
+  tenant_id,
+  name,
+  address,
+  status,
+  created_at,
+  updated_at
+)
+```
+
+### users
+
+```sql
+users(
+  id,
+  tenant_id,
+  branch_id,
+  email,
+  password_hash,
+  full_name,
+  status,
+  created_at,
+  updated_at
+)
+```
+
+Notes:
+- Platform super admin may have tenant_id = null.
+- Tenant admin has tenant_id but may have branch_id = null.
+- Branch user has both tenant_id and branch_id.
+
+### roles
+
+```sql
+roles(
+  id,
+  tenant_id,
+  code,
+  name
+)
+```
+
+### permissions
+
+```sql
+permissions(
+  id,
+  code,
+  name
+)
+```
+
+### role_permissions
+
+```sql
+role_permissions(
+  role_id,
+  permission_id
+)
+```
+
+### user_roles
+
+```sql
+user_roles(
+  user_id,
+  role_id
+)
+```
+
+---
+
+## Product Core
+
+### products
+
+```sql
+products(
+  id,
+  tenant_id,
+  sku,
+  base_name,
+  category_id,
+  tax_rate,
+  status,
+  created_at,
+  updated_at
+)
+```
+
+Purpose:
+- Represents the core identity of the product.
+- Does not contain module-specific fields.
+- Does not contain POS name, QR menu display name, table order visibility, home delivery price, etc.
+
+Example:
+
+```text
+Product ID: 42
+base_name: Makarna
+```
+
+This means:
+
+> “This tenant has a product called Makarna.”
+
+It does not mean:
+- How it appears in the QR menu
+- How it is named in POS
+- Whether it is enabled for table ordering
+- Whether home delivery price is different
+
+---
+
+## Product Translations
+
+### product_translations
+
+```sql
+product_translations(
+  id,
+  product_id,
+  language_code,
+  name,
+  description
+)
+```
+
+Example:
+
+```text
+TR -> Makarna
+EN -> Pasta
+DE -> Nudeln
+```
+
+Menu display names can still override these if needed.
+
+---
+
+## Product Prices
+
+Do not keep only one price field in products.
+
+Reason:
+Prices may vary by:
+- Branch
+- Channel
+- Menu
+- Time
+- Campaign
+- Delivery method
+- POS
+- Table order
+- Home delivery
+
+### product_prices
+
+```sql
+product_prices(
+  id,
+  product_id,
+  branch_id,
+  channel,
+  amount,
+  currency,
+  valid_from,
+  valid_to,
+  created_at,
+  updated_at
+)
+```
+
+Example channels:
+
+```text
+QR_MENU
+TABLE_ORDER
+HOME_DELIVERY
+POS
+WAITER_TERMINAL
+```
+
+Example:
+
+```text
+Product: Makarna
+QR Menu price: 280 TRY
+Table order price: 270 TRY
+Home delivery price: 300 TRY
+POS price: 260 TRY
+```
+
+---
+
+## QR Menu Module
+
+QR Menu is the first must-have business module.
+
+But QR Menu itself has many plan-controlled features:
+- Create menu manually
+- Create menu with Excel
+- Create menu with AI
+- Update menu manually
+- Update menu with Excel
+- Update menu with AI
+- Menu designer
+- Limited designer
+- Advanced designer
+- Templates
+- Dynamic pricing
+- Dynamic design
+- Scheduled menu visibility
+- Category management
+- Multi-language support
+
+### menus
+
+```sql
+menus(
+  id,
+  tenant_id,
+  branch_id,
+  name,
+  default_language,
+  active_theme_id,
+  status,
+  created_at,
+  updated_at
+)
+```
+
+Notes:
+- A branch can have its own menu.
+- Some tenants may use one shared menu across branches, but branch-specific override should be possible.
+
+### menu_categories
+
+```sql
+menu_categories(
+  id,
+  menu_id,
+  parent_category_id,
+  name,
+  sort_order,
+  is_visible,
+  created_at,
+  updated_at
+)
+```
+
+### menu_items
+
+```sql
+menu_items(
+  id,
+  menu_id,
+  category_id,
+  product_id,
+  sort_order,
+  is_visible,
+  override_name,
+  override_description,
+  override_image_id,
+  created_at,
+  updated_at
+)
+```
+
+Important:
+- menu_items references products.
+- menu_items is not the product itself.
+- menu item can override name, description, image and visibility.
+- This allows Product = “Makarna”, Menu Display = “Chef Special Pasta”.
+
+---
+
+## POS Integration
+
+POS product name may be different from menu or core product name.
+
+Example:
+- Product core name: Makarna
+- QR menu name: Italian Pasta
+- POS name: MKRN
+- POS external ID: 12345
+
+### pos_integrations
+
+```sql
+pos_integrations(
+  id,
+  tenant_id,
+  branch_id,
+  provider,
+  status,
+  config_json,
+  created_at,
+  updated_at
+)
+```
+
+### pos_product_mappings
+
+```sql
+pos_product_mappings(
+  id,
+  product_id,
+  branch_id,
+  pos_integration_id,
+  external_product_id,
+  external_name,
+  external_code,
+  sync_status,
+  last_synced_at,
+  created_at,
+  updated_at
+)
+```
+
+Purpose:
+- Map internal product to external POS product.
+- Allow different POS naming.
+- Allow future sync from Product Core to POS.
+
+---
+
+## Table Order Module
+
+### tables
+
+```sql
+tables(
+  id,
+  tenant_id,
+  branch_id,
+  name,
+  table_number,
+  status
+)
+```
+
+### qr_codes
+
+```sql
+qr_codes(
+  id,
+  tenant_id,
+  branch_id,
+  table_id,
+  code,
+  target_url,
+  status
+)
+```
+
+### table_order_product_settings
+
+```sql
+table_order_product_settings(
+  id,
+  product_id,
+  branch_id,
+  is_enabled,
+  allow_customer_note,
+  max_quantity_per_order,
+  preparation_time_minutes,
+  created_at,
+  updated_at
+)
+```
+
+Notes:
+- Do not create a separate TableOrderProduct identity.
+- This table only stores table-order-specific settings for a product.
+
+---
+
+## Home Delivery Module
+
+Future module.
+
+### home_delivery_product_settings
+
+```sql
+home_delivery_product_settings(
+  id,
+  product_id,
+  branch_id,
+  is_enabled,
+  package_fee,
+  min_order_quantity,
+  delivery_price_override,
+  created_at,
+  updated_at
+)
+```
+
+Notes:
+- Home delivery may have different price, packaging fee, min quantity.
+- Actual pricing should still preferably be resolved by product_prices + pricing rules.
+
+---
+
+## Orders and Snapshot Model
+
+Orders must store snapshots.
+
+Reason:
+If product name or price changes later, old orders must not change.
+
+### orders
+
+```sql
+orders(
+  id,
+  tenant_id,
+  branch_id,
+  source_channel,
+  table_id,
+  customer_id,
+  status,
+  total_amount,
+  currency,
+  created_at,
+  updated_at
+)
+```
+
+source_channel examples:
+
+```text
+TABLE_ORDER
+HOME_DELIVERY
+WAITER_TERMINAL
+POS
+```
+
+### order_items
+
+```sql
+order_items(
+  id,
+  order_id,
+  product_id,
+  product_name_snapshot,
+  unit_price_snapshot,
+  quantity,
+  total_amount,
+  note,
+  created_at
+)
+```
+
+Important:
+- product_id links to current product identity.
+- product_name_snapshot and unit_price_snapshot preserve historical truth.
+
+---
+
+## Dynamic Pricing Engine
+
+Dynamic pricing should not be hardcoded into QR Menu.
+
+It should be a generic pricing engine usable by:
+- QR Menu
+- Table Order
+- Home Delivery
+- POS
+- Campaigns
+
+### pricing_rules
+
+```sql
+pricing_rules(
+  id,
+  tenant_id,
+  branch_id,
+  channel,
+  name,
+  priority,
+  status,
+  valid_from,
+  valid_to,
+  created_at,
+  updated_at
+)
+```
+
+### pricing_rule_conditions
+
+```sql
+pricing_rule_conditions(
+  id,
+  pricing_rule_id,
+  condition_type,
+  operator,
+  value
+)
+```
+
+Example condition types:
+
+```text
+DAY_OF_WEEK
+TIME_RANGE
+CATEGORY
+PRODUCT
+BRANCH
+ORDER_TOTAL
+CUSTOMER_SEGMENT
+```
+
+### pricing_rule_actions
+
+```sql
+pricing_rule_actions(
+  id,
+  pricing_rule_id,
+  action_type,
+  value
+)
+```
+
+Example actions:
+
+```text
+PERCENT_DISCOUNT
+FIXED_DISCOUNT
+SET_PRICE
+INCREASE_PERCENT
+```
+
+Example use case:
+
+```text
+On Saturday and Sunday between 10:00-14:00,
+apply 15% discount to child menu products.
+```
+
+---
+
+## Dynamic Menu Design
+
+Dynamic design should be separate from the menu entity.
+
+### menu_themes
+
+```sql
+menu_themes(
+  id,
+  tenant_id,
+  name,
+  config_json,
+  created_at,
+  updated_at
+)
+```
+
+Example config_json:
+
+```json
+{
+  "font": "Inter",
+  "primaryColor": "#111827",
+  "layout": "card-grid",
+  "showImages": true,
+  "categoryStyle": "tabs",
+  "priceStyle": "bold"
+}
+```
+
+### menu_design_rules
+
+```sql
+menu_design_rules(
+  id,
+  menu_id,
+  name,
+  priority,
+  condition_json,
+  theme_id,
+  status,
+  created_at,
+  updated_at
+)
+```
+
+Example condition_json:
+
+```json
+{
+  "days": ["SATURDAY", "SUNDAY"],
+  "timeRange": "10:00-18:00"
+}
+```
+
+Example use case:
+
+```text
+On weekends, show child-friendly theme/design.
+```
+
+---
+
+## Menu Templates and Designer
+
+Designer data changes frequently, so do not model every visual setting as relational columns.
+
+Use JSON configuration.
+
+### menu_templates
+
+```sql
+menu_templates(
+  id,
+  name,
+  template_type,
+  preview_image_url,
+  config_json,
+  created_at,
+  updated_at
+)
+```
+
+### menu_theme_configs
+
+```sql
+menu_theme_configs(
+  id,
+  menu_id,
+  template_id,
+  config_json,
+  created_at,
+  updated_at
+)
+```
+
+---
+
+## Import / AI / Excel Creation
+
+Manual, Excel and AI creation are not separate product types.
+
+They are import sources.
+
+### import_jobs
+
+```sql
+import_jobs(
+  id,
+  tenant_id,
+  branch_id,
+  source_type,
+  status,
+  created_by,
+  created_at,
+  updated_at
+)
+```
+
+source_type examples:
+
+```text
+MANUAL
+EXCEL
+AI
+POS_IMPORT
+```
+
+### import_job_items
+
+```sql
+import_job_items(
+  id,
+  import_job_id,
+  raw_data_json,
+  mapped_product_id,
+  status,
+  error_message,
+  created_at,
+  updated_at
+)
+```
+
+Final output of imports should become:
+- products
+- product_translations
+- product_prices
+- menu_items
+
+---
+
+## Subscription / Plan / Feature Entitlements
+
+### plans
+
+```sql
+plans(
+  id,
+  code,
+  name,
+  status
+)
+```
+
+### features
+
+```sql
+features(
+  id,
+  code,
+  name,
+  feature_type
+)
+```
+
+feature_type examples:
+
+```text
+BOOLEAN
+LIMIT
+MODULE
+```
+
+### plan_features
+
+```sql
+plan_features(
+  id,
+  plan_id,
+  feature_id,
+  is_enabled,
+  limit_value
+)
+```
+
+Examples:
+
+```text
+QR_MENU = enabled
+QR_MENU_AI_CREATE = disabled
+QR_MENU_DYNAMIC_PRICING = disabled
+MAX_BRANCHES = 1
+MAX_PRODUCTS = 50
+```
+
+### tenant_subscriptions
+
+```sql
+tenant_subscriptions(
+  id,
+  tenant_id,
+  plan_id,
+  status,
+  started_at,
+  expires_at
+)
+```
+
+### tenant_feature_overrides
+
+```sql
+tenant_feature_overrides(
+  id,
+  tenant_id,
+  feature_id,
+  is_enabled,
+  limit_value,
+  reason,
+  created_at
+)
+```
+
+Use case:
+- Tenant is on Pro plan
+- But buys AI menu creation as an add-on
+- Enable QR_MENU_AI_CREATE only for that tenant
+
+---
+
+## Reporting
+
+Reporting should be based on:
+- Order snapshots
+- Product IDs
+- Channels
+- Branches
+- Time periods
+- Module usage events
+
+Do not rely only on current product/menu tables for historical reports.
+
+Possible reporting dimensions:
+- tenant_id
+- branch_id
+- product_id
+- category_id
+- source_channel
+- date/time
+- payment status
+- module source
+
+Future event/audit model:
+
+```sql
+audit_logs(
+  id,
+  tenant_id,
+  user_id,
+  entity_type,
+  entity_id,
+  action,
+  old_value_json,
+  new_value_json,
+  created_at
+)
+```
+
+---
+
+## Key Design Rules
+
+### Rule 1
+
+Do not create one giant products table with every module-specific field.
+
+Bad example:
+
+```text
+products
+- menu_price
+- pos_name
+- table_order_enabled
+- home_delivery_fee
+- qr_visible
+- waiter_terminal_visible
+- pos_sync_status
+```
+
+This will become unmaintainable.
+
+### Rule 2
+
+Do not create completely separate product identities per module.
+
+Bad example:
+
+```text
+menu_products
+pos_products
+home_order_products
+table_order_products
+```
+
+If all of these represent independent products, synchronization, reporting and inventory become difficult.
+
+### Rule 3
+
+Correct model:
+
+```text
+Product = identity
+Module-specific tables = configuration/projection/mapping
+OrderItem = snapshot
+```
+
+### Rule 4
+
+Feature availability should be controlled by entitlement checks, not hardcoded logic.
+
+Example:
+
+```text
+Can tenant use dynamic pricing?
+Check feature QR_MENU_DYNAMIC_PRICING.
+```
+
+### Rule 5
+
+Menus and design are presentation layers.
+Products and pricing are domain/core layers.
+
+---
+
+## Important Open Questions
+
+These decisions should be clarified before implementation:
+
+1. Will one product be shared across all branches by default?
+2. Can branches override product name, price, visibility and availability?
+3. Should a menu belong to one branch or multiple branches?
+4. Should categories be global product categories or menu-specific categories?
+5. Should POS sync be one-way or two-way?
+6. Should product deletion be soft-delete only?
+7. Should price changes be versioned?
+8. Should menu design rules be evaluated on server-side or client-side?
+9. Should QR menu work without login/publicly?
+10. Should table ordering require staff approval before sending to kitchen/POS?
+11. Will there be stock/inventory in future?
+12. Will products have variants/options such as size, sauce, extra cheese?
+13. How will tax/VAT be handled per product/channel?
+14. Will campaign pricing and dynamic pricing conflict? If yes, which has priority?
+15. Will reporting be real-time or periodically aggregated?
+
+---
+
+## Suggested Next Implementation Order
+
+Phase 1 foundation:
+
+```text
+1. Tenant / Branch
+2. User / Role / Permission
+3. Product Core
+4. Product Translation
+5. Product Price
+6. QR Menu
+7. Menu Category
+8. Menu Item
+9. Feature / Plan entitlement
+10. Basic QR menu public view
+```
+
+Phase 1 extension:
+
+```text
+11. Excel import
+12. Basic menu designer
+13. Table definitions
+14. QR codes per table
+15. Table order
+16. Order snapshot model
+17. Basic reporting
+```
+
+Phase 2:
+
+```text
+18. AI menu creation
+19. Dynamic pricing
+20. Dynamic design
+21. POS mapping
+22. Waiter terminal
+23. Home delivery
+24. Advanced reports
+```
+
+---
+
+## Final Summary
+
+Use this core principle:
+
+```text
+Product Core is the stable identity.
+Modules are business capabilities.
+Features are plan-controlled abilities.
+Module-specific product tables are projections/settings/mappings.
+Orders store snapshots.
+Pricing and design should be rule-based and reusable.
+```
