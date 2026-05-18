@@ -166,29 +166,30 @@ Her rol klasörünün tam donanımı: `current.md`, `ilerleme.md`, `kurallar.md`
 - Kullanıcı sözlü olarak da ekleme yapabilir, agent ilgili `analiz.md` / `rules.md` günceller
 - **Kullanım:** "Bu sayfayı şu referans projedeki gibi yap" denildiğinde → `analiz/` altındaki ilgili analiz.md okunur, kod bloğu referans alınır
 
-### project_Design Klasörü
-- Backend hariç frontend projeler için merkezi design alanı: `project_Design/projects/<ProjeAdı>/`
-- Kapsam: RestaurantSystemPanel, RestaurantSystemQr
-- **Okuma:** Tüm roller
-- **Yazma:** `tasarimci` (tüm klasörler), `arge_muhendisi` (arge_design/), `analiz_uzmani` (design_metni, arayuz_aciklamalari)
-- Yapı:
-  - `design_kurallari.md` — renk, tipografi, boşluk, komponent standartları
-  - `design_metni.md` — tasarımın ruh/ton/kimlik metin hali (analiz_uzmani yazar)
-  - `arayuz_aciklamalari.md` — her ekran ve bileşenin detaylı açıklaması
-  - `example_design/` — referans/ilham alınan ham tasarımlar (screenshot, link)
-  - `example_design_duzenlenmis/` — notlanmış, uyarlama kararları eklenmiş referanslar
-  - `mevcut_design/` — projenin gerçek mevcut tasarım durumu
-  - `arge_design/` — arge mühendisinin deneysel tasarım araştırmaları
-  - `gecici/` — geçici/çer çöp dosyalar, periyodik temizlenir
+### projectDesignAnalizTaskArge Klasörü (Üç Kapsam)
+**Geliştirici harici rollerin tüm çıktı merkezi.**
 
-### hamExample Klasörü (project_Design altında, proje bazlı değil)
-- Konum: `project_Design/hamExample/` — proje ayrımı yapmadan sistemin bütününü ilgilendiren ham materyaller
+Üç kapsam:
+- **Geliştirme:** `gelistirici` → `current_md/` + kod repo
+- **Design+Analiz+Task+Arge:** `tasarimci`, `analiz_uzmani`, `task_uzmani`, `arge_muhendisi` → `projectDesignAnalizTaskArge/`
+- **Test:** `tester` → ayrı kapsam
+
+Yapı: `projects/<ProjeAdı>/design/`, `analiz/`, `tasks/`, `arge/` — her rol kendi alt klasörüne yazar.
+- `tasarimci` → `design/`
+- `analiz_uzmani` → `analiz/` + `design/design_metni.md`, `design/arayuz_aciklamalari.md`
+- `task_uzmani` → `tasks/`
+- `arge_muhendisi` → `arge/` + `design/arge_design/`
+- `RestaurantSystemBackend` → sadece `tasks/`
+- `genel/` → proje ataması yapılamayan çıktılar (`design/`, `analiz/`, `arge/`)
+
+### hamExample Klasörü (projectDesignAnalizTaskArge altında, proje bazlı değil)
+- Konum: `projectDesignAnalizTaskArge/hamExample/` — proje ayrımı yapmadan sistemin bütününü ilgilendiren ham materyaller
 - **Amaç:** Hangi projeye ait olduğu belirsiz veya her iki projeyi kapsayan dökümanların "önce at, sonra analiz et" alanı
 - **Yapı:** Flat (alt klasör yok) — `example1`, `example2` gibi dosyalar doğrudan klasörde
 - **Kural:** Bu klasöre dosyaları HEP KULLANICI koyar, Claude eklemez
 - **Analiz akışı:** tasarimci / arge_muhendisi / analiz_uzmani rolleri, mod menüsünden önce "projeye devam mı, genel analiz mi?" sorar → analiz seçilirse dosyalar listelenir, analiz edilir, kullanıcıdan proje ataması istenir:
-  - Panel → `project_Design/projects/RestaurantSystemPanel/example_design_duzenlenmis/`
-  - QR → `project_Design/projects/RestaurantSystemQr/example_design_duzenlenmis/`
+  - Panel → `projectDesignAnalizTaskArge/projects/RestaurantSystemPanel/design/example_design_duzenlenmis/`
+  - QR → `projectDesignAnalizTaskArge/projects/RestaurantSystemQr/design/example_design_duzenlenmis/`
   - Genel / her ikisi de → `project_Design/genel/example_design_duzenlenmis/`
 - **Temizlik:** Analizi tamamlanan materyaller ilgili proje klasörüne taşınır, `hamExample/` periyodik temizlenir
 - `example_design/` farkı: `example_design/` proje bazlı, curated referanslar içerir; `hamExample/` proje-üstü, ham, sırasız döküman deposudur

@@ -89,8 +89,8 @@ Seçilen rol → kullanıcı dosyasının proje satırına kaydet.
 | tester | `current_md/<proje>/mimari_gelisen.md`, `current_md/<proje>/tester/current.md`, `tester/ilerleme.md`, `tester/public/bug_raporlari/README.md`, `tester/public/regression_listesi/README.md` |
 | analiz_uzmani | `current_md/<proje>/mimari_gelisen.md`, `current_md/<proje>/is_analisti/current.md`, `is_analisti/ilerleme.md`, `is_analisti/public/sorular/README.md`, `is_analisti/public/analizler/README.md` |
 | task_uzmani | `current_md/<proje>/mimari_gelisen.md`, `current_md/<proje>/task_uzmani/current.md`, `task_uzmani/ilerleme.md`, `tasks/<proje>/havuz.md`, `tasks/<proje>/yapilacaklar.md` |
-| tasarimci | `current_md/<proje>/mimari_gelisen.md`, `current_md/<proje>/tasarimci/current.md`, `tasarimci/ilerleme.md`, `project_Design/projects/<proje>/design_kurallari.md`, `project_Design/projects/<proje>/arayuz_aciklamalari.md` |
-| arge_muhendisi | `current_md/<proje>/mimari_gelisen.md`, `current_md/<proje>/arge_muhendisi/current.md`, `arge_muhendisi/ilerleme.md`, `project_Design/projects/<proje>/mevcut_design/README.md`, `arge_muhendisi/public/arastirmalar/README.md` |
+| tasarimci | `current_md/<proje>/mimari_gelisen.md`, `current_md/<proje>/tasarimci/current.md`, `tasarimci/ilerleme.md`, `projectDesignAnalizTaskArge/projects/<proje>/design/design_kurallari.md`, `projectDesignAnalizTaskArge/projects/<proje>/design/arayuz_aciklamalari.md` |
+| arge_muhendisi | `current_md/<proje>/mimari_gelisen.md`, `current_md/<proje>/arge_muhendisi/current.md`, `arge_muhendisi/ilerleme.md`, `projectDesignAnalizTaskArge/projects/<proje>/design/mevcut_design/README.md`, `arge_muhendisi/public/arastirmalar/README.md` |
 | yazilim_mimari | `current_md/<proje>/mimari_gelisen.md`, `current_md/<proje>/yazilim_mimari/current.md`, `yazilim_mimari/ilerleme.md`, `yazilim_mimari/public/mimariler/README.md`, `yazilim_mimari/public/kararlar/README.md` |
 | kalite_muhendisi | `current_md/<proje>/mimari_gelisen.md`, `current_md/<proje>/kalite_muhendisi/current.md`, `kalite_muhendisi/ilerleme.md`, `kalite_muhendisi/public/kalite_raporlari/README.md`, `kalite_muhendisi/public/standartlar/README.md` |
 | yonetici | `current_md/<proje>/mimari_gelisen.md`, `current_md/<proje>/yonetici/current.md`, `yonetici/ilerleme.md`, `yonetici/public/ilerleme_raporu.md`, `yonetici/public/sprint_plani.md` |
@@ -159,9 +159,9 @@ Kısa özet: "Kaldığın yer şu — ne yapmak istiyorsun?"
 4) Kullanıcı Akışı Çiz
 5) Prototip Ekle
 ```
-*Okur:* `is_analisti/public/akislar/`, `project_Design/projects/<proje>/` (design merkezi)
+*Okur:* `is_analisti/public/akislar/`, `projectDesignAnalizTaskArge/projects/<proje>/design/` (design merkezi)
 *Taslak:* `current_md/<proje>/tasarimci/private/taslaklar/`
-*Nihai:* `tasarimci/public/`, `project_Design/projects/<proje>/` (mevcut_design, design_kurallari, arayuz_aciklamalari)
+*Nihai:* `tasarimci/public/`, `projectDesignAnalizTaskArge/projects/<proje>/design/` (mevcut_design, design_kurallari, arayuz_aciklamalari)
 
 #### Arge Mühendisi
 ```
@@ -172,9 +172,9 @@ Kısa özet: "Kaldığın yer şu — ne yapmak istiyorsun?"
 5) Öneri Oluştur
 6) Bulguları Paylaş
 ```
-*Okur:* `referansProject/analiz/`, `rules/`, `is_analisti/public/`, mimari dosyaları, `project_Design/projects/<proje>/`
+*Okur:* `referansProject/analiz/`, `rules/`, `is_analisti/public/`, mimari dosyaları, `projectDesignAnalizTaskArge/projects/<proje>/design/`
 *Taslak:* `current_md/<proje>/arge_muhendisi/private/taslaklar/`
-*Nihai:* `arge_muhendisi/public/`, `project_Design/projects/<proje>/arge_design/`
+*Nihai:* `arge_muhendisi/public/`, `projectDesignAnalizTaskArge/projects/<proje>/design/arge_design/`
 
 #### Yazılım Mimarı
 ```
@@ -229,7 +229,7 @@ Her oturum bitiminde güncelle. **Tüm roller için:** `claude_context/<oturum>/
 | tester | `tester/current.md`, `tester/ilerleme.md`, ilgili `tester/public/` dosyaları |
 | analiz_uzmani | `is_analisti/current.md`, `is_analisti/ilerleme.md`, taslaktan `public/`'a taşıma |
 | task_uzmani | `task_uzmani/current.md`, `task_uzmani/ilerleme.md`, `tasks/<proje>/` dosyaları |
-| tasarimci | `tasarimci/current.md`, `tasarimci/ilerleme.md`, taslaktan `public/`'a taşıma, `project_Design/projects/<proje>/yapilacak_design/` güncellemeleri |
+| tasarimci | `tasarimci/current.md`, `tasarimci/ilerleme.md`, taslaktan `public/`'a taşıma, `projectDesignAnalizTaskArge/projects/<proje>/design/yapilacak_design/` güncellemeleri |
 | arge_muhendisi | `arge_muhendisi/current.md`, `arge_muhendisi/ilerleme.md`, taslaktan `public/`'a taşıma |
 | yazilim_mimari | `yazilim_mimari/current.md`, `yazilim_mimari/ilerleme.md`, taslaktan `public/`'a taşıma, `mimari_gelisen.md` |
 | kalite_muhendisi | `kalite_muhendisi/current.md`, `kalite_muhendisi/ilerleme.md`, taslaktan `public/`'a taşıma |

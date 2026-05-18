@@ -1,24 +1,31 @@
 # Tasarımcı Rolü
 
 ## Tanım
-UI/UX tasarımı yapan, komponentler tanımlayan, stil rehberi yöneten ekip üyesi. Tasarım kararları `public/` ile tüm ekiple paylaşılır.
+UI/UX tasarımı yapan, komponentler tanımlayan, stil rehberi yöneten ekip üyesi.
 
 ## Klasör Yapısı
 ```
-current_md/<proje>/tasarimci/
+current_md/<proje>/tasarimci/       # agent takip (çıktı buraya gelmez)
 ├── current.md
 ├── ilerleme.md
 ├── kurallar.md
-├── private/
-│   ├── notlar.md
-│   ├── tartisma.md       # Analiz uzmanı / geliştirici ile tasarım tartışmaları
-│   └── taslaklar/        # Ham eskizler, deneme tasarımları
-└── public/
-    ├── tasarimlar/        # Kesinleşmiş ekran tasarımları
-    ├── komponentler/      # Komponent tanımları ve kuralları
-    ├── stiller/           # Renk, tipografi, spacing rehberi
-    ├── kullanici_akislari/ # UX akış diyagramları
-    └── prototipler/       # Etkileşimli prototip linkleri / açıklamaları
+└── private/
+    ├── notlar.md
+    ├── tartisma.md
+    └── taslaklar/                  # ham eskizler (kesinleşince design/ ye taşı)
+
+projectDesignAnalizTaskArge/projects/<proje>/design/   # TÜM çıktılar buraya
+├── design_kurallari.md
+├── design_metni.md
+├── arayuz_aciklamalari.md
+├── example_design/
+├── example_design_duzenlenmis/
+├── mevcut_design/
+├── arge_design/
+├── taslak_design/
+├── gecici/
+└── yapilacak_design/               # gelistirici buradan okur
+    └── oncelik_sirasi.md
 ```
 
 ## Mod Menüsü
@@ -29,33 +36,18 @@ current_md/<proje>/tasarimci/
 5. Prototip Ekle
 
 ## Okur
-- `is_analisti/public/akislar/` (kullanıcı akışları)
-- `is_analisti/public/gereksinimler/`
+- `projectDesignAnalizTaskArge/projects/<proje>/analiz/` (analiz_uzmani çıktıları)
+- `projectDesignAnalizTaskArge/projects/<proje>/design/`
+- `projectDesignAnalizTaskArge/hamExample/`
 - `current_md/<proje>/mimari_gelisen.md`
-- `project_Design/projects/<proje>/design_kurallari.md`
-- `project_Design/projects/<proje>/design_metni.md`
-- `project_Design/projects/<proje>/arayuz_aciklamalari.md`
-- `project_Design/projects/<proje>/example_design/` (referans tasarımlar)
-- `project_Design/projects/<proje>/example_design_duzenlenmis/`
-- `project_Design/projects/<proje>/arge_design/` (arge önerileri)
-- `project_Design/hamExample/` (ham, proje-üstü materyaller)
-
-## hamExample Bilgisi
-- `project_Design/hamExample/` — proje-üstü ham materyal deposu
-- **Bu klasöre dosyaları HEP KULLANICI koyar.** Claude buraya dosya eklemez.
-- Dosyalar flat yapıda durur (alt klasör yok), kullanıcı `example1`, `example2` vb. şeklinde atar
 
 ## Yazar
 - Taslak: `tasarimci/private/taslaklar/`
-- Nihai: `tasarimci/public/`
-- `project_Design/projects/<proje>/design_kurallari.md`
-- `project_Design/projects/<proje>/design_metni.md`
-- `project_Design/projects/<proje>/arayuz_aciklamalari.md`
-- `project_Design/projects/<proje>/mevcut_design/`
-- `project_Design/projects/<proje>/example_design_duzenlenmis/`
-- `project_Design/projects/<proje>/gecici/`
-- `project_Design/projects/<proje>/yapilacak_design/` (geliştirici buraya bakarak UI yapar — spec dosyaları)
-- `project_Design/projects/<proje>/yapilacak_design/oncelik_sirasi.md`
+- Nihai: `projectDesignAnalizTaskArge/projects/<proje>/design/`
+
+## hamExample Bilgisi
+- `projectDesignAnalizTaskArge/hamExample/` — proje-üstü ham materyal deposu
+- **Bu klasöre dosyaları HEP KULLANICI koyar.** Claude buraya dosya eklemez.
 
 ## Son Adım Sorusu (Zorunlu)
 Mod menüsü gösterilmeden hemen önce sorulur:
@@ -63,13 +55,13 @@ Mod menüsü gösterilmeden hemen önce sorulur:
 > "Projelerde mi çalışmak istiyorsun yoksa genel tasarım/analiz mi yapacaksın?"
 > 1. **Projeye devam** → normal mod menüsünü göster
 > 2. **Genel / hamExample** →
->    - `project_Design/hamExample/` klasörünü tara
->    - Her materyali her iki projenin `example_design_duzenlenmis/` klasörlerine karşı kontrol et — karşılığı yoksa "analiz edilmemiş (yeni)" say
->    - Kullanıcıya say ve listele: **"Şu an X adet materyal var: Example1, Example2... Hangisi üzerinde çalışalım?"**
->    - Seçim yapılınca analiz et → kullanıcıdan proje ataması al:
-      - `RestaurantSystemPanel` → `project_Design/projects/RestaurantSystemPanel/example_design_duzenlenmis/`
-      - `RestaurantSystemQr` → `project_Design/projects/RestaurantSystemQr/example_design_duzenlenmis/`
-      - `Genel / her ikisi de` → `project_Design/genel/example_design_duzenlenmis/`
+>    - `projectDesignAnalizTaskArge/hamExample/` klasörünü tara
+>    - Her materyali `projects/*/design/example_design_duzenlenmis/` ile karşılaştır — yoksa "yeni"
+>    - **"Şu an X adet materyal var: Example1, ... Hangisi üzerinde çalışalım?"**
+>    - Analiz et → kullanıcıdan proje ve tip ataması al:
+>      - Panel design → `projects/RestaurantSystemPanel/design/example_design_duzenlenmis/`
+>      - QR design → `projects/RestaurantSystemQr/design/example_design_duzenlenmis/`
+>      - Genel → `genel/design/example_design_duzenlenmis/`
 
 ## Oturum Sonu Güncellenecekler
-`tasarimci/current.md`, `tasarimci/ilerleme.md`, taslaktan `public/`'a taşıma, ilgili `project_Design/<proje>/` dosyaları, `claude_context/<oturum>/oturum.md`
+`tasarimci/current.md`, `tasarimci/ilerleme.md`, ilgili `design/` dosyaları
