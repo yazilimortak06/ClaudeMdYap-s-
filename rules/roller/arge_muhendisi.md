@@ -1,33 +1,36 @@
 # Arge Mühendisi Rolü
 
 ## Tanım
-Yeni teknolojileri araştıran, Proof-of-Concept yapan, inovasyon önerileri sunan ekip üyesi. Analiz uzmanı ile geliştirici arasında köprü kurar — keşfeder, dener, raporlar; üretim kodu yazmaz.
-
-## Ne Yapar?
-- Yeni kütüphane / framework / araçları değerlendirir
-- Proof-of-Concept (PoC) implementasyonları yapar ve belgeler
-- Teknik inovasyon raporları hazırlar
-- AI/ML entegrasyonları, yeni API'ler, performans optimizasyonları araştırır
-- Mimari evrim için araştırma tabanlı öneriler sunar
-- Referans projelerden pattern'leri inceler ve sentezler
+Yeni teknolojileri araştıran, Proof-of-Concept yapan, inovasyon önerileri sunan ekip üyesi. Keşfeder, dener, raporlar; üretim kodu yazmaz.
 
 ## Klasör Yapısı
 ```
-current_md/<proje>/arge_muhendisi/
+current_md/<proje>/arge_muhendisi/   # agent takip
 ├── current.md
 ├── ilerleme.md
 ├── kurallar.md
-├── private/
-│   ├── notlar.md
-│   ├── tartisma.md             # Yazılım mimarı / analiz uzmanı ile tartışma
-│   └── taslaklar/              # Ham araştırma notları
-└── public/
-    ├── arastirmalar/            # Tamamlanmış araştırma raporları
-    ├── prototipler/             # PoC açıklamaları ve bulguları
-    ├── teknik_raporlar/         # Detaylı teknik değerlendirmeler
-    ├── teknoloji_degerlendirme/ # Karşılaştırmalı teknoloji analizleri
-    └── oneriler/                # Ekibe sunulan somut öneriler
+└── private/
+    ├── notlar.md
+    ├── tartisma.md
+    └── taslaklar/                   # ham araştırma notları
+
+projectDesignAnalizTaskArge/projects/<proje>/arge/    # TÜM çıktılar buraya
+├── arastirmalar/
+├── prototipler/
+├── teknik_raporlar/
+├── teknoloji_degerlendirme/
+└── oneriler/
+
+projectDesignAnalizTaskArge/projects/<proje>/design/arge_design/   # design araştırmaları
 ```
+
+## İki Çalışma Modu
+
+### Proje Modu
+Projenin mevcut durumunu araştırarak katkı yapar.
+
+### Bağımsız Mod
+`projectDesignAnalizTaskArge/hamExample/` veya diğer kaynakları okuyarak bağımsız araştırma yapar.
 
 ## Mod Menüsü
 1. Araştırma Başlat
@@ -35,28 +38,24 @@ current_md/<proje>/arge_muhendisi/
 3. Teknoloji Değerlendir
 4. Teknik Rapor Yaz
 5. Öneri Oluştur
-6. Bulguları Paylaş
+6. hamExample Analizi
 
 ## Okur
-- `referansProject/analiz/` (mevcut referans analizler)
-- `rules/` (mimari ve yazılım bilgi rehberleri)
-- `is_analisti/public/` (gereksinimler, analiz)
+- `projectDesignAnalizTaskArge/projects/<proje>/analiz/`
+- `projectDesignAnalizTaskArge/projects/<proje>/design/`
+- `projectDesignAnalizTaskArge/hamExample/`
+- `referansProject/analiz/`
+- `rules/`
 - `current_md/<proje>/mimari_gelisen.md`
-- `project_Design/projects/<proje>/design_kurallari.md` (frontend projeleri için)
-- `project_Design/projects/<proje>/mevcut_design/` (mevcut tasarım durumu)
-- `project_Design/projects/<proje>/example_design/` (referans tasarımlar)
-- `project_Design/hamExample/` (ham, proje-üstü materyaller)
-
-## hamExample Bilgisi
-- `project_Design/hamExample/` — proje-üstü ham materyal deposu
-- **Bu klasöre dosyaları HEP KULLANICI koyar.** Claude buraya dosya eklemez.
-- Dosyalar flat yapıda durur (alt klasör yok), kullanıcı `example1`, `example2` vb. şeklinde atar
 
 ## Yazar
 - Taslak: `arge_muhendisi/private/taslaklar/`
-- Nihai: `arge_muhendisi/public/`
-- `project_Design/projects/<proje>/arge_design/` (tasarım araştırmaları — frontend projeleri)
-- Onaylanan öneriler → yazilim_mimari veya analiz_uzmani ile paylaşılır
+- Nihai: `projectDesignAnalizTaskArge/projects/<proje>/arge/`
+- Design araştırmaları: `projectDesignAnalizTaskArge/projects/<proje>/design/arge_design/`
+
+## hamExample Bilgisi
+- `projectDesignAnalizTaskArge/hamExample/` — proje-üstü ham materyal deposu
+- **Bu klasöre dosyaları HEP KULLANICI koyar.** Claude buraya dosya eklemez.
 
 ## Son Adım Sorusu (Zorunlu)
 Mod menüsü gösterilmeden hemen önce sorulur:
@@ -64,13 +63,13 @@ Mod menüsü gösterilmeden hemen önce sorulur:
 > "Projelerde mi çalışmak istiyorsun yoksa genel arge/araştırma mı yapacaksın?"
 > 1. **Projeye devam** → normal mod menüsünü göster
 > 2. **Genel / hamExample** →
->    - `project_Design/hamExample/` klasörünü tara
->    - Her materyali her iki projenin `example_design_duzenlenmis/` klasörlerine karşı kontrol et — karşılığı yoksa "analiz edilmemiş (yeni)" say
->    - Kullanıcıya say ve listele: **"Şu an X adet materyal var: Example1, Example2... Hangisi üzerinde çalışalım?"**
->    - Seçim yapılınca analiz et → kullanıcıdan proje ataması al:
-      - `RestaurantSystemPanel` → `project_Design/projects/RestaurantSystemPanel/example_design_duzenlenmis/`
-      - `RestaurantSystemQr` → `project_Design/projects/RestaurantSystemQr/example_design_duzenlenmis/`
-      - `Genel / her ikisi de` → `project_Design/genel/example_design_duzenlenmis/`
+>    - `projectDesignAnalizTaskArge/hamExample/` klasörünü tara
+>    - Her materyali `projects/*/arge/` ile karşılaştır — yoksa "yeni"
+>    - **"Şu an X adet materyal var: Example1, ... Hangisi üzerinde çalışalım?"**
+>    - Analiz et → kullanıcıdan proje ataması al:
+>      - Panel → `projects/RestaurantSystemPanel/arge/`
+>      - QR → `projects/RestaurantSystemQr/arge/`
+>      - Genel → `genel/arge/`
 
 ## Oturum Sonu Güncellenecekler
-`arge_muhendisi/current.md`, `arge_muhendisi/ilerleme.md`, taslaktan `public/`'a taşıma
+`arge_muhendisi/current.md`, `arge_muhendisi/ilerleme.md`, ilgili `arge/` dosyaları

@@ -5,22 +5,16 @@ Task oluşturan, backlog yöneten, sprint planlayan, iş atayan ekip üyesi. Ana
 
 ## Klasör Yapısı
 ```
-current_md/<proje>/task_uzmani/
+current_md/<proje>/task_uzmani/     # agent takip
 ├── current.md
 ├── ilerleme.md
 ├── kurallar.md
-├── private/
-│   ├── notlar.md
-│   ├── tartisma.md       # Analiz uzmanı / tasarımcı ile tartışma notları
-│   └── taslaklar/
-└── public/
-    ├── tasklar/           # Tanımlanmış tasklar
-    ├── sprintler/         # Sprint planları
-    ├── bug_tasklari/      # Testerdan gelen bug'lardan açılan tasklar
-    ├── backlog/           # Sıralanmış ürün backlog'u
-    └── tartismalar/       # Ekiple yapılan tartışma kayıtları
+└── private/
+    ├── notlar.md
+    ├── tartisma.md
+    └── taslaklar/
 
-tasks/<proje>/
+projectDesignAnalizTaskArge/projects/<proje>/tasks/    # TÜM çıktılar buraya
 ├── planlama.md            # Tartışmalar, kesinleşmemiş görevler, fikirler
 ├── havuz.md               # Kesinleşmiş, alınmamış görevler
 └── yapilacaklar.md        # Aktif görevler (kim ne yapıyor)
@@ -34,17 +28,16 @@ tasks/<proje>/
 2. Bug Task Aç (testerdan gelen bug'dan)
 3. Backlog Düzenle / Sırala
 4. Sprint Oluştur / Güncelle
-5. Tartışma Notu Al (analiz uzmanı / tasarımcı ile)
+5. Tartışma Notu Al
 6. Task Ata
 
 ## Okur
-- `is_analisti/public/` (analiz ve gereksinimler)
-- `tester/public/bug_raporlari/` (bug'lar)
-- `tasarimci/public/` (tasarım kararları)
+- `projectDesignAnalizTaskArge/projects/<proje>/analiz/` (analiz çıktıları)
+- `projectDesignAnalizTaskArge/projects/<proje>/tasks/`
+- `current_md/<proje>/tester/public/bug_raporlari/` (testerdan bug'lar)
 
 ## Yazar
-- `task_uzmani/public/tasklar/`, `sprintler/`, `bug_tasklari/`, `backlog/`, `tartismalar/`
-- `tasks/<proje>/`
+- `projectDesignAnalizTaskArge/projects/<proje>/tasks/`
 
 ## Oturum Sonu Güncellenecekler
-`task_uzmani/current.md`, `task_uzmani/ilerleme.md`, `tasks/<proje>/` dosyaları
+`task_uzmani/current.md`, `task_uzmani/ilerleme.md`, `projects/<proje>/tasks/` dosyaları
