@@ -1,0 +1,55 @@
+# Ekran: Sepet ve Sipariş
+
+## Tetiklenme
+Header'daki sepet ikonu veya "Sepete Ekle" butonu sonrası açılan sepet sayfası.
+
+## Görünüm Açıklaması
+
+### Sepet Başlığı
+- "Sepetim" başlığı
+- Ürün adedi: "3 ürün"
+- Geri/kapat butonu
+
+### Sepet Ürün Listesi
+Her satırda:
+  - Ürün görseli (küçük thumbnail, sol)
+  - Ürün adı ve varsa notu
+  - Adet seçici: [−] [2] [+]
+  - Birim fiyat: ₺538
+  - Toplam fiyat (adet × fiyat): ₺1.076
+  - Sil butonu (çöp ikonu veya kaydırarak sil)
+
+Örnek Sepet İçeriği:
+  1. Soul Klasik Burger × 2     → ₺1.076
+  2. Soul Nachos Night × 1      → ₺454
+  3. Tiramisu × 1               → ₺426
+
+### Özet Bölümü
+  Ara Toplam  : ₺1.956
+  Servis Ücreti: ₺0 (masada sipariş)
+  ─────────────────────
+  TOPLAM      : ₺1.956
+
+### Sipariş Notu
+  [ Siparişinize genel not ekleyin... ]
+
+### Aksiyon Butonu
+  [ SİPARİŞİ ONAYLA ] — Tam genişlik, amber/vurgu rengi
+
+### Masa Bilgisi
+  📍 Masa: 5  (QR kodu ile gelen masa bilgisi)
+
+## Sipariş Akışı
+  1. Ürünler sepete eklendi
+  2. Sepet ekranı açıldı
+  3. Notlar eklendi (opsiyonel)
+  4. "Siparişi Onayla" tıklandı
+  5. Onay ekranı / teşekkür mesajı
+  6. Sipariş mutfağa/garsona iletildi
+
+## Tasarım Detayları
+- Arkaplan: #111111
+- Ürün satırı: #1E1E1E kart, rounded corners
+- Adet seçici: Küçük, inline
+- Onay butonu: Tam genişlik, yüksek kontrast
+- Toplam fiyat: Büyük, beyaz, bold

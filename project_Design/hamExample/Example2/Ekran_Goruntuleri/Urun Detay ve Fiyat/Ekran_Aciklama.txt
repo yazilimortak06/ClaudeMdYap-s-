@@ -1,0 +1,39 @@
+# Ekran: Ürün Detay ve Fiyat
+
+## Tetiklenme
+Kullanıcı ürün kartına tıkladığında / dokunduğunda açılan detay sayfası veya modal/bottom sheet.
+
+## Görünüm Açıklaması
+
+### Ürün Görseli
+- Tam ekran veya büyük görsel (üst yarı)
+- Yüksek çözünürlüklü yemek fotoğrafı
+- Geri butonu (sol üst, ok ikonu)
+
+### Ürün Bilgileri (Alt Bölüm)
+- Ürün adı (büyük, beyaz, bold)
+- Kategori etiketi (küçük, gri) — örn: "Başlangıçlar"
+- Açıklama metni (varsa) — içindekiler, hazırlanış notu
+- Fiyat: ₺XXX (büyük, amber/altın renk)
+
+### Örnek Ürün: Soul Steak
+  Ad        : Soul Steak
+  Kategori  : Ana Yemekler
+  Açıklama  : (varsa) Özel marinasyon, ızgara dana et
+  Fiyat     : ₺1.546
+
+### Aksiyon Bölümü (Alt Kısım)
+- Adet seçici: [−] [1] [+]
+- "Sepete Ekle" butonu (tam genişlik, vurgu rengi)
+- Not ekle alanı (opsiyonel): "Siparişinize not ekleyin..."
+
+### Allerjen / Besin Bilgisi (Varsa)
+- Allerjen ikonları (gluten, süt, fıstık vb.)
+- Kalori bilgisi
+
+## Tasarım Detayları
+- Modal: Bottom sheet (aşağıdan yukarı kayar)
+- Arkaplan overlay: Yarı şeffaf siyah (#000000CC)
+- Bottom sheet arkaplanı: #1E1E1E
+- Sepete ekle butonu: Amber gradient veya solid
+- Adet seçici: Yuvarlak butonlar, koyu arka plan

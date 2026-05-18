@@ -1,0 +1,52 @@
+# Ekran: AI Asistan
+
+## Platform Özelliği: Pardon AI
+
+Pardon App'in en farklılaştırıcı özelliği: yapay zeka destekli sipariş öneri sistemi.
+Sistem "Pardon AI: #1 AI for Restaurants" olarak konumlandırılıyor.
+
+## AI Asistan Çalışma Mantığı
+
+### Girdi Verileri
+  - Kullanıcı tercihleri (varsa önceki siparişler)
+  - Günün saati / gündüz-gece
+  - Popüler ürünler (diğer kullanıcıların siparişleri)
+  - Menü içeriği analizi
+
+### AI Öneri Türleri
+  1. "Bugün Popüler" — En çok sipariş edilen ürünler
+  2. "Sizin İçin Öneri" — Kişiselleştirilmiş öneri
+  3. "İyi Gider" — Seçilen ürünle uyumlu tamamlayıcı ürün (upsell)
+  4. "Bu Saate Özel" — Saat bazlı öneri (öğle, akşam, gece)
+
+## Ekran Görünümü
+
+### Ana Sayfada AI Banner
+  Renkli gradient banner (mor/mavi/amber)
+  "🤖 AI Önerisi: Bu akşam için Soul Steak mükemmel bir seçim!"
+  [İncele →] butonu
+
+### AI Öneri Kartları (Slider/Carousel)
+  Yatay kaydırmalı 3–4 öneri kartı
+  Her kart:
+    - Ürün görseli
+    - "AI Önerisi" etiketi (küçük rozet)
+    - Ürün adı
+    - Fiyat
+    - [Ekle] butonu
+
+### AI Asistan Chat (Varsa)
+  Sağ alt köşede chat baloncuğu (fab button)
+  Soru: "Ne yiyebilirim?"
+  Yanıt: "Menünüzde Burgerler kategorisi çok popüler.
+           Soul Klasik Burger (₺538) öneriyorum!"
+
+## Teknik Uygulama
+  - LLM tabanlı öneri motoru (GPT-4 veya özel model)
+  - Menü verisi embedding ile vektör DB'ye yüklenmiş
+  - Kullanıcı sorgusuna en yakın ürünler semantic search ile bulunuyor
+  - SSE (Server-Sent Events) ile stream yanıt
+
+## Pardon AI Sloganı
+  "Pardon AI: Restoranlar için #1 AI"
+  "Satışlarınızı yapay zeka önerileriyle katlayın"

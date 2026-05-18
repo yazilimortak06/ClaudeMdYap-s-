@@ -1,0 +1,475 @@
+# SYSTEM CONTEXT — Soul Pub QR Menu Analysis (Pardon App Platform)
+
+## Analiz Edilen URL
+
+https://webmenu.pardonapp.co/soul-pub
+
+Platform: Pardon App — AI Destekli Akıllı QR Menü SaaS Sistemi
+İşletme: The Soul Pub (Ankara, Kavaklıdere)
+
+---
+
+## İşletme Bilgileri
+
+### Genel Bilgiler
+
+- **İşletme Adı:** The Soul Pub
+- **Konsept:** "Finest Drink & Dining" — Ankara'nın kalp noktasında kokteyl, bira, viski, gin ve yemek deneyimi sunan premium bar/pub
+- **Kuruluş:** 2012
+- **Adres:** Remzi Oğuz Arık Mahallesi, Bülten Caddesi No:4/A, Kavaklıdere, Çankaya, Ankara
+- **Telefon:** +90 312 426 06 44
+- **Çalışma Saatleri:** Pazartesi – Pazar: 11:00 – 01:00
+- **Sosyal Medya:** Facebook (facebook.com/soulpub) | Instagram (@soul.pub)
+
+### Konsept Özellikleri
+
+- 200+ çeşit viski koleksiyonu (İskoçya, İrlanda, Amerika, Asya)
+- Kokteyl günleri, bira günleri, viski günleri, gin günleri
+- Uzman bartender ekibi
+- Özel konsept menüler
+- Canlı müzik etkinlikleri
+- Fine dining + pub atmosferi kombinasyonu
+
+---
+
+## Platform: Pardon App
+
+### Platform Tanımı
+
+Pardon App, restoranlar, kafeler ve oteller için yapay zeka destekli akıllı QR menü SaaS platformudur.
+Müşteriler masadaki QR kodu telefonlarıyla okutarak dijital menüye erişir, sipariş verebilir.
+
+### Platform Temel Özellikleri
+
+```text
+- Anlık/sınırsız menü güncellemesi
+- AI destekli ürün önerileri
+- Çok dilli menü desteği
+- Gerçek ürün görselleri
+- Yönetim paneli
+- Garson çağırma
+- Online ödeme entegrasyonu
+- Masa bazlı QR kod üretimi
+- Dinamik menü tasarımı
+- Excel / AI ile menü yükleme
+```
+
+### Platform URL Yapısı
+
+```text
+https://webmenu.pardonapp.co/{slug}
+https://webmenu.pardonapp.co/{slug}/{branch_id}/menu/{menu_id}
+https://webmenu.pardonapp.co/en/{slug}          (İngilizce)
+https://webmenu.pardonapp.co/en/{slug}/{branch}/{menu}
+```
+
+---
+
+## Menü Yapısı ve İçerik Analizi
+
+### Menü Kategorileri
+
+```text
+1. Başlangıçlar
+2. Soul Fritöz
+3. Tacos & Wraps
+4. Salatalar & Bowl
+5. Burgerler
+6. Makarnalar
+7. Ana Yemekler
+8. Tatlı & Kahve
+```
+
+### Ürün Detayları
+
+#### Başlangıçlar
+| Ürün Adı | Fiyat |
+|---|---|
+| Soul Kızarmış Bamya | ₺392 |
+| Soul Çıtır Sebze Tempura | ₺372 |
+| Soul Girit Kızartma | ₺412 |
+| Denizci Tabağı | ₺592 |
+| Soul Special Kıyma Soslu Kaşık Patates | ₺424 |
+| Soul Cheddar Soslu Kaşık Patates | ₺282 |
+| Soul Nachos Night | ₺454 |
+
+#### Soul Fritöz
+| Ürün Adı | Fiyat |
+|---|---|
+| Jagermeister Böreği | ₺486 |
+| Etli Butlu | ₺432 |
+| Susamlı Çıtır Tavuk | ₺452 |
+| Sen Soul | ₺448 |
+| Keyifli Ortak | ₺698 |
+
+#### Tacos & Wraps
+| Ürün Adı | Fiyat |
+|---|---|
+| Etli Tacos | ₺772 |
+| Tavuklu Tacos | ₺498 |
+| Kıymalı Tacos | ₺648 |
+| Greenpeace Wrap | ₺376 |
+| Rodeo Wrap | ₺762 |
+| Cheese Steak Wrap | ₺806 |
+
+#### Salatalar & Bowl
+| Ürün Adı | Fiyat |
+|---|---|
+| Dakos Salata | ₺446 |
+| Izgara Ananas & Hellim Salata | ₺436 |
+| Fish Bowl | ₺578 |
+| Avakado Bowl | ₺598 |
+| Beef Bowl | ₺696 |
+
+#### Burgerler
+| Ürün Adı | Fiyat |
+|---|---|
+| Soul Klasik Burger | ₺538 |
+| Cheddar Soslu Burger | ₺568 |
+| Füme Kaburga Burger | ₺692 |
+| Vejeteryan Burger | ₺462 |
+| Anadolu Efes Burger | ₺698 |
+
+#### Makarnalar
+| Ürün Adı | Fiyat |
+|---|---|
+| Asya Dana | ₺684 |
+| Soul Chef | ₺792 |
+| Spaghetti Bolognese | ₺486 |
+| Fettucine Alfredo Original | ₺492 |
+
+#### Ana Yemekler
+| Ürün Adı | Fiyat |
+|---|---|
+| Soul Kitchen | ₺852 |
+| Soul Fast Dana Etli | ₺798 |
+| Soul Steak | ₺1.546 |
+| Dana Madalyon | ₺1.432 |
+| The Original Antrikot | ₺1.224 |
+
+#### Tatlı & Kahve
+| Ürün Adı | Fiyat |
+|---|---|
+| Cheese Cake | ₺426 |
+| Tiramisu | ₺426 |
+| Baker's Field Coffee | ₺264 |
+| Jon Snow | ₺548 |
+
+---
+
+## Teknik Mimari Analizi
+
+### Frontend Teknoloji Stack
+
+```text
+- Framework  : Next.js (React tabanlı SSR/SSG)
+- Dil        : TypeScript / JavaScript
+- Stil       : Tailwind CSS veya CSS Modules
+- Platform   : Vercel veya benzer cloud (Next.js)
+- Mobil      : Responsive / Mobile-first tasarım
+- Tema       : Dark mode ağırlıklı, premium görünüm
+```
+
+### URL / Routing Yapısı
+
+```text
+/[slug]                     → İşletme ana sayfası (dil: TR)
+/en/[slug]                  → İşletme ana sayfası (dil: EN)
+/[slug]/[branch_id]/menu/[menu_id]   → Belirli şube menüsü
+```
+
+### SEO ve Meta Yapısı
+
+```text
+- Sayfa başlığı: "{İşletme Adı} | Pardon AI: #1 AI for Restaurants"
+- Open Graph meta tagları mevcut
+- SSR/SSG ile içerik arama motorları tarafından indexlenebilir
+- Hızlı yükleme için görsel optimizasyon
+```
+
+### Güvenlik Katmanı
+
+```text
+- Cloudflare veya benzeri CDN/WAF koruması aktif
+- Bot/scraper erişimi engelleniyor (HTTP 403)
+- Gerçek tarayıcı (JS yürütümlü) erişimi destekleniyor
+```
+
+---
+
+## UI/UX Tasarım Analizi
+
+### Genel Tasarım Dili
+
+```text
+Tema          : Dark (Koyu arka plan)
+Renk Paleti   :
+  - Arkaplan    : #111111 – #1A1A1A (derin siyah/koyu gri)
+  - Vurgu Renk  : Amber / altın tonları (premium his)
+  - Metin       : #FFFFFF / #E5E5E5
+  - İkincil     : Koyu gri tonlar
+
+Tipografi     : Modern sans-serif (Inter, Poppins veya benzeri)
+Layout        : Card-grid (ürün kartları ızgara düzeni)
+Görseller     : Yüksek çözünürlüklü yemek/içki fotoğrafları
+```
+
+### Navigasyon Yapısı
+
+```text
+Header
+  └── İşletme logosu/adı
+  └── Dil seçici (TR/EN)
+  └── Sepet ikonu
+  └── Garson çağır butonu (opsiyonel)
+
+Kategori Çubuğu (Yatay kaydırmalı)
+  └── Başlangıçlar | Fritöz | Tacos | Salatalar | ...
+
+Ürün Listesi (Grid/Liste görünümü)
+  └── Ürün görseli
+  └── Ürün adı
+  └── Açıklama (opsiyonel)
+  └── Fiyat
+  └── Sepete ekle butonu
+
+Footer
+  └── İşletme bilgileri
+  └── İletişim
+  └── Sosyal medya linkleri
+```
+
+### Mobil Deneyim
+
+```text
+- Tam responsive tasarım
+- Mobil öncelikli (Mobile-first)
+- Dokunmatik kaydırma ile kategori navigasyonu
+- Büyük görseller ve okunabilir yazı boyutları
+- Alt çubuk navigasyonu (muhtemelen)
+```
+
+---
+
+## QR Menü Modülü Özellikleri
+
+### Müşteri Tarafı Özellikler
+
+```text
+QR_MENU_VIEW              : Menüyü görüntüleme (genel erişim)
+QR_MENU_MULTILINGUAL      : Çok dilli görünüm (TR/EN ve diğerleri)
+QR_MENU_PRODUCT_IMAGE     : Ürün görselleri gösterimi
+QR_MENU_CATEGORY_NAV      : Kategori bazlı navigasyon
+QR_MENU_SEARCH            : Ürün arama (muhtemelen)
+QR_MENU_AI_RECOMMEND      : AI destekli kişiselleştirilmiş öneriler
+QR_MENU_CART              : Sepet yönetimi
+QR_MENU_ORDER             : Masadan sipariş verme
+QR_MENU_WAITER_CALL       : Garson çağırma
+```
+
+### Yönetici Tarafı Özellikler
+
+```text
+ADMIN_MENU_CREATE         : Menü oluşturma (manuel / Excel / AI)
+ADMIN_MENU_UPDATE         : Menü güncelleme
+ADMIN_CATEGORY_MANAGE     : Kategori yönetimi
+ADMIN_PRODUCT_MANAGE      : Ürün yönetimi (ad, açıklama, fiyat, görsel)
+ADMIN_THEME_CUSTOMIZE     : Tema ve tasarım özelleştirme
+ADMIN_QR_GENERATE         : QR kod üretme (masa başına)
+ADMIN_LANGUAGE_MANAGE     : Çok dil yönetimi
+ADMIN_BRANCH_MANAGE       : Şube yönetimi
+ADMIN_ANALYTICS           : Sipariş ve görüntülenme analitikleri
+```
+
+---
+
+## Platform Veri Modeli Gözlemleri
+
+### Çıkarılan Varlıklar (Entities)
+
+```text
+Tenant (İşletme)
+  id, slug, name, description, logo, contact_info, working_hours
+
+Branch (Şube)
+  id, tenant_id, name, address, status
+
+Menu
+  id, branch_id, name, default_language, active_theme_id, status
+
+MenuCategory
+  id, menu_id, name, sort_order, icon, is_visible
+
+MenuItem (Ürün)
+  id, menu_id, category_id, name, description, price, image_url,
+  is_visible, sort_order
+
+MenuItemTranslation
+  id, menu_item_id, language_code, name, description
+
+QRCode
+  id, branch_id, table_id, code, target_url, status
+
+Table
+  id, branch_id, name, table_number, status
+```
+
+### URL Slug Stratejisi
+
+```text
+- Her işletme benzersiz bir slug'a sahip: /soul-pub
+- Şube ve menü ID'leri path parametresi olarak geçilebiliyor
+- Dil prefixi URL'e ekleniyor: /en/soul-pub
+```
+
+---
+
+## Çok Dil Desteği
+
+```text
+Desteklenen Diller (Gözlemlenenler):
+  - Türkçe (TR) — Varsayılan
+  - İngilizce (EN) — /en/ prefixi ile
+
+Muhtemel Ek Diller:
+  - Arapça (AR)
+  - Almanca (DE)
+  - Rusça (RU)
+  - Fransızca (FR)
+```
+
+---
+
+## Fiyatlandırma Planı Gözlemleri
+
+```text
+Starter Plan (Muhtemelen)
+  - QR Menü görüntüleme
+  - Temel kategori yönetimi
+  - Sınırlı ürün sayısı
+  - 1 şube
+  - Temel tema
+
+Pro Plan (Muhtemelen)
+  - Excel import/export
+  - Gelişmiş tasarımcı
+  - Çok dil desteği
+  - Birden fazla şube
+  - Daha fazla ürün
+
+Premium Plan (Muhtemelen)
+  - AI menü oluşturma
+  - AI sipariş önerileri
+  - Dinamik fiyatlandırma
+  - Gelişmiş analitik
+  - Sınırsız ürün
+```
+
+---
+
+## Benzer İşletmeler (Platform Örnekleri)
+
+```text
+Soul Pub      → webmenu.pardonapp.co/soul-pub
+Rock Pub      → webmenu.pardonapp.co/en/rock-pub/4335/menu/23
+Cordelia Pub  → webmenu.pardonapp.co/en/cordelia-pub/3010/menu/32
+Lookin Pub    → webmenu.pardonapp.co/en/lookin-pub
+Elma Pub      → webmenu.pardonapp.co/en/elma-pub
+Salacak       → webmenu.pardonapp.co/en/salacak-restaurant
+Mienyu        → webmenu.pardonapp.co/en/mienyu/4387/menu/61
+```
+
+---
+
+## Ekran Görüntüsü Kategorileri
+
+### Kaydedilen Ekran Yapısı
+
+```text
+/Ekran_Goruntuleri
+  /Ana Sayfa ve Kategori Listesi
+      → İşletme banner görseli, kategori sekme çubuğu, ürün grid'i
+
+  /Urun Detay ve Fiyat
+      → Ürün büyük görseli, ad, açıklama, fiyat, sepete ekle
+
+  /Dil Secimi
+      → Dil seçici overlay/dropdown (TR, EN, vb.)
+
+  /Sepet ve Siparis
+      → Sepet içeriği, adet kontrolü, toplam tutar, sipariş ver
+
+  /Isletme Bilgileri ve Profil
+      → İşletme adı, logo, adres, çalışma saatleri, telefon
+
+  /AI Asistan
+      → AI öneri kartları, kişiselleştirme UI
+
+  /Tema ve Tasarim
+      → Dark tema, renk paleti, card grid layout
+
+  /QR Kod
+      → Masa QR kodu görünümü, yönlendirme bilgisi
+```
+
+---
+
+## Temel Tasarım Kuralları
+
+### Kural 1 — Müşteri Deneyimi
+Müşteri QR kodu okutunca herhangi bir uygulama indirmeden tarayıcı üzerinden anında menüye erişmeli.
+Yükleme süresi 2 saniyenin altında olmalı.
+
+### Kural 2 — Mobil Öncelik
+Tüm tasarım kararları önce mobil için yapılmalı.
+Masaüstü ikincil kanaldır.
+
+### Kural 3 — Görsel Kalite
+Ürün görselleri yüksek çözünürlüklü olmalı.
+Görsel olmayan ürünler için placeholder kullanılmalı.
+
+### Kural 4 — Fiyat Güncelleme
+Menü fiyatları admin panelinden anlık güncellenebilmeli.
+Güncelleme fiziksel menü değişikliği gerektirmemeli.
+
+### Kural 5 — Çok Dil
+Tüm menü içeriği dil başına ayrı çeviri kaydı tutmalı.
+Dil değiştirme URL prefix değişimi ile sağlanmalı.
+
+### Kural 6 — AI Öneriler
+AI motoru kullanıcı geçmişi ve popüler ürünlere göre kişiselleştirilmiş öneriler sunmalı.
+Öneri kartları ürün listesine entegre edilmeli.
+
+---
+
+## Önemli Sorular (Geliştirme İçin)
+
+1. Pardon App API'ye dışarıdan erişim mümkün mü (white-label)?
+2. Masa bazlı sipariş akışı nasıl işliyor (masa seçimi → sipariş → mutfak)?
+3. AI öneri motoru hangi verilerle çalışıyor (konum, saat, geçmiş sipariş)?
+4. Ödeme entegrasyonu hangi gateway'lerle yapılıyor?
+5. POS entegrasyonu (Lightspeed, Revel, vb.) mevcut mu?
+6. Kampanya ve indirim modülü nasıl tanımlanıyor?
+7. Şube bazlı fiyat farklılıkları destekleniyor mu?
+8. Allerjen ve besin değeri bilgileri gösteriliyor mu?
+9. Ürün varyantları (boy, ekstra malzeme) destekleniyor mu?
+10. Garson çağırma feature'ı ayrı subscription ile mi geliyor?
+
+---
+
+## Sonuç ve Özet
+
+```text
+Platform     : Pardon App — Next.js tabanlı QR Menü SaaS
+İşletme      : The Soul Pub (Premium Ankara Bar/Pub)
+Menü Yapısı  : 8 kategori, ~38 ürün (yiyecek odaklı; içki menüsü QR'da ayrı)
+Tema         : Dark premium, mobil-first
+Dil Desteği  : TR + EN (en az)
+Öne Çıkan    : AI öneriler, çok dil, QR masa yönetimi, anlık güncelleme
+Koruma       : Cloudflare / WAF aktif (bot engeli)
+
+Kullanım Amacı:
+  → Benzer bir QR Menü SaaS platformu geliştirmek için referans analiz
+  → Soul Pub gibi premium işletmeler için menü yönetim sistemi tasarımı
+  → Pardon App rakip analizi ve feature benchmarking
+```

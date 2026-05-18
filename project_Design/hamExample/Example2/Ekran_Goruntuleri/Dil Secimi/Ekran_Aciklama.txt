@@ -1,0 +1,42 @@
+# Ekran: Dil Seçimi
+
+## Tetiklenme
+Header'daki dil ikonu / "TR" butonuna tıklandığında açılan dil seçim arayüzü.
+
+## URL Yapısı
+- Türkçe : https://webmenu.pardonapp.co/soul-pub
+- İngilizce : https://webmenu.pardonapp.co/en/soul-pub
+- Dil değişimi URL prefix ekleme/kaldırma ile yapılıyor
+
+## Görünüm Açıklaması
+
+### Dil Seçici Modal veya Dropdown
+Açılış şekli: Dropdown menü (header'da) veya bottom sheet (mobilde)
+
+İçerik:
+  [🇹🇷 Türkçe    ]  ← Seçili (checkmark ile)
+  [🇬🇧 English   ]
+  [🇩🇪 Deutsch   ]  (varsa)
+  [🇸🇦 العربية   ]  (varsa)
+  [🇷🇺 Русский   ]  (varsa)
+
+### Dil Bayrak İkonları
+- Her dil satırında ülke bayrağı + dil adı
+- Aktif dil: vurgu rengi arka plan veya checkmark
+
+### Animasyon
+- Smooth fade-in / slide-down açılış
+- Dışarı tıklayınca kapanma (dismiss on outside click)
+
+## Teknik Not
+- Dil tercihi localStorage veya URL'de saklanıyor
+- Sayfa yenilenmeden içerik dile göre değişiyor (client-side i18n)
+- next-i18next veya react-intl kullanılıyor olabilir
+- URL route: /[lang]/[slug] yapısı
+
+## Ekran Örneği (Seçim Sonrası)
+Türkçe → İngilizce geçişte:
+  "Başlangıçlar" → "Starters"
+  "Burgerler" → "Burgers"
+  "Ana Yemekler" → "Main Courses"
+  Fiyatlar TL olarak kalmaya devam ediyor (₺)
