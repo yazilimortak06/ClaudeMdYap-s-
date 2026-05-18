@@ -1,0 +1,76 @@
+# Ekran: Tema ve Tasarım
+
+## Pardon App Tema Sistemi
+
+Pardon App dinamik tema/tasarım sistemi içeriyor.
+Her işletme kendi renk paletini, font'unu ve layout'unu seçebiliyor.
+
+## The Soul Pub Tema Analizi
+
+### Renk Paleti
+  Arkaplan Birincil   : #0F0F0F – #111111 (derin siyah)
+  Arkaplan İkincil    : #1A1A1A – #222222 (koyu gri)
+  Kart Arkaplanı      : #1E1E1E – #242424
+  Kenarlık            : #2E2E2E – #333333
+  Birincil Metin      : #FFFFFF (beyaz)
+  İkincil Metin       : #A0A0A0 – #9CA3AF (açık gri)
+  Vurgu Rengi (Aksan) : #F59E0B – #D97706 (amber/altın — premium his)
+  Hata/Uyarı         : #EF4444 (kırmızı)
+  Başarı              : #10B981 (yeşil)
+
+### Tipografi
+  Başlık Fontu   : Inter, Poppins veya Montserrat (sans-serif, modern)
+  Gövde Fontu    : Inter veya Roboto
+  Fiyat Fontu    : Mono veya bold sans-serif
+  Boyutlar       : xs: 12px | sm: 14px | base: 16px | lg: 18px | xl: 24px | 2xl: 32px
+
+### Layout / Düzen
+  Mobil Layout   : Single column (tek sütun) + 2 sütun ürün grid'i
+  Masaüstü       : Sidebar kategori + 3–4 sütun ürün grid'i
+  Kategori Çubuğu: Yatay sticky scroll
+  Kart Tasarımı  : Dikey kart (görsel üstte, bilgi altta)
+
+### Bileşen Detayları
+
+#### Ürün Kartı
+  ┌─────────────────────┐
+  │   [ÜRÜN GÖRSELİ]   │  ← 16:9 veya 4:3 oran
+  │                     │
+  ├─────────────────────┤
+  │ Ürün Adı            │  ← #FFFFFF, 16px, semibold
+  │ Kısa açıklama...    │  ← #9CA3AF, 13px
+  │ ₺538            [+] │  ← Amber fiyat, yuvarlak + butonu
+  └─────────────────────┘
+  Border-radius: 12px
+  Box-shadow: 0 2px 8px rgba(0,0,0,0.3)
+
+#### Kategori Sekme Butonu
+  Normal   : Metin #9CA3AF, arka plan şeffaf
+  Aktif    : Metin #FFFFFF, alt border amber veya amber arka plan pill
+
+#### CTA Butonu (Sepete Ekle / Sipariş Ver)
+  Renk       : Amber (#F59E0B) veya gradient
+  Text       : #000000 veya #FFFFFF (kontrasta göre)
+  Radius     : 8px veya full rounded
+  Padding    : 12px 24px
+
+### Animasyon ve Geçişler
+  Sayfa geçişi         : Fade-in (200ms)
+  Kart hover           : Scale 1.02 + shadow artışı
+  Sepete ekleme        : Bounce animasyonu (+ butonu)
+  Bottom sheet         : Slide-up (300ms ease-out)
+  Skeleton loader      : Pulse animasyonu (yükleme sırasında)
+
+## Pardon App Tema Konfigürasyon (config_json örneği)
+{
+  "font": "Inter",
+  "primaryColor": "#F59E0B",
+  "backgroundColor": "#111111",
+  "cardBackgroundColor": "#1E1E1E",
+  "layout": "card-grid",
+  "showImages": true,
+  "categoryStyle": "tabs-horizontal-scroll",
+  "priceStyle": "bold-accent",
+  "borderRadius": "12px",
+  "darkMode": true
+}

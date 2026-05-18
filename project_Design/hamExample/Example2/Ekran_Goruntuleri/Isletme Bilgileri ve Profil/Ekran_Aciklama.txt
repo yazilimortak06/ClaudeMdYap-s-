@@ -1,0 +1,53 @@
+# Ekran: İşletme Bilgileri ve Profil
+
+## İşletme: The Soul Pub
+
+### Temel Bilgiler
+  Ad          : The Soul Pub
+  Slogan      : "Finest Drink & Dining"
+  Konsept     : Premium bar, 200+ çeşit viski, kokteyl, yemek
+  Kuruluş     : 2012
+  Tür         : Pub / Bar / Restaurant
+
+### İletişim Bilgileri
+  Adres       : Remzi Oğuz Arık Mah., Bülten Caddesi No:4/A
+                Kavaklıdere, Çankaya, Ankara
+  Telefon     : +90 312 426 06 44
+  Instagram   : @soul.pub
+  Facebook    : facebook.com/soulpub
+  Web         : thesoulpub.com.tr
+
+### Çalışma Saatleri
+  Pazartesi  : 11:00 – 01:00
+  Salı       : 11:00 – 01:00
+  Çarşamba   : 11:00 – 01:00
+  Perşembe   : 11:00 – 01:00
+  Cuma       : 11:00 – 01:00
+  Cumartesi  : 11:00 – 01:00
+  Pazar      : 11:00 – 01:00
+
+## Ekran Görünümü (Profil / Hakkında Sayfası)
+
+### Header
+- İşletme logosu veya adı büyük
+- Kapak fotoğrafı (mekan görseli)
+
+### Bilgi Kartları
+  📍 Adres kartı (harita linki ile)
+  📞 Telefon kartı (tıkla-ara özelliği)
+  🕐 Çalışma saatleri (bugün: açık/kapalı durumu)
+  📱 Sosyal medya linkleri
+
+### "Bizi Takip Edin" Bölümü
+  Instagram ikonu + @soul.pub
+  Facebook ikonu + Soul Pub
+
+### Platform Logosu (Footer)
+  "Powered by Pardon App"
+  pardon-app.com linki
+
+## Pardon App Platform Profil Sayfası Özellikleri
+- Menüye dönüş butonu
+- İşletmeyi favorilere ekleme (kayıtlı kullanıcılar için)
+- Paylaşma butonu (URL/QR kodu paylaşma)
+- Değerlendirme/yorum bölümü (varsa)

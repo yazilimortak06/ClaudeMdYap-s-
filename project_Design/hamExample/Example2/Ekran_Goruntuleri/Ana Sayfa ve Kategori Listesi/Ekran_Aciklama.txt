@@ -1,0 +1,53 @@
+# Ekran: Ana Sayfa ve Kategori Listesi
+
+## URL
+https://webmenu.pardonapp.co/soul-pub
+
+## Görünüm Açıklaması
+
+### Header Bölümü
+- İşletme logosu (sol üst) veya işletme adı: "THE SOUL PUB"
+- Dil seçici butonu (sağ üst): TR / EN toggle
+- Sepet ikonu (sağ üst, ürün adedi badge'i ile)
+- Koyu arka plan (#111 – #1a1a1a tonları)
+
+### Hero / Banner
+- İşletme kapak görseli (geniş banner)
+- "Finest Drink & Dining" sloganı
+- İşletme adı büyük yazı tipiyle
+
+### Kategori Çubuğu (Sticky / Yapışkan)
+Yatay kaydırmalı sekme çubuğu:
+  [Başlangıçlar] [Soul Fritöz] [Tacos & Wraps] [Salatalar & Bowl]
+  [Burgerler] [Makarnalar] [Ana Yemekler] [Tatlı & Kahve]
+
+Aktif kategori: altı çizgili veya vurgu renkli (amber/altın ton)
+
+### Ürün Grid (Kategori Altında)
+Layout: 2 sütun kart grid (mobilde) / 3-4 sütun (masaüstü)
+
+Her ürün kartı içeriği:
+  - Ürün görseli (üstte, tam genişlik kart görseli)
+  - Ürün adı (koyu/bold yazı)
+  - Kısa açıklama (isteğe bağlı, gri renk)
+  - Fiyat (₺ sembolü ile, vurgu renginde)
+  - "+" veya "Ekle" butonu (sağ alt köşe)
+
+### Tasarım Detayları
+- Arkaplan: Siyah/koyu gri
+- Kart arka planı: #1e1e1e veya #222222
+- Ürün adı rengi: #FFFFFF
+- Fiyat rengi: Amber / #F59E0B
+- Border: 1px solid #333333 (kart çerçevesi)
+- Border radius: 12px (yuvarlak köşeler)
+
+## Örnek Ekran İçeriği (İlk Yükleme)
+
+Başlangıçlar kategorisi açık:
+- Soul Kızarmış Bamya - ₺392
+- Soul Çıtır Sebze Tempura - ₺372
+- Soul Girit Kızartma - ₺412
+- Denizci Tabağı - ₺592
+- Soul Special Kıyma Soslu Kaşık Patates - ₺424
+- Soul Cheddar Soslu Kaşık Patates - ₺282
+- Soul Nachos Night - ₺454

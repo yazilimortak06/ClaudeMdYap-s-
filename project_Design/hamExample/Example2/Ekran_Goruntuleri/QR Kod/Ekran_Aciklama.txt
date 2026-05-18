@@ -1,0 +1,60 @@
+# Ekran: QR Kod
+
+## QR Kod Sistemi
+
+Pardon App'te her masa için ayrı QR kod üretilir.
+Kullanıcı QR kodu okutunca o masaya özel menü URL'sine yönlendirilir.
+
+## QR Kod URL Yapısı
+
+### Genel Menü QR
+  https://webmenu.pardonapp.co/soul-pub
+  → Masaya özel değil, genel menü görünümü
+
+### Masa Bazlı QR
+  https://webmenu.pardonapp.co/soul-pub?table=5
+  veya
+  https://webmenu.pardonapp.co/soul-pub/{branch_id}/table/{table_id}
+  → Belirli masadan gelen sipariş kaydediliyor
+
+### Şube + Menü Bazlı QR
+  https://webmenu.pardonapp.co/en/soul-pub/{branch_id}/menu/{menu_id}
+  → Özel kampanya veya öğün menüsü (kahvaltı, akşam menüsü vb.)
+
+## Admin Paneli QR Kod Üretici
+
+### İşlem Akışı
+  1. Admin paneline giriş
+  2. "Şubeler" → "Masalar" bölümüne git
+  3. Masa ekle (toplu ekleme desteği var)
+  4. Her masa için QR kod otomatik üretilir
+  5. PDF olarak indir / yazdır
+
+### QR Kod Özellikleri
+  Format    : PNG / SVG / PDF
+  Boyut     : 200x200px – 1000x1000px (özelleştirilebilir)
+  Renk      : İşletmenin marka renkleriyle özelleştirilebilir
+  Merkez    : İşletme logosu yerleştirilebilir
+  Hata payı : %30 (logo ile birlikte çalışabilir)
+
+## QR Kodu Okuma Deneyimi
+
+### Adım Adım Kullanıcı Akışı
+  1. Müşteri masaya oturur
+  2. Telefon kamerasını QR koda doğrultur
+  3. Tarayıcı otomatik açılır (uygulama gerektirmez)
+  4. webmenu.pardonapp.co/soul-pub?table=5 yüklenir
+  5. Menü karşısında görünür (1-2 saniye içinde)
+  6. Sipariş verebilir, garson çağırabilir
+
+### Teknik Detaylar
+  QR Standart  : QR Code 2005 (ISO 18004)
+  Hata Düzeltme: Level H (%30 — logo için)
+  Encoding     : UTF-8
+  Minimum Boyut: Masa başında kolayca okunabilmeli (>3cm x 3cm)
+
+## Fiziksel Yerleştirme Önerileri
+  - Masa üstü tent card (3 taraflı kart)
+  - Menü kapağına yapıştırma
+  - Masa yüzeyine laminasyon
+  - Stand üzerinde dikey yerleştirme

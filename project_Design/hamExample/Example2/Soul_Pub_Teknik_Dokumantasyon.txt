@@ -1,0 +1,232 @@
+# The Soul Pub — QR Menü Teknik Dokümantasyonu
+## Platform: Pardon App (webmenu.pardonapp.co)
+
+---
+
+## 1. Genel Bakış
+
+The Soul Pub, Pardon App'in SaaS QR Menü altyapısını kullanan Ankara merkezli premium bir bar/pub işletmesidir. Müşteriler masadaki QR kodu okutarak dijital menüye erişir ve sipariş verebilir.
+
+**Analiz Edilen URL:** https://webmenu.pardonapp.co/soul-pub
+**Platform:** Pardon App — "Restoranlar için #1 AI"
+
+---
+
+## 2. Platform Mimarisi
+
+### 2.1 Frontend Yapısı
+
+```
+Framework   : Next.js (React tabanlı, SSR destekli)
+Dil         : TypeScript
+Stil        : Tailwind CSS
+Mobil       : Responsive / Mobile-first
+Tema        : Dark mode (Premium koyu tema)
+Deployment  : CDN ile dünya genelinde dağıtım
+Güvenlik    : Cloudflare WAF (bot engeli aktif)
+```
+
+### 2.2 Backend Tahminleri
+
+```
+API         : RESTful veya GraphQL
+Auth        : JWT token tabanlı
+DB          : PostgreSQL (tenant bazlı)
+Cache       : Redis
+Media       : CDN üzerinden görsel servisi
+AI Engine   : OpenAI API veya özel LLM
+```
+
+### 2.3 Multi-Tenant SaaS Yapısı
+
+```
+Tenant = İşletme (The Soul Pub)
+Slug   = soul-pub (URL anahtarı)
+Branch = Şube (Kavaklıdere şubesi)
+Menu   = Aktif menü (yiyecek menüsü)
+```
+
+---
+
+## 3. Menü Yapısı
+
+### 3.1 Kategori Hiyerarşisi
+
+```
+Menu (soul-pub)
+├── Başlangıçlar (7 ürün)
+├── Soul Fritöz (5 ürün)
+├── Tacos & Wraps (6 ürün)
+├── Salatalar & Bowl (5 ürün)
+├── Burgerler (5 ürün)
+├── Makarnalar (4 ürün)
+├── Ana Yemekler (5 ürün)
+└── Tatlı & Kahve (4 ürün)
+Toplam: ~41 ürün
+```
+
+### 3.2 Fiyat Aralıkları
+
+```
+En Düşük Fiyat  : ₺264 (Baker's Field Coffee)
+En Yüksek Fiyat : ₺1.546 (Soul Steak)
+Ortalama Fiyat  : ~₺580
+Fiyat Para Birimi: Türk Lirası (TRY / ₺)
+```
+
+### 3.3 Ürün Veri Modeli
+
+```json
+{
+  "id": "uuid",
+  "menu_id": "uuid",
+  "category_id": "uuid",
+  "name": "Soul Klasik Burger",
+  "name_en": "Soul Classic Burger",
+  "description": "...",
+  "price": 538.00,
+  "currency": "TRY",
+  "image_url": "cdn.pardonapp.co/...",
+  "is_visible": true,
+  "sort_order": 1
+}
+```
+
+---
+
+## 4. Özellik Analizi
+
+### 4.1 Çok Dil Desteği
+
+| Özellik | Durum |
+|---|---|
+| Türkçe (TR) | Aktif (varsayılan) |
+| İngilizce (EN) | Aktif (/en/ prefix) |
+| Diğer diller | Platform destekliyor |
+| URL i18n | /[lang]/[slug] yapısı |
+
+### 4.2 AI Özellikleri
+
+| Özellik | Açıklama |
+|---|---|
+| Ürün önerileri | Popülerlik + saat bazlı |
+| Kişiselleştirme | Geçmiş sipariş analizi |
+| Doğal dil arama | "Et yemeği istiyorum" |
+| Upsell önerileri | Ürün tamamlayıcı öneri |
+
+### 4.3 Sipariş Özellikleri
+
+| Özellik | Durum |
+|---|---|
+| QR ile erişim | Aktif |
+| Masadan sipariş | Aktif |
+| Garson çağırma | Aktif |
+| Sepet yönetimi | Aktif |
+| Sipariş notu | Aktif |
+| Online ödeme | Platform desteği var |
+
+### 4.4 Admin Panel Özellikleri
+
+| Özellik | Durum |
+|---|---|
+| Menü oluşturma (manuel) | Aktif |
+| Excel import | Aktif |
+| AI ile menü yükleme | Aktif (plan bağımlı) |
+| Tema özelleştirme | Aktif |
+| QR kod üretimi | Aktif |
+| Analitik / Raporlama | Aktif (plan bağımlı) |
+| Çok dil yönetimi | Aktif |
+| Şube yönetimi | Aktif |
+
+---
+
+## 5. Veritabanı Şeması Tahmini
+
+### 5.1 Temel Tablolar
+
+```sql
+tenants(id, slug, name, description, logo_url, status)
+branches(id, tenant_id, name, address, phone, status)
+menus(id, branch_id, name, default_language, theme_id, status)
+menu_categories(id, menu_id, name, sort_order, is_visible)
+menu_items(id, menu_id, category_id, name, description,
+           price, currency, image_url, is_visible, sort_order)
+menu_item_translations(id, item_id, language_code, name, description)
+tables(id, branch_id, name, table_number, status)
+qr_codes(id, branch_id, table_id, code, target_url, status)
+```
+
+### 5.2 Sipariş Tabloları
+
+```sql
+orders(id, tenant_id, branch_id, table_id, status,
+       total_amount, currency, note, created_at)
+order_items(id, order_id, item_id, item_name_snapshot,
+            unit_price_snapshot, quantity, note)
+```
+
+---
+
+## 6. UI/UX Tasarım Özeti
+
+### 6.1 Tasarım Sistemi
+
+```
+Tema        : Dark Premium
+Primary     : #F59E0B (Amber / Altın)
+Background  : #111111
+Surface     : #1E1E1E
+Text        : #FFFFFF / #9CA3AF
+Font        : Inter (sans-serif)
+Radius      : 12px (kartlar), 8px (butonlar)
+Layout      : Card-grid, mobile-first
+```
+
+### 6.2 Kullanıcı Akışı
+
+```
+QR Tara → Menü Açılır → Kategori Seç → Ürün İncele
+→ Sepete Ekle → Sepeti Gözden Geçir → Siparişi Onayla
+→ Garson Bilgilendirilir → Sipariş Hazırlanır → Servis
+```
+
+---
+
+## 7. Rekabet Analizi — Pardon App vs. Rakipler
+
+| Özellik | Pardon App | Adisyo | Kolaymenü | Foodnerd |
+|---|---|---|---|---|
+| AI Öneri | Var | Yok | Yok | Sınırlı |
+| Çok Dil | Var | Var | Sınırlı | Var |
+| Dark Tema | Var | Yok | Yok | Var |
+| QR Sipariş | Var | Var | Var | Var |
+| Mobile-first | Evet | Kısmen | Kısmen | Evet |
+
+---
+
+## 8. Kaynak Referansları
+
+- Platform: https://pardon-app.com/en/smart-qr-menu/
+- AI Özellikleri: https://pardon-app.com/en/ai-based-smart-qr-menu-service/
+- The Soul Pub Resmi Site: https://thesoulpub.com.tr
+- Menü Verileri: https://thesoulpub.com.tr/menü
+- Foursquare: https://tr.foursquare.com/v/the-soul-pub/5011712fe4b0dbe1571d9707
+- TripAdvisor: https://tripadvisor.com/... (The Soul Pub Ankara)
+- Mekanlar.com: https://mekanlar.com/mekan/the-soul-pub-kavaklidere/menu
+
+---
+
+## 9. Önemli Notlar
+
+1. **Site Erişim Kısıtlaması:** webmenu.pardonapp.co bot erişimini engelliyor (HTTP 403).
+   Gerçek tarayıcı ile erişildiğinde JavaScript yükleniyor ve içerik görünüyor.
+
+2. **Menü Güncelliği:** Menü fiyatları dinamik olduğundan zaman içinde değişebilir.
+   Bu dokümandaki fiyatlar analiz tarihine ait anlık veridir.
+
+3. **İçecek Menüsü:** Soul Pub'ın 200+ viski dahil geniş içecek menüsü
+   webmenu.pardonapp.co üzerindeki QR menüde ayrı olarak bulunuyor olabilir.
+   Bu analizde sadece yiyecek kategorileri erişilebildi.
+
+4. **AI Özellikleri:** Pardon AI modülü aktif kullanımda.
+   Platform kendini "Restoranlar için #1 AI" olarak konumlandırıyor.
